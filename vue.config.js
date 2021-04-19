@@ -5,7 +5,7 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || '11' // page title
+// const name = defaultSettings.title || '11' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -26,30 +26,37 @@ module.exports = {
   publicPath: './',
   outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: false,
   productionSourceMap: false,
   devServer: {
     port: 8888,
     open: true,
     overlay: {
       warnings: false,
-      errors: true
+      errors: false
     },
-    // before: require('./mock/mock-server.js')
     proxy: {
-      [process.env.VUE_APP_BASE_API]: {
-        target: 'http://127.0.0.1:8000',
+      '/api': {
+        target: 'http://127.0.0.1:7777',
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
+          '^/api': ''
         }
       }
+      // ,
+      // [process.env.VUE_APP_BASE_API]: {
+      //   target: 'http://127.0.0.1:7777',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     ['^' + process.env.VUE_APP_BASE_API]: ''
+      //   }
+      // }
     }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
-    name: name,
+    name: `name`,
     resolve: {
       alias: {
         '@': resolve('src')
