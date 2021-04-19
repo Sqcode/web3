@@ -39,7 +39,7 @@
     <el-pagination
       layout="total, sizes, prev, pager, next, jumper"
       :current-page="search.current"
-      :page-sizes="[10, 30, 60, 80, 100]"
+      :page-sizes="[2, 5, 10, 30, 60, 80, 100]"
       :page-size="search.size"
       :total="totalCount"
       @size-change="handleSizeChange"
@@ -75,7 +75,7 @@ export default {
         var sort = this.sort
         var search = {
             current: 1,
-            size: 15,
+            size: 10,
             orderBy: ''
         }
         // search = CACHE.restore(search, this.remote)
@@ -83,9 +83,7 @@ export default {
             search: search,
             loading: true,
             tableData: [],
-            totalCount: null,
-            currentPage: 1,
-        }
+            totalCount: null        }
     },
     watch: {
         update: function (newVal, oldVal) {
@@ -108,15 +106,22 @@ export default {
         async getList (value) {
 
             var criteria = Object.assign(this.search, this.criteria)
+            console.log(criteria)
             // CACHE.reserve(criteria, this.remote)
-			const res =  await request({
+// 			const res =  await request({
+// 				url: this.remote,
+// 				method: 'post',
+// 				data: criteria
+// 			})
+//  console.log(res)
+			const {data} =  await request({
 				url: this.remote,
-				method: 'get',
-				param: criteria
+				method: 'post',
+				data: criteria
 			})
- console.log(res)
-			this.tableData = res.data || ''
-            this.totalCount = res.total || null
+            console.log(data)
+			this.tableData = data.records || []
+            this.totalCount = data.total || null
             this.loading = false
 			// console.log(this.tableData)
             // this.$emit('search-after')
