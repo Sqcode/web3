@@ -2,11 +2,11 @@ import axios from 'axios'
 // import { Message, Notification } from 'element-ui'
 // import store from '@/store'
 // import { getToken } from '@/utils/auth'
-// axios.defaults.baseURL = '/api'
+
 // create an axios instance
 const service = axios.create({
+  baseURL: '/api',
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  baseURL: '/api', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })

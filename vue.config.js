@@ -26,7 +26,8 @@ module.exports = {
   publicPath: './',
   outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: false,
+  // lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: false,// 格式检查
   productionSourceMap: false,
   devServer: {
     port: 8888,
@@ -52,11 +53,20 @@ module.exports = {
       //   }
       // }
     }
+    // proxy: {
+    //   [process.env.VUE_APP_BASE_API]: {
+    //     target: 'http://127.0.0.1:7777',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       ['^' + process.env.VUE_APP_BASE_API]: ''
+    //     }
+    //   }
+    // }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
-    name: `name`,
+    name: 'web3333',
     resolve: {
       alias: {
         '@': resolve('src')

@@ -16,15 +16,16 @@
       <!-- <el-button slot="button" type="primary" icon="el-icon-plus">添加</el-button> -->
 
       <!-- 表格字段 -->
-      <el-table-column label="商品名称" prop="goodsName"></el-table-column>
+      <el-table-column label="ID" prop="id"></el-table-column>
+      <el-table-column label="商品名称" prop="goodName"></el-table-column>
       <el-table-column sortable label="创建时间" prop="createdTime">
-        <template #default="scope">
-          <span>{{ scope.row.createdTime }}</span>
+        <template #slot-scope="scope">
+          <span>{{ scope.row.createdTime || timeFormat }}</span>
         </template>
       </el-table-column>
       <el-table-column sortable label="修改时间" prop="updatedTime">
-        <template #default="scope">
-          <span>{{ scope.row.updatedTime }}</span>
+        <template #slot-scope="scope">
+          <span>{{ scope.row.updatedTime || timeFormat }}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="操作" width="160">
@@ -48,9 +49,9 @@ export default {
     // var table = CACHE.restore({
     var table = {
       search: {
-        goodsName: "",
+        size: 2,
       },
-      remote: `/goods-server/goods/list`,
+      remote: `/goods-server/goods/listPage`,
       update: 0,
     };
     return {
