@@ -22,7 +22,7 @@
       <el-table-column label="库存" prop="stock"></el-table-column>
       <el-table-column label="描述" prop="description"></el-table-column>
 
-      <el-table-column sortable label="创建时间" prop="createdTime" >
+      <el-table-column sortable label="创建时间" prop="createdTime" :formatter="dateFormat">
         <template #slot-scope="scope">
           <span>{{ scope.row.createdTime }}</span>
         </template>
@@ -38,6 +38,7 @@
 </template>
 <script>
 import shTable from "@/components/shTable";
+import moment from 'moment'
 
 export default {
   name: "goods",
@@ -63,6 +64,13 @@ export default {
     
   },
   methods: {
+    dateFormat: function(row, column) {
+      var date = row[column.property];
+        if (date == undefined) {
+          return "";
+        }
+        return moment(date).format("YYYY-MM-DD HH:mm:ss");
+    },
     getList: function () {
       //获取列表
       this.table.update++;

@@ -6,4 +6,16 @@ import store from './store'
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
 
+// import filters from './filters/timeFormat'
+// import { format } from 'date-fns'
+
+
+// import * as filters from './filters/timeFormat'
+// Object.keys(filters).forEach(key => {
+//   Vue.filters(key, filters[key])
+// })
+
+// 全局注册过滤器。VUE3 去掉了噶、
+// Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
+
 createApp(App).use(store).use(router).use(ElementPlus).mount('#app')
