@@ -104,26 +104,18 @@ export default {
     },
     methods: {
         async getList (value) {
-
             var criteria = Object.assign(this.search, this.criteria)
-            console.log(criteria)
+            // console.log(criteria)
             // CACHE.reserve(criteria, this.remote)
-// 			const res =  await request({
-// 				url: this.remote,
-// 				method: 'post',
-// 				data: criteria
-// 			})
-//  console.log(res)
-			const {data} =  await request({
-				url: this.remote,
-				method: 'post',
-				data: criteria
-			})
-            console.log(data)
-			this.tableData = data.records || []
+            const { data } = await request({
+              url: this.remote,
+              method: 'post',
+              data: criteria
+            })
+            // console.log(data)
+			      this.tableData = data.records || []
             this.totalCount = data.total || null
             this.loading = false
-			// console.log(this.tableData)
             // this.$emit('search-after')
         },
         handleSizeChange: function (val) {//修改显示条数
