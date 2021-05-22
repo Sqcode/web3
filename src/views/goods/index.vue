@@ -51,7 +51,7 @@ export default {
       search: {
         size: 10,
       },
-      remote: `/good-server/goods/listPage`,
+      remote: `/goods-server/goods/listPage`,
       update: 0,
     };
     return {
@@ -61,7 +61,7 @@ export default {
   },
   mounted() {
     // console.log(format(new Date, 'YYYY-MM-DD HH:mm:ss'))
-    
+
   },
   methods: {
     dateFormat: function(row, column) {
@@ -76,11 +76,11 @@ export default {
       this.table.update++;
     },
     handleEdit(row) {
-      
+
     },
     // 删除
     async handleDelete(row) {
-      
+
     },
   },
 };
