@@ -1,19 +1,31 @@
 <template>
+
   <div class="app-container">
+  <el-upload
+  class="upload-demo"
+  action="http://localhost:8002/goods/upload"
+  multiple
+>
+  <el-button size="small" type="primary">点击上传</el-button>
+</el-upload>
     <sh-table
       :remote="table.remote"
       :criteria="table.search"
       :update="table.update"
     >
       <!-- 搜索条件 -->
-      <!-- <el-col slot="search" :span="8">
-        <el-form-item label="商品名称">
-          <el-input v-model="table.search.goodsName"></el-input>
-        </el-form-item>
-      </el-col> -->
-
+      <template #search>
+        <el-col :span="8">
+          <el-form-item label="商品名称">
+            <el-input v-model="table.search.goodsName"></el-input>
+          </el-form-item>
+        </el-col>
+      </template>
       <!-- 功能按钮 -->
-      <!-- <el-button slot="button" type="primary" icon="el-icon-plus">添加</el-button> -->
+      <template #button>
+          <!-- <el-button  type="primary" icon="el-icon-plus">添加</el-button> -->
+          <el-button size="small" type="primary">点击上传</el-button>
+      </template>
 
       <!-- 表格字段 -->
       <el-table-column label="ID" prop="id"></el-table-column>
@@ -57,6 +69,7 @@ export default {
     return {
       table: table,
       Rules: {},
+      fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
     };
   },
   mounted() {

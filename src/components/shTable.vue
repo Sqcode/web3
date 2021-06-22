@@ -11,20 +11,20 @@
         <el-col :span="24">
           <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
           <slot name="button">
-			  <!-- 功能按钮 -->
-		  </slot>
+            <!-- 功能按钮 -->
+          </slot>
         </el-col>
       </el-row>
     </el-form>
     <slot name="tip">
-		<!-- 温馨提示 -->
-	</slot>
+      <!-- 温馨提示 -->
+    </slot>
 	<!-- 数据表格 -->
     <el-table
-	  v-loading="loading"
-	  element-loading-text="拼命加载中"
-	  ref="defaultTable"
-	  border
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      ref="defaultTable"
+      border
       :data="tableData"
       :default-sort="search"
       @sort-change="handleSortChange"
@@ -53,9 +53,9 @@
 import request from '@/utils/request'
 
 export default {
-	
+
 // Vue.component('shTable', {
-//     template: 'shTable', 
+//     template: 'shTable',
 	name: 'shTable',
     props: {
         remote: {
@@ -146,7 +146,7 @@ export default {
 // })
 
 </script>
-<!-- 封装的一个table 
+<!-- 封装的一个table
 1. 插槽search：搜索输入框
 2. 插槽button：搜索按钮/其他按钮
 3. 插槽tip：放一些文字提示
@@ -161,7 +161,7 @@ export default {
 
 
 -->
-<!-- 
+<!--
 	<sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
       搜索条件
       <el-col slot="search"></el-col>
