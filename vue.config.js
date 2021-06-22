@@ -5,7 +5,7 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-// const name = defaultSettings.title || '11' // page title
+// const name = defaultSettings.title || 'web3' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -30,6 +30,7 @@ module.exports = {
   lintOnSave: false,// 格式检查
   productionSourceMap: false,
   devServer: {
+    // disableHostCheck: true,// 自定义域名访问
     port: 8888,
     open: true,
     overlay: {
@@ -66,7 +67,7 @@ module.exports = {
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
-    name: 'web3333',
+    name: 'web3',
     resolve: {
       alias: {
         '@': resolve('src')
