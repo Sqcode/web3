@@ -79,7 +79,7 @@ service.interceptors.response.use(
     //   })
     //   return Promise.reject(res.mesg || 'Error')
     // } else {
-      return res
+    return res
     // }
   },
   error => {
