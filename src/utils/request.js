@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { ElNotification } from 'element-plus';
+import { defineComponent } from 'vue';
 // import { Message, Notification } from 'element-ui'
 // import store from '@/store'
 // import { getToken } from '@/utils/auth'
@@ -63,24 +65,34 @@ service.interceptors.response.use(
     // Notification.closeAll()
     console.log(response)
     const res = response.data
-    // res.access_token 获取tonken接口
-    // if (response.status !== 200 || (res.code !== '000000' && !res.access_token)) {
-    //   Notification({
-    //     message: res.data || res.mesg || 'Error',
-    //     type: 'error',
-    //     duration: 5 * 1000
-    //   })
-    //   return Promise.reject(res.mesg || 'Error')
-    // } else if (res.code === '020000') {
-    //   Notification({
-    //     message: res.data || res.mesg || 'Error',
-    //     type: 'warning',
-    //     duration: 5 * 1000
-    //   })
-    //   return Promise.reject(res.mesg || 'Error')
-    // } else {
-    return res
-    // }
+    // ElNotification({
+    //   title: '错误',
+    //   message: 'res.msg',
+    // });
+    // res.access_token 获取tonken接口  && !res.access_token
+    if (response.status !== 200 || (res.code !== '00000')) {
+      console(res.code)
+      ElNotification({
+        title: '错误',
+        type: 'error',
+        message: res.data || res.msg || 'Error',
+        duration: 5 * 1000
+      });
+      return Promise.reject(res.msg || 'Error')
+
+    } else if (res.code === '020000') {
+      ElNotification({
+        title: '错误',
+        type: 'warning',
+        message: res.data || res.msg || 'Error',
+        duration: 5 * 1000
+      });
+      return Promise.reject(res.msg || 'Error')
+
+    } else {
+      return res
+
+    }
   },
   error => {
     // Message.closeAll()
@@ -91,25 +103,25 @@ service.interceptors.response.use(
     console.log(errMsg)
     // const code = errMsg.substr(errMsg.indexOf('code') + 5)
     // console.log(code, '错误的code')
-    // if (error.response.status === 501 || code === '501') {
-    //   Notification({
-    //     message: '登录超时 !',
-    //     type: 'error',
-    //     duration: 5 * 1000
-    //   })
-    //   removeToken()
-    //   window.localStorage.clear()
-    //   window.sessionStorage.clear()
-    //   let formPath = router.history.current.path
-    //   if (formPath === '/login') return
-    //   store.dispatch('user/logout')
-    // } else if (res.code === '040003' || res.code === '040075') {
-    //   Notification({
-    //     message: res.mesg || '账户或密码错误 !',
-    //     type: 'error',
-    //     duration: 5 * 1000
-    //   })
-    // }
+    if (error.response.status === 501 || code === '501') {
+        ElNotification({
+          title: '登录超时 !',
+          type: 'error',
+          message: res.data || res.msg || 'Error',
+        });
+        removeToken()
+        window.localStorage.clear()
+        window.sessionStorage.clear()
+        let formPath = router.history.current.path
+        if (formPath === '/login') return
+        store.dispatch('user/logout')
+    } else if (res.code === '040003' || res.code === '040075') {
+      ElNotification({
+        title: '登录超时 !',
+        type: 'error',
+        message: res.msg || '账户或密码错误 !',
+      });
+    }
     return Promise.reject(error)
   }
 )

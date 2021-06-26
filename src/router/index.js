@@ -5,6 +5,11 @@ import Goods from '../views/goods'
 const routes = [
   {
     path: '/',
+    name: 'About',
+    component: () => import('../views/About.vue')
+  },
+  {
+    path: '/home',
     name: 'Home',
     component: Home
   },

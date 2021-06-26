@@ -2,7 +2,6 @@
 <template>
     <div>
         <el-form
-            class="p20"
             style="width: 95%"
             :model="search"
             label-width="80px"
@@ -12,7 +11,7 @@
                     <!-- 搜索条件 -->
                 </slot>
             </el-row>
-            <el-row :gutter="20">
+            <el-row :gutter="20" style="float: left; margin-bottom: 15px;">
                 <el-col :span="24">
                     <el-button
                         type="primary"
@@ -48,14 +47,13 @@
         </el-table>
         <!-- 分页 -->
         <el-pagination
-            layout="total, sizes, prev, pager, next, jumper"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
             :current-page="search.current"
             :page-sizes="[2, 5, 10, 30, 60, 80, 100]"
             :page-size="search.size"
-            :total="totalCount"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-        >
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
         </el-pagination>
     </div>
 </template>
@@ -86,7 +84,7 @@ export default {
         var sort = this.sort;
         var search = {
             current: 1,
-            size: 10,
+            size: 5,
             orderBy: "",
         };
         // search = CACHE.restore(search, this.remote)
@@ -130,17 +128,17 @@ export default {
             // this.$emit('search-after')
         },
         handleSizeChange: function (val) {
-            //修改显示条数
+            // 修改显示条数
             this.search.size = val;
             this.getList();
         },
         handleCurrentChange: function (val) {
-            //修改页数
+            // 修改页数
             this.search.current = val;
             this.getList();
         },
         handleSortChange: function (column, prop, order) {
-            //排序
+            // 排序
             console.log(column, prop, order);
             // this.search.orderBy = UTILS.toSqlOrder(column)
             this.search.orderBy = column.prop + " " + column.order;

@@ -1,12 +1,12 @@
 <template>
     <div class="app-container">
-        <el-upload
+        <!-- <el-upload
             class="upload-demo"
             action="http://localhost:8002/goods/upload"
             multiple
         >
             <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
+        </el-upload> -->
         <sh-table
             :remote="table.remote"
             :criteria="table.search"
@@ -23,12 +23,12 @@
             <!-- 功能按钮 -->
             <template #button>
                 <!-- <el-button  type="primary" icon="el-icon-plus">添加</el-button> -->
-                <el-button size="small" type="primary">点击上传</el-button>
+                <!-- <el-button size="small" type="primary">点击上传</el-button> -->
             </template>
 
             <!-- 表格字段 -->
             <el-table-column label="ID" prop="id"></el-table-column>
-            <el-table-column label="商品名称" prop="goodName"></el-table-column>
+            <el-table-column label="商品名称" prop="goodsName"></el-table-column>
             <el-table-column label="价格" prop="price"></el-table-column>
             <el-table-column label="库存" prop="stock"></el-table-column>
             <el-table-column label="描述" prop="description"></el-table-column>
@@ -65,7 +65,7 @@ export default {
         // var table = CACHE.restore({
         var table = {
             search: {
-                size: 10,
+              "goodsName": '',
             },
             remote: `/goods-server/goods/listPage`,
             update: 0,

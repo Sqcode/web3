@@ -1,12 +1,35 @@
 <template>
     <div class="menu">
-        <el-menu
-            default-active="2"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-        >
-            <el-submenu index="1">
+        <el-row class="tac">
+            <el-col :span="12">
+                <el-menu
+                    :default-active="this.$router.path"
+                    class="el-menu-vertical-demo"
+                    @open="handleOpen"
+                    @close="handleClose"
+                    router
+                >
+                    <el-menu-item
+                        v-for="(item, i) in navList"
+                        :key="i"
+                        :index="item.route"
+                    >
+                        <template #title>{{ item.name }}</template>
+                    </el-menu-item>
+                    <!-- <el-menu-item index="1">
+                <i class="el-icon-menu"></i>
+                <template #title>Home</template>
+            </el-menu-item>
+            <el-menu-item index="2">
+                <i class="el-icon-document"></i>
+                <template #title>About</template>
+            </el-menu-item>
+            <el-menu-item index="3">
+                <i class="el-icon-setting"></i>
+                <template #title>Goods</template>
+            </el-menu-item> -->
+
+                    <!-- <el-submenu index="1">
                 <template #title>
                     <i class="el-icon-location"></i>
                     <span>导航一</span>
@@ -35,8 +58,10 @@
             <el-menu-item index="4">
                 <i class="el-icon-setting"></i>
                 <template #title>导航四</template>
-            </el-menu-item>
-        </el-menu>
+            </el-menu-item> -->
+                </el-menu>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -51,6 +76,15 @@ export default {
         handleClose(key, keyPath) {
             console.log(key, keyPath);
         },
+    },
+    data() {
+        return {
+            navList: [
+                { name: "Home", route: "/home" },
+                { name: "About", route: "/about" },
+                { name: "Goods", route: "/goods" },
+            ],
+        };
     },
 };
 </script>
