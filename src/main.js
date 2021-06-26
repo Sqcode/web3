@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 
 import ElementPlus from 'element-plus';
+import locale from 'element-plus/lib/locale/lang/zh-cn'
 import 'element-plus/lib/theme-chalk/index.css';
 
 // import filters from './filters/timeFormat'
@@ -18,4 +19,4 @@ import 'element-plus/lib/theme-chalk/index.css';
 // 全局注册过滤器。VUE3 去掉了噶、
 // Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
 
-createApp(App).use(store).use(router).use(ElementPlus).mount('#app')
+createApp(App).use(store).use(router).use(ElementPlus, { locale }).mount('#app')
