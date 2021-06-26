@@ -20,3 +20,10 @@ import 'element-plus/lib/theme-chalk/index.css';
 // Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
 
 createApp(App).use(store).use(router).use(ElementPlus, { locale }).mount('#app')
+router.beforeEach((to, from, next) => {
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
+})
