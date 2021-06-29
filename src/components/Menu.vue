@@ -67,24 +67,24 @@
 
 <script>
 export default {
-    name: "Menu",
-    components: {},
-    methods: {
-        handleOpen(key, keyPath) {
-            console.log(key, keyPath);
-        },
-        handleClose(key, keyPath) {
-            console.log(key, keyPath);
-        },
+  name: 'Menu',
+  components: {},
+  methods: {
+    handleOpen (key, keyPath) {
+      console.log(key, keyPath)
     },
-    data() {
-        return {
-            navList: [
-                { name: "Home", route: "/home" },
-                { name: "About", route: "/about" },
-                { name: "Goods", route: "/goods" },
-            ],
-        };
-    },
-};
+    handleClose (key, keyPath) {
+      console.log(key, keyPath)
+    }
+  },
+  data () {
+    return {
+      navList: [
+        { name: 'Home', route: '/home' },
+        { name: 'About', route: '/about' },
+        { name: 'Goods', route: '/goods' }
+      ]
+    }
+  }
+}
 </script>

@@ -3,20 +3,20 @@ import Home from '../views/Home.vue'
 import Goods from '../views/goods'
 
 const routes = [
-  {
-    path: '/',
-    name: 'About',
-    component: () => import('../views/About.vue'),
-    meta: {
-      title: '我的主页'
-    }
-  },
+  // {
+  //   path: '/',
+  //   name: 'About',
+  //   component: () => import('../views/About.vue'),
+  //   meta: {
+  //     title: '我的主页'
+  //   }
+  // },
   {
     path: '/home',
     name: 'Home',
     component: Home,
     meta: {
-      title: '主页'
+      title: '我的主页'
     }
   },
   {
@@ -35,7 +35,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     meta: {
-      title: 'About'
+      title: '关于'
     }
   }
 ]

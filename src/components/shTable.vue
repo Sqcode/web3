@@ -60,101 +60,101 @@
 
 <script>
 // import table from '@/components/table/table'
-import request from "@/utils/request";
+import request from '@/utils/request'
 
 export default {
-    // Vue.component('shTable', {
-    //     template: 'shTable',
-    name: "shTable",
-    props: {
-        remote: {
-            type: String,
-            required: true,
-        },
-        // 搜索条件
-        criteria: Object,
-        // 默认排序
-        sort: Object,
-        // 请求方法
-        method: String,
-        // 请求计数
-        update: Number,
+  // Vue.component('shTable', {
+  //     template: 'shTable',
+  name: 'shTable',
+  props: {
+    remote: {
+      type: String,
+      required: true
     },
-    data: function () {
-        var sort = this.sort;
-        var search = {
-            current: 1,
-            size: 5,
-            orderBy: "",
-        };
-        // search = CACHE.restore(search, this.remote)
-        return {
-            search: search,
-            loading: true,
-            tableData: [],
-            totalCount: null,
-        };
+    // 搜索条件
+    criteria: Object,
+    // 默认排序
+    sort: Object,
+    // 请求方法
+    method: String,
+    // 请求计数
+    update: Number
+  },
+  data: function () {
+    // var sort = this.sort
+    var search = {
+      current: 1,
+      size: 5,
+      orderBy: ''
+    }
+    // search = CACHE.restore(search, this.remote)
+    return {
+      search: search,
+      loading: true,
+      tableData: [],
+      totalCount: null
+    }
+  },
+  watch: {
+    update: function (newVal, oldVal) {
+      console.log(newVal, oldVal)
+      var name = this.method || 'getList'
+      var method = this[name]
+      if (typeof method === 'function') {
+        method()
+      } else {
+        console.log("Can't invoke method '" + name + "'")
+      }
+    }
+  },
+  mounted: function () {
+    // console.log($(`#btn`))
+    this.getList(1)
+  },
+  methods: {
+    async getList (value) {
+      var criteria = Object.assign(this.search, this.criteria)
+      // console.log(criteria)
+      // CACHE.reserve(criteria, this.remote)
+      const { data } = await request({
+        url: this.remote,
+        method: 'post',
+        data: criteria
+      })
+      // console.log(data)
+      this.tableData = data.records || []
+      this.totalCount = data.total || null
+      this.loading = false
+      // this.$emit('search-after')
     },
-    watch: {
-        update: function (newVal, oldVal) {
-            console.log(newVal, oldVal);
-            var name = this.method || "getList";
-            var method = this[name];
-            if (typeof method === "function") {
-                method();
-            } else {
-                console.log("Can't invoke method '" + name + "'");
-            }
-        },
+    handleSizeChange: function (val) {
+      // 修改显示条数
+      this.search.size = val
+      this.getList()
     },
-    mounted: function () {
-        // console.log($(`#btn`))
-        this.getList(1);
+    handleCurrentChange: function (val) {
+      // 修改页数
+      this.search.current = val
+      this.getList()
     },
-    methods: {
-        async getList(value) {
-            var criteria = Object.assign(this.search, this.criteria);
-            // console.log(criteria)
-            // CACHE.reserve(criteria, this.remote)
-            const { data } = await request({
-                url: this.remote,
-                method: "post",
-                data: criteria,
-            });
-            // console.log(data)
-            this.tableData = data.records || [];
-            this.totalCount = data.total || null;
-            this.loading = false;
-            // this.$emit('search-after')
-        },
-        handleSizeChange: function (val) {
-            // 修改显示条数
-            this.search.size = val;
-            this.getList();
-        },
-        handleCurrentChange: function (val) {
-            // 修改页数
-            this.search.current = val;
-            this.getList();
-        },
-        handleSortChange: function (column, prop, order) {
-            // 排序
-            console.log(column, prop, order);
-            // this.search.orderBy = UTILS.toSqlOrder(column)
-            this.search.orderBy = column.prop + " " + column.order;
-            this.getList();
-        },
-        handleSelectionChange: function (rows) {
-            this.$emit("selection", rows);
-        },
-        handleRowClick: function (row, event, column) {
-            this.$emit("row-click", row, event, column);
-        },
-        handleExpandChange: function (row, expandedRows, expanded) {
-            this.$emit("expand-change", row, expandedRows, expanded);
-        },
+    handleSortChange: function (column, prop, order) {
+      // 排序
+      console.log(column, prop, order)
+      // this.search.orderBy = UTILS.toSqlOrder(column)
+      this.search.orderBy = column.prop + ' ' + column.order
+      this.getList()
     },
-};
+    handleSelectionChange: function (rows) {
+      this.$emit('selection', rows)
+    },
+    handleRowClick: function (row, event, column) {
+      this.$emit('row-click', row, event, column)
+    },
+    handleExpandChange: function (row, expandedRows, expanded) {
+      this.$emit('expand-change', row, expandedRows, expanded)
+    }
+  }
+}
 // })
 </script>
 <!-- 封装的一个table
@@ -162,18 +162,16 @@ export default {
 2. 具名插槽button：搜索按钮/其他按钮
 3. 具名插槽tip：放一些文字提示
 4. 表数据
-	1. 排序-事件
-	2. 多选-事件
-	3. 行点击-事件
-	4. 扩展行-事件
+  1. 排序-事件
+  2. 多选-事件
+  3. 行点击-事件
+  4. 扩展行-事件
 5. 分页
-	1. 切换页面
+  1. 切换页面
 未完善
-
-
 -->
 <!--
-	<sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
+  <sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
       搜索条件
       <el-col slot="search"></el-col>
       功能按钮

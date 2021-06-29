@@ -1,5 +1,3 @@
-
-
 <template>
     <el-container>
         <el-header><HeaderMenu></HeaderMenu></el-header>
@@ -46,14 +44,14 @@
 </style>
 <script>
 // @ is an alias to /src
-import Menu from "@/components/Menu.vue";
-import HeaderMenu from "@/components/HeaderMenu.vue";
+import Menu from '@/components/Menu.vue'
+import HeaderMenu from '@/components/HeaderMenu.vue'
 
 export default {
-    name: "App",
-    components: {
-        Menu,
-        HeaderMenu
-    },
-};
+  name: 'App',
+  components: {
+    Menu,
+    HeaderMenu
+  }
+}
 </script>

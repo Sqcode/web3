@@ -3,14 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import ElementPlus from 'element-plus';
+import ElementPlus from 'element-plus'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
-import 'element-plus/lib/theme-chalk/index.css';
+import 'element-plus/lib/theme-chalk/index.css'
 
 // import filters from './filters/timeFormat'
 // import { format } from 'date-fns'
-
-
 // import * as filters from './filters/timeFormat'
 // Object.keys(filters).forEach(key => {
 //   Vue.filters(key, filters[key])
@@ -24,6 +22,8 @@ router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   if (to.meta.title) {
     document.title = to.meta.title
+  } else {
+    document.title = 'su1888'
   }
   next()
 })

@@ -45,7 +45,7 @@
             </el-table-column>
             <!-- <el-table-column label="操作" width="160">
         <template v-slot="scope">
-          <el-button size="small"	@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column> -->
@@ -53,56 +53,56 @@
     </div>
 </template>
 <script>
-import shTable from "@/components/shTable";
-import moment from "moment";
+import shTable from '@/components/shTable'
+import moment from 'moment'
 
 export default {
-    name: "goods",
-    components: {
-        shTable,
-    },
-    data() {
-        // var table = CACHE.restore({
-        var table = {
-            search: {
-              "goodsName": '',
-            },
-            remote: `/goods-server/goods/listPage`,
-            update: 0,
-        };
-        return {
-            table: table,
-            Rules: {},
-            fileList: [
-                {
-                    name: "food.jpeg",
-                    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-                },
-                {
-                    name: "food2.jpeg",
-                    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-                },
-            ],
-        };
-    },
-    mounted() {
-        // console.log(format(new Date, 'YYYY-MM-DD HH:mm:ss'))
-    },
-    methods: {
-        dateFormat: function (row, column) {
-            var date = row[column.property];
-            if (date == undefined) {
-                return "";
-            }
-            return moment(date).format("YYYY-MM-DD HH:mm:ss");
+  name: 'goods',
+  components: {
+    shTable
+  },
+  data () {
+    // var table = CACHE.restore({
+    var table = {
+      search: {
+        goodsName: ''
+      },
+      remote: '/goods-server/goods/listPage',
+      update: 0
+    }
+    return {
+      table: table,
+      Rules: {},
+      fileList: [
+        {
+          name: 'food.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
         },
-        getList: function () {
-            //获取列表
-            this.table.update++;
-        },
-        handleEdit(row) {},
-        // 删除
-        async handleDelete(row) {},
+        {
+          name: 'food2.jpeg',
+          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+        }
+      ]
+    }
+  },
+  mounted () {
+    // console.log(format(new Date, 'YYYY-MM-DD HH:mm:ss'))
+  },
+  methods: {
+    dateFormat: function (row, column) {
+      var date = row[column.property]
+      if (date === undefined) {
+        return ''
+      }
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
-};
+    getList: function () {
+      // 获取列表
+      this.table.update++
+    },
+    handleEdit (row) {},
+    // 删除
+    async handleDelete (row) {}
+  }
+}
 </script>
