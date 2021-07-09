@@ -82,7 +82,8 @@ export default {
       navList: [
         { name: 'Home', route: '/home' },
         { name: 'About', route: '/about' },
-        { name: 'Goods', route: '/goods' }
+        { name: 'Note', route: '/note' },
+        // { name: 'Goods', route: '/goods' }
       ]
     }
   }

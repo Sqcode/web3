@@ -37,7 +37,7 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:7777',
+        target: 'http://localhost:10086',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -57,9 +57,22 @@ module.exports = {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
     name: 'web3',
+    // optimization: {
+    //   runtimeChunk: true
+    // },
+    // plugins: [
+    //   new ScriptExtHtmlWebpackPlugin({
+    //     inline: /runtime~.+\.js$/ //正则匹配runtime文件名
+    //   })
+    // ],
     resolve: {
       alias: {
-        '@': resolve('src')
+        '@': resolve('src'),
+        'components': resolve('./src/components'),
+        'utils': resolve('./src/utils'),
+        'models': resolve('./src/models'),
+        'router': resolve('./src/router'),
+        'views': resolve('./src/views')
       }
     }
   }

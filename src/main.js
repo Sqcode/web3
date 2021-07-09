@@ -3,6 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+
+// import VueQuillEditor from 'vue-quill-editor'
+// import "quill/dist/quill.core.css";
+// import "quill/dist/quill.snow.css";
+// import "quill/dist/quill.bubble.css";
+
 import ElementPlus from 'element-plus'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 import 'element-plus/lib/theme-chalk/index.css'
@@ -23,7 +29,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
   } else {
-    document.title = 'su1888'
+    document.title = 'cn.su'
   }
   next()
 })

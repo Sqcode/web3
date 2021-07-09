@@ -1,17 +1,17 @@
 <template>
     <el-container>
-        <el-header><HeaderMenu></HeaderMenu></el-header>
+        <!-- <el-header><HeaderMenu></HeaderMenu></el-header> -->
         <el-container>
             <el-aside width="240px">
               <Menu></Menu>
             </el-aside>
             <el-container>
-                <el-main>
-                    <div id="nav">
+                <el-main style="margin-top: 15px;">
+                    <!-- <div id="nav">
                         <router-link to="/home">Home</router-link>
                         | <router-link to="/about">About</router-link> |
                         <router-link to="/goods">Goods</router-link>
-                    </div>
+                    </div> -->
                     <router-view />
                 </el-main>
                 <!-- <el-footer>Footer</el-footer> -->

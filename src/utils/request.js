@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ElNotification } from 'element-plus'
+import { ElNotification, ElMessage } from 'element-plus'
 // import { defineComponent } from 'vue'
 // import { Message, Notification } from 'element-ui'
 import store from '@/store'
@@ -122,5 +122,111 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+// export default service
 
-export default service
+export default class Request {
+  static get(url, data = {}) {
+    return service.get(url, data).then(res => {
+      let code = res.code;
+      if (code === '00000') {
+        return res.data;
+      }
+    })
+  }
+
+  static post(url, data = {}) {
+    return service.post(url, data).then(res => {
+      let code = res.code;
+      if (code === '00000') {
+        return res.data;
+      }
+    })
+  }
+
+  static exportFile(url, data = {}) {
+    return new Promise((resolve, reject) => {
+      service.post(url, data, {
+        timeout: 60 * 1000,
+        responseType: 'blob'
+      }).then(res => {
+        let data = res.data;
+        if (!data) {
+          reject(res.statusText);
+          return;
+        }
+
+        const r = new FileReader();
+        r.onload = function () {
+          try {
+            const resData = JSON.parse(this.result);
+            console.log('resData', resData);
+            if (resData.code === '-1') {
+              let msg = resData.msg;
+              ElMessage.closeAll();
+              ElMessage({
+                message: msg,
+                type: 'error',
+                duration: 2000,
+                showClose: true
+              });
+              reject(new Error(msg));
+            }
+          } catch (error) {
+            resolve(data);
+          }
+        };
+        r.readAsText(data);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
+  static uploadFile(url, file,callback, data = {},config = {}) {
+    const param = new FormData();
+    param.append("file", file);
+    if (!SystemUtil.isEmpty(data)) {
+      for (const key in data) {
+        let value = data[key];
+        if (value !== undefined) {
+          param.append(key, value);
+        }
+      }
+    }
+
+    if (!config.headers) {
+      config.headers = {};
+    }
+    config.headers['Content-Type'] = 'multipart/form-data;charset=utf-8';
+    config.onUploadProgress = function (progressEvent) {
+      if (callback=== undefined) {
+        return;
+      }
+      if (progressEvent.lengthComputable) {
+        callback(progressEvent);
+      }
+    };
+
+    return service.post(url, param, config).then(res => {
+      let status = res.status;
+      if (status !== 200) {
+        throw new Error(res.statusText);
+      }
+
+      res = res.data;
+      let code = res.code;
+      if (code === '000000') {
+        return res.data;
+      }
+      throw new Error(res.msg);
+    }).catch(error => {
+      ElMessage({
+        message: error.message,
+        type: 'error',
+        duration: 2000,
+        showClose: true
+      });
+      throw new Error(error);
+    });
+  }
+}
