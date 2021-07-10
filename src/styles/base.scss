@@ -1,0 +1,70 @@
+html,
+body,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: auto;
+}
+
+body {
+  overflow: hidden;
+  font-family: "Source Han Sans", "微软雅黑", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#app {
+  overflow: auto;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  height: 100%;
+}
+.el-container {
+  height: 100%;
+}
+.clearfix:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+// .el-pagination.goods-table-pagination {
+//   .el-pagination__total {
+//     color: #ffffff;
+//   }
+
+//   .btn-prev,
+//   .btn-next {
+//     background: none;
+//     color: #ffffff;
+//   }
+
+//   .el-pager li {
+//     background: none;
+//     color: #ffffff;
+
+//     &.active {
+//       color: #409EFF;
+//     }
+
+//     &:hover {
+//       color: #409EFF;
+//     }
+//   }
+
+//   .el-pagination__jump {
+//     color: #ffffff;
+//   }
+// }

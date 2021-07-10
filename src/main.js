@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 
 
+import './styles/base.scss';
 // import VueQuillEditor from 'vue-quill-editor'
 // import "quill/dist/quill.core.css";
 // import "quill/dist/quill.snow.css";

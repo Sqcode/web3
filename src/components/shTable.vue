@@ -1,161 +1,151 @@
-
 <template>
-    <div>
-        <el-form
-            style="width: 95%"
-            :model="search"
-            label-width="80px"
-        >
-            <el-row :gutter="20">
-                <slot name="search">
-                    <!-- 搜索条件 -->
-                </slot>
-            </el-row>
-            <el-row :gutter="20" style="float: left; margin-bottom: 15px;">
-                <el-col :span="24">
-                    <el-button
-                        type="primary"
-                        icon="el-icon-search"
-                        @click="getList()"
-                        >搜索</el-button
-                    >
-                    <slot name="button">
-                        <!-- 功能按钮 -->
-                    </slot>
-                </el-col>
-            </el-row>
-        </el-form>
-        <slot name="tip">
-            <!-- 温馨提示 -->
+  <div style="width: 100%; margin: 10px;">
+    <el-form :model="search" label-width="80px">
+      <el-row :gutter="20">
+        <slot name="search">
+          <!-- 搜索条件 -->
         </slot>
-        <!-- 数据表格 -->
-        <el-table
-            v-loading="loading"
-            element-loading-text="拼命加载中"
-            ref="defaultTable"
-            border
-            :data="tableData"
-            :default-sort="search"
-            @sort-change="handleSortChange"
-            @selection-change="handleSelectionChange"
-            @row-click="handleRowClick"
-            @expand-change="handleExpandChange"
-        >
-            <slot>
-                <!-- 表格字段 -->
-            </slot>
-        </el-table>
-        <!-- 分页 -->
-        <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="search.current"
-            :page-sizes="[2, 5, 10, 30, 60, 80, 100]"
-            :page-size="search.size"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalCount">
-        </el-pagination>
-    </div>
+      </el-row>
+      <el-row :gutter="20" style="float: left; margin-bottom: 15px;">
+        <el-col :span="24">
+          <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
+          <slot name="button">
+            <!-- 功能按钮 -->
+          </slot>
+        </el-col>
+      </el-row>
+    </el-form>
+    <slot name="tip">
+      <!-- 温馨提示 -->
+    </slot>
+    <!-- 数据表格 -->
+    <el-table v-loading="loading" element-loading-text="拼命加载中" ref="defaultTable" border :data="tableData"
+      :default-sort="search" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
+      @row-click="handleRowClick" @expand-change="handleExpandChange">
+      <slot>
+        <!-- 表格字段 -->
+      </slot>
+    </el-table>
+    <!-- 分页 -->
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="search.current"
+      :page-sizes="[10, 30, 60, 80, 100]" :page-size="search.size"
+      layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+    </el-pagination>
+  </div>
 </template>
 
 <script>
-// import table from '@/components/table/table'
-import request from '@/utils/request'
+  // import table from '@/components/table/table'
+  import request from '@/utils/request'
 
-export default {
-  // Vue.component('shTable', {
-  //     template: 'shTable',
-  name: 'shTable',
-  props: {
-    remote: {
-      type: String,
-      required: true
+  export default {
+    // Vue.component('shTable', {
+    //     template: 'shTable',
+    name: 'shTable',
+    props: {
+      remote: {
+        type: String,
+        required: true
+      },
+      // 搜索条件
+      criteria: Object,
+      // 默认排序
+      sort: Object,
+      // 请求方法
+      method: String,
+      // 请求计数
+      update: Number
     },
-    // 搜索条件
-    criteria: Object,
-    // 默认排序
-    sort: Object,
-    // 请求方法
-    method: String,
-    // 请求计数
-    update: Number
-  },
-  data: function () {
-    // var sort = this.sort
-    var search = {
-      current: 1,
-      size: 5,
-      orderBy: ''
-    }
-    // search = CACHE.restore(search, this.remote)
-    return {
-      search: search,
-      loading: true,
-      tableData: [],
-      totalCount: null
-    }
-  },
-  watch: {
-    update: function (newVal, oldVal) {
-      console.log(newVal, oldVal)
-      var name = this.method || 'getList'
-      var method = this[name]
-      if (typeof method === 'function') {
-        method()
-      } else {
-        console.log("Can't invoke method '" + name + "'")
+    data() {
+      // var sort = this.sort
+      var search = {
+        current: 1,
+        size: 10,
+        orderBy: '',
+        orders: [{
+          column: 'created_time',
+          asc: false
+        }]
+      }
+      // search = CACHE.restore(search, this.remote)
+      return {
+        search: search,
+        loading: true,
+        tableData: [],
+        totalCount: null
+      }
+    },
+    watch: {
+      update(newVal, oldVal) {
+        console.log(newVal, oldVal)
+        var name = this.method || 'getList'
+        var method = this[name]
+        if (typeof method === 'function') {
+          method()
+        } else {
+          console.log("Can't invoke method '" + name + "'")
+        }
+      }
+    },
+    mounted() {
+      // console.log($(`#btn`))
+      this.getList(1)
+    },
+    methods: {
+      getList() {
+        var criteria = Object.assign(this.search, this.criteria)
+
+        request.post(this.remote, criteria).then(res => {
+          this.tableData = res.records || []
+          this.totalCount = res.total || null
+          this.loading = false
+        });
+      },
+
+      // async getList (value) {
+      //   var criteria = Object.assign(this.search, this.criteria)
+      //   // console.log(criteria)
+      //   // CACHE.reserve(criteria, this.remote)
+      //   const { data } = await request({
+      //     url: this.remote,
+      //     method: 'post',
+      //     data: criteria
+      //   })
+      //   // console.log(data)
+      //   this.tableData = data.records || []
+      //   this.totalCount = data.total || null
+      //   this.loading = false
+      //   // this.$emit('search-after')
+      // },
+      handleSizeChange(val) {
+        // 修改显示条数
+        this.search.size = val
+        this.getList()
+      },
+      handleCurrentChange(val) {
+        // 修改页数
+        this.search.current = val
+        this.getList()
+      },
+      handleSortChange(column, prop, order) {
+        // 排序
+        console.log(column, prop, order)
+        // this.search.orderBy = UTILS.toSqlOrder(column)
+        this.search.orderBy = column.prop + ' ' + column.order
+        this.getList()
+      },
+      handleSelectionChange(rows) {
+        this.$emit('selection', rows)
+      },
+      handleRowClick(row, event, column) {
+        this.$emit('row-click', row, event, column)
+      },
+      handleExpandChange(row, expandedRows, expanded) {
+        this.$emit('expand-change', row, expandedRows, expanded)
       }
     }
-  },
-  mounted: function () {
-    // console.log($(`#btn`))
-    this.getList(1)
-  },
-  methods: {
-    async getList (value) {
-      var criteria = Object.assign(this.search, this.criteria)
-      // console.log(criteria)
-      // CACHE.reserve(criteria, this.remote)
-      const { data } = await request({
-        url: this.remote,
-        method: 'post',
-        data: criteria
-      })
-      // console.log(data)
-      this.tableData = data.records || []
-      this.totalCount = data.total || null
-      this.loading = false
-      // this.$emit('search-after')
-    },
-    handleSizeChange: function (val) {
-      // 修改显示条数
-      this.search.size = val
-      this.getList()
-    },
-    handleCurrentChange: function (val) {
-      // 修改页数
-      this.search.current = val
-      this.getList()
-    },
-    handleSortChange: function (column, prop, order) {
-      // 排序
-      console.log(column, prop, order)
-      // this.search.orderBy = UTILS.toSqlOrder(column)
-      this.search.orderBy = column.prop + ' ' + column.order
-      this.getList()
-    },
-    handleSelectionChange: function (rows) {
-      this.$emit('selection', rows)
-    },
-    handleRowClick: function (row, event, column) {
-      this.$emit('row-click', row, event, column)
-    },
-    handleExpandChange: function (row, expandedRows, expanded) {
-      this.$emit('expand-change', row, expandedRows, expanded)
-    }
   }
-}
-// })
+  // })
 </script>
 <!-- 封装的一个table
 1. 具名插槽search：搜索输入框
