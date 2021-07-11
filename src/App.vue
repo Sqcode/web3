@@ -7,7 +7,7 @@
           <Menu></Menu>
         </el-aside>
         <el-container>
-          <!-- <el-header style="text-align: right; font-size: 12px">
+          <el-header style="text-align: right; font-size: 12px; background-color: white;">
             <el-dropdown>
               <i class="el-icon-setting" style="margin-right: 15px"></i>
               <template #dropdown>
@@ -19,7 +19,7 @@
               </template>
             </el-dropdown>
             <span>王小虎</span>
-          </el-header> -->
+          </el-header>
             <!-- <el-container> -->
           <!-- <el-main style="margin-top: 15px;"> -->
               <!-- <div id="nav">

@@ -3,8 +3,8 @@
     <!-- 搜索条件 -->
     <template #search>
       <el-col :span="8">
-        <el-form-item label="名称">
-          <el-input v-model="table.search.name"></el-input>
+        <el-form-item label="标题">
+          <el-input v-model="table.search.title"></el-input>
         </el-form-item>
       </el-col>
     </template>
@@ -15,9 +15,13 @@
 
     <!-- 表格字段 -->
     <el-table-column type="index" label="序号" width="100"></el-table-column>
-    <el-table-column prop="menuId" label="menuId"></el-table-column>
-    <el-table-column prop="title" label="title"></el-table-column>
-    <el-table-column prop="content" label="content" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="" label="所属菜单">
+      <template #default="scope">
+        <span>{{ scope.row.menuId }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="title" label="标题"></el-table-column>
+    <el-table-column prop="content" label="内容" show-overflow-tooltip></el-table-column>
     <el-table-column sortable label="创建时间" prop="createdTime" :formatter="dateFormat">
       <template #slot-scope="scope">
         <span>{{ scope.row.createdTime }}</span>
@@ -64,6 +68,7 @@ export default {
     }
   },
   mounted() {
+    // this.getList ()
   },
   methods: {
     dateFormat (row, column) {

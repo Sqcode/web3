@@ -1,31 +1,29 @@
 <template>
-  <div style="width: 100%; margin: 10px;">
-    <el-form :model="search" label-width="80px">
-      <el-row :gutter="20">
+  <div class="shTable" >
+    <div class="div-form">
+      <el-form :model="search" label-width="80px">
         <slot name="search">
           <!-- 搜索条件 -->
         </slot>
-      </el-row>
-      <el-row :gutter="20" style="float: left; margin-bottom: 15px;">
-        <el-col :span="24">
-          <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
-          <slot name="button">
-            <!-- 功能按钮 -->
-          </slot>
-        </el-col>
-      </el-row>
-    </el-form>
-    <slot name="tip">
-      <!-- 温馨提示 -->
-    </slot>
-    <!-- 数据表格 -->
-    <el-table v-loading="loading" element-loading-text="拼命加载中" ref="defaultTable" border :data="tableData"
-      :default-sort="search" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
-      @row-click="handleRowClick" @expand-change="handleExpandChange">
-      <slot>
-        <!-- 表格字段 -->
+        <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
+        <slot name="button">
+          <!-- 功能按钮 -->
+        </slot>
+      </el-form>
+      <slot name="tip">
+        <!-- 温馨提示 -->
       </slot>
-    </el-table>
+    </div>
+    <!-- 数据表格 -->
+    <div class="div-table">
+      <el-table height="100%" v-loading="loading" element-loading-text="拼命加载中" ref="defaultTable" border :data="tableData"
+        :default-sort="search" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
+        @row-click="handleRowClick" @expand-change="handleExpandChange">
+        <slot>
+          <!-- 表格字段 -->
+        </slot>
+      </el-table>
+    </div>
     <!-- 分页 -->
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="search.current"
       :page-sizes="[10, 30, 60, 80, 100]" :page-size="search.size"
@@ -72,7 +70,7 @@
         search: search,
         loading: true,
         tableData: [],
-        totalCount: null
+        totalCount: 0
       }
     },
     watch: {
@@ -89,15 +87,14 @@
     },
     mounted() {
       // console.log($(`#btn`))
-      this.getList(1)
+      this.getList()
     },
     methods: {
       getList() {
         var criteria = Object.assign(this.search, this.criteria)
-
         request.post(this.remote, criteria).then(res => {
           this.tableData = res.records || []
-          this.totalCount = res.total || null
+          this.totalCount = res.total || 0
           this.loading = false
         });
       },
@@ -124,6 +121,7 @@
       },
       handleCurrentChange(val) {
         // 修改页数
+        console.log('当前页数', val);
         this.search.current = val
         this.getList()
       },
@@ -147,6 +145,20 @@
   }
   // })
 </script>
+<style lang="scss" scoped>
+  .shTable {
+    height: 100%;
+    // height: calc(100% - 60px);
+    width: 90%; 
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+  }
+  .div-table {
+    flex:1; 
+    overflow:auto
+  }
+</style>
 <!-- 封装的一个table
 1. 具名插槽search：搜索输入框
 2. 具名插槽button：搜索按钮/其他按钮

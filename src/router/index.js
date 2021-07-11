@@ -10,14 +10,14 @@ const routes = [
       title: 'Home'
     }
   },
-  {
-    path: '/home',
-    name: 'Home',
-    component: Home,
-    meta: {
-      title: 'Home'
-    }
-  },
+  // {
+  //   path: '/home',
+  //   name: 'Home',
+  //   component: Home,
+  //   meta: {
+  //     title: 'Home'
+  //   }
+  // },
   {
     path: '/goods',
     name: 'Goods',

@@ -3,9 +3,9 @@
     <el-form-item label="标题" prop="title">
       <el-input v-model="form.title"></el-input>
     </el-form-item>
-    <el-form-item label="子标题" prop="subTitle">
+    <!-- <el-form-item label="子标题" prop="subTitle">
       <el-input v-model="form.subTitle"></el-input>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="所属菜单" prop="subTitle">
       <el-select style="width: 100%" v-model="form.menuId" placeholder="请选择">
         <el-option
@@ -27,7 +27,7 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('form')">提交</el-button>
-      <el-button @click="resetForm('form')">重置</el-button>
+      <!-- <el-button @click="resetForm('form')">重置</el-button> -->
     </el-form-item>
   </el-form>
   <!-- <el-button @click="handleButtonClick">按钮</el-button> -->
@@ -55,7 +55,7 @@ export default {
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
         ],
         status: [
           { required: true, message: 'status', trigger: 'blur' }
@@ -63,8 +63,8 @@ export default {
         content: [
           { required: true, message: '请填写内容', trigger: 'blur' }
         ],
-        menus: []
-      }
+      },
+      menus: []
     }
   },
   methods: {
@@ -90,9 +90,9 @@ export default {
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
+    // resetForm(formName) {
+    //   this.$refs[formName].resetFields();
+    // },
     handleButtonClick () {
       console.log(this.editor.txt.html());
     }
@@ -104,7 +104,7 @@ export default {
     editor.create()
     this.editor = editor
 
-    Request.get('/menu/list?parentId=&level=2').then(res => {
+    Request.get('/menu/list?level=2').then(res => {
       var list = []
 
       res.forEach(menu => {
