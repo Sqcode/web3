@@ -1,5 +1,5 @@
 <template>
-  <el-menu :default-active="this.$router.path" class="el-menu-vertical-demo" @open="handleOpen"
+  <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" @open="handleOpen"
     @close="handleClose" router
     background-color="white"
     text-color="black"

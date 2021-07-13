@@ -52,9 +52,10 @@ const routes = [
   }
 ]
 const router = createRouter({
-  // history: createWebHashHistory(),
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(),
+  // history: createWebHistory(process.env.BASE_URL),
   routes
 })
-
+// createWebHashHistory() --> this.$route.path
+// createWebHistory(process.env.BASE_URL) --> this.$router.path
 export default router

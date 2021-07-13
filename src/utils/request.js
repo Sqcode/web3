@@ -63,7 +63,7 @@ service.interceptors.response.use(
     // 关闭消息弹框,防止出现一串消息弹框
     // Message.closeAll()
     // Notification.closeAll()
-    console.log(response)
+    // console.log(response)
     const res = response.data
     // ElNotification({
     //   title: '错误',
@@ -71,7 +71,6 @@ service.interceptors.response.use(
     // });
     // res.access_token 获取tonken接口  && !res.access_token
     if (response.status !== 200 || (res.code !== '00000')) {
-      console(res.code)
       ElNotification({
         title: '错误',
         type: 'error',

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  // import table from '@/components/table/table'
+  import { format } from '@/utils/util'
   import request from '@/utils/request'
 
   export default {
@@ -59,7 +59,6 @@
       var search = {
         current: 1,
         size: 10,
-        orderBy: '',
         orders: [{
           column: 'created_time',
           asc: false
@@ -93,6 +92,10 @@
       getList() {
         var criteria = Object.assign(this.search, this.criteria)
         request.post(this.remote, criteria).then(res => {
+          // res.records.forEach(e => {
+          //   e.createdTime = format(e.createdTime, 'yyyy-MM-dd HH:mm:ss')
+          // });
+          // console.log('tableData', res.records);
           this.tableData = res.records || []
           this.totalCount = res.total || 0
           this.loading = false
@@ -114,21 +117,16 @@
       //   this.loading = false
       //   // this.$emit('search-after')
       // },
-      handleSizeChange(val) {
-        // 修改显示条数
+      handleSizeChange(val) {// 修改显示条数
         this.search.size = val
         this.getList()
       },
-      handleCurrentChange(val) {
-        // 修改页数
-        console.log('当前页数', val);
+      handleCurrentChange(val) {// 修改页数
         this.search.current = val
         this.getList()
       },
-      handleSortChange(column, prop, order) {
-        // 排序
+      handleSortChange(column, prop, order) {// 排序
         console.log(column, prop, order)
-        // this.search.orderBy = UTILS.toSqlOrder(column)
         this.search.orderBy = column.prop + ' ' + column.order
         this.getList()
       },
@@ -149,13 +147,13 @@
   .shTable {
     height: 100%;
     // height: calc(100% - 60px);
-    width: 90%; 
+    width: 90%;
     display: flex;
     flex-direction: column;
     margin-left: 10px;
   }
   .div-table {
-    flex:1; 
+    flex:1;
     overflow:auto
   }
 </style>
