@@ -37,6 +37,10 @@ export default {
           name: 'Note',
           route: '/note'
         },
+        {
+          name: 'Resource',
+          route: '/resource'
+        },
         // { name: 'Goods', route: '/goods' },
         // { name: 'Goods', route: '/goods' },
       ]

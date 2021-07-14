@@ -1,5 +1,6 @@
 export default class Note {
   id
+  sort = 1
   title=''
   subTitle=''
   content=''

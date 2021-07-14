@@ -6,6 +6,9 @@
     <!-- <el-form-item label="子标题" prop="subTitle">
       <el-input v-model="form.subTitle"></el-input>
     </el-form-item> -->
+    <el-form-item label="排序">
+      <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
+    </el-form-item>
     <el-form-item label="所属菜单" prop="menuId" v-if="!form.parentId">
       <el-cascader style="width: 100%"
         clearable

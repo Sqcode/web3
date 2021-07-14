@@ -55,16 +55,17 @@
           <span v-if="scope.row.parentName">{{ scope.row.parentName.split(',').reverse().join(' / ') }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="图片">
+      <el-table-column prop="" label="图片">
         <template #default="scope">
           <el-image v-if="scope.row.absoluteUrl"
-            style="width: 100px; height: 100px"
+            style="width: 100%; height: 100%"
             :src="scope.row.absoluteUrl"
             fit="fill" :preview-src-list="[scope.row.absoluteUrl]">
           </el-image>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
+      <el-table-column prop="sort" label="排序"></el-table-column>
       <el-table-column prop="typeName" label="菜单类型"></el-table-column>
       <el-table-column prop="jumpTypeName" label="跳转类型"></el-table-column>
       <el-table-column prop="createdTime" label="创建时间" width="175">
@@ -82,12 +83,11 @@
   <!-- </div> -->
   <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="排序" prop="sort">
-        <el-input-number style="width: 100%" v-model="form.sort" :min="1" :max="99999999" label="小程序菜单排序"></el-input-number>
+      <el-form-item label="排序">
+        <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="小程序菜单排序"></el-input-number>
       </el-form-item>
       <el-form-item label="图标地址" prop="absoluteUrl">
         <el-input v-model="form.absoluteUrl"></el-input>
@@ -124,7 +124,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="跳转页面" prop="dataJson" v-if="form.jumpType == 2">
-        <el-select style="width: 100%" v-model="pageSelected" placeholder="请选择">
+        <el-select clearable style="width: 100%" v-model="pageSelected" placeholder="请选择">
           <el-option
             v-for="item in pageOptions"
             :key="item.value"
@@ -168,6 +168,7 @@ export default {
       cascaderSearchSelected: [],
       dialogCascaderSelected: [0],
       dialogFormVisible: false,
+      dialogTitle: '',
       form: new Menu(),
       rules: {
         name: [
@@ -228,7 +229,6 @@ export default {
           }
         }
       },
-      dialogTitle: ''
     }
   },
   mounted() {

@@ -31,7 +31,7 @@ const routes = [
     name: 'Menu',
     component: () => import('views/menu'),
     meta: {
-      title: 'menu'
+      title: 'Menu'
     }
   },
   {
@@ -39,7 +39,15 @@ const routes = [
     name: 'Note',
     component: () => import('views/note'),
     meta: {
-      title: 'note'
+      title: 'Note'
+    }
+  },
+  {
+    path: '/resource',
+    name: 'Resource',
+    component: () => import('views/resource'),
+    meta: {
+      title: 'Resource'
     }
   },
   {

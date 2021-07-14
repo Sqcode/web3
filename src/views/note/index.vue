@@ -10,7 +10,7 @@
     </template>
     <!-- 功能按钮 -->
     <template #button>
-      <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible = true">添加</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="handleInsertClick">添加</el-button>
     </template>
 
     <!-- 表格字段 -->
@@ -22,6 +22,7 @@
     </el-table-column>
     <el-table-column prop="parentName" label="所属笔记"></el-table-column>
     <el-table-column prop="title" label="标题"></el-table-column>
+    <el-table-column prop="sort" label="排序"></el-table-column>
     <el-table-column prop="content" label="内容" show-overflow-tooltip></el-table-column>
     <el-table-column prop="createdTime" label="创建时间" width="175">
       <template #default="scope">
@@ -36,7 +37,7 @@
       </el-table-column>
   </sh-table>
 
-  <el-dialog title="新增" v-model="dialogFormVisible">
+  <el-dialog :title="dialogTitle" v-model="dialogFormVisible" :close-on-click-modal="false" fullscreen>
     <form-dialog ref="insertRef" @getList="getList" :note="note"></form-dialog>
   </el-dialog>
 
@@ -64,6 +65,7 @@ export default {
     return {
       table: table,
       dialogFormVisible: false,
+      dialogTitle: '',
       note: new Note()
     }
   },
@@ -75,8 +77,17 @@ export default {
       this.table.update++
       this.dialogFormVisible = false
     },
+    handleInsertClick(){
+      this.dialogFormVisible = true
+      this.dialogTitle = '新增'
+      this.note = new Note()
+      this.$nextTick(() => {
+        this.$refs.insertRef.handleOpen(this.note)
+      })
+    },
     handleEdit (index, row) {
       this.dialogFormVisible = true
+      this.dialogTitle = '编辑'
       this.note = clone(row)
       this.$nextTick(() => {
         this.$refs.insertRef.handleOpen(row)
