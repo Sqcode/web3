@@ -44,7 +44,7 @@
       </template>
       <!-- 功能按钮 -->
       <template #button>
-        <el-button type="primary" icon="el-icon-plus" @click="dialogFormVisible = true">添加</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="handleInsertClick">添加</el-button>
       </template>
 
       <!-- 表格字段 -->
@@ -53,6 +53,15 @@
       <el-table-column prop="" label="所属菜单">
         <template #default="scope">
           <span v-if="scope.row.parentName">{{ scope.row.parentName.split(',').reverse().join(' / ') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="name" label="图片">
+        <template #default="scope">
+          <el-image v-if="scope.row.absoluteUrl"
+            style="width: 100px; height: 100px"
+            :src="scope.row.absoluteUrl"
+            fit="fill" :preview-src-list="[scope.row.absoluteUrl]">
+          </el-image>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
@@ -71,10 +80,18 @@
         </el-table-column>
     </sh-table>
   <!-- </div> -->
-  <el-dialog title="新增" v-model="dialogFormVisible" >
+  <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
+
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="排序" prop="sort">
+        <el-input-number style="width: 100%" v-model="form.sort" :min="1" :max="99999999" label="小程序菜单排序"></el-input-number>
+      </el-form-item>
+      <el-form-item label="图标地址" prop="absoluteUrl">
+        <el-input v-model="form.absoluteUrl"></el-input>
+        <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
       </el-form-item>
       <el-form-item label="所属菜单" prop="parentId">
         <el-cascader style="width: 100%"
@@ -82,7 +99,8 @@
           filterable
           :props="props"
           v-model="dialogCascaderSelected"
-          @change="handleDialogCascaderChange">
+          @change="handleDialogCascaderChange"
+          :key="cascaderKey">
         </el-cascader>
       </el-form-item>
       <el-form-item label="菜单类型" prop="type">
@@ -177,8 +195,13 @@ export default {
       pageSelected: null,
       pageOptions: [
         {label: '笔记', value: 0},
+        {label: '原版工具卡', value: 1},
       ],
-      pages: [{label: "page", value: "/notes/index"}],
+      pages: [
+        {label: "page", value: "/notes/index"},
+        {label: "page", value: "/menu_icon/index"},
+      ],
+      cascaderKey: 0,
       props: {
         checkStrictly: true,
         lazy: true,
@@ -204,7 +227,8 @@ export default {
             })
           }
         }
-      }
+      },
+      dialogTitle: ''
     }
   },
   mounted() {
@@ -231,6 +255,11 @@ export default {
     },
     submitForm(formName) {
       this.form.parentId = this.dialogCascaderSelected ? this.dialogCascaderSelected[this.dialogCascaderSelected.length - 1] : ''
+      console.log(this.form.parentId, this.form.id);
+      if (this.form.parentId == this.form.id) {
+        this.$message.error('菜单不能属于自己');
+        return;
+      }
       this.form.parentPath = this.dialogCascaderSelected.join(',')
       this.form.dataJson = this.pages[this.pageSelected]
 
@@ -243,6 +272,7 @@ export default {
           request.post(url, this.form).then(res => {
             this.dialogFormVisible = false
             this.getList()
+            this.cascaderKey++
           });
         } else {
           console.log('error submit!!');
@@ -250,8 +280,14 @@ export default {
         }
       });
     },
+    handleInsertClick(){
+      this.dialogFormVisible = true
+      this.dialogTitle = '新增'
+      this.form = new Menu()
+    },
     handleEdit (index, row) {
       this.dialogFormVisible = true
+      this.dialogTitle = '编辑'
       if (row.parentPath) {
         this.dialogCascaderSelected = row.parentPath.split(',').map(Number)
       }

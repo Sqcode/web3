@@ -1,12 +1,13 @@
 export default class Menu {
   id
+  sort
   name = ''
   parentPath = ''
   type = 2
   jumpType = ''
   dataJson = '{}'
-  iconUrl = ''
   url = ''
+  absoluteUrl = ''
   status = ''
   parentId = 0
 
