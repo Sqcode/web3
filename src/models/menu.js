@@ -1,5 +1,5 @@
 export default class Menu {
-  id
+  id = ''
   sort = 1
   name = ''
   parentPath = ''

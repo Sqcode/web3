@@ -1,47 +1,50 @@
 <template>
-  <el-form :model="form" :rules="rules" ref="form" label-width="100px" >
-    <el-form-item label="标题" prop="title">
-      <el-input v-model="form.title"></el-input>
-    </el-form-item>
-    <!-- <el-form-item label="子标题" prop="subTitle">
-      <el-input v-model="form.subTitle"></el-input>
-    </el-form-item> -->
-    <el-form-item label="排序">
-      <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
-    </el-form-item>
-    <el-form-item label="所属菜单" prop="menuId" v-if="!form.parentId">
-      <el-cascader style="width: 100%"
-        clearable
-        filterable
-        :props="props"
-        v-model="dialogCascaderSelected"
-        @change="handleDialogCascaderChange">
-      </el-cascader>
-    </el-form-item>
-    <el-form-item label="所属笔记" prop="">
-      <el-select clearable filterable style="width: 100%" v-model="form.parentId" placeholder="请选择">
-        <el-option
-          v-for="item in notes"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value" :disabled="item.value == form.id">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <!-- <el-form-item label="status" prop="status">
-      <el-radio-group v-model="form.status">
-        <el-radio label="0"></el-radio>
-        <el-radio label="1"></el-radio>
-      </el-radio-group>
-    </el-form-item> -->
-    <el-form-item label="内容" prop="content">
-      <div id="editor"></div>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="submitForm('form')">提交</el-button>
-      <!-- <el-button @click="resetForm('form')">重置</el-button> -->
-    </el-form-item>
-  </el-form>
+  <!-- <el-dialog :title="dialogTitle" v-model="dialogFormVisible" :close-on-click-modal="false" fullscreen> -->
+    <el-form :model="form" :rules="rules" ref="form" label-width="100px" >
+      <el-form-item label="标题" prop="title">
+        <el-input v-model="form.title"></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="子标题" prop="subTitle">
+        <el-input v-model="form.subTitle"></el-input>
+      </el-form-item> -->
+      <el-form-item label="排序">
+        <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
+      </el-form-item>
+      <el-form-item label="所属菜单" prop="" v-if="!form.parentId">
+        <el-cascader style="width: 100%"
+          clearable
+          filterable
+          :props="props"
+          v-model="dialogCascaderSelected"
+          @change="handleDialogCascaderChange">
+        </el-cascader>
+      </el-form-item>
+      <el-form-item label="所属笔记" prop="">
+        <el-select clearable filterable style="width: 100%" v-model="form.parentId" placeholder="请选择">
+          <el-option
+            v-for="item in notes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value" :disabled="item.value == form.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <!-- <el-form-item label="status" prop="status">
+        <el-radio-group v-model="form.status">
+          <el-radio label="0"></el-radio>
+          <el-radio label="1"></el-radio>
+        </el-radio-group>
+      </el-form-item> -->
+      <el-form-item label="内容" prop="content">
+        <div id="editor"></div>
+      </el-form-item>
+      <el-form-item>
+        <!-- <el-button >取 消</el-button> -->
+        <el-button type="primary" @click="submitForm('form')">提交</el-button>
+        <!-- <el-button @click="resetForm('form')">重置</el-button> -->
+      </el-form-item>
+    </el-form>
+  <!-- </dialog> -->
   <!-- <el-button @click="handleButtonClick">按钮</el-button> -->
 </template>
 <script>
@@ -65,14 +68,16 @@ export default {
     return {
       editor: null,
       form: this.note,
+      // dialogFormVisible: false,
+      // dialogTitle: '',
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' },
           { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
         ],
-        menuId: [
-          { required: true, message: '请选择菜单', trigger: 'blur' }
-        ],
+        // menuId: [
+        //   { required: true, message: '请选择菜单', trigger: 'blur' }
+        // ],
         content: [
           { required: true, message: '请填写内容', trigger: 'blur' }
         ],
@@ -117,6 +122,8 @@ export default {
   methods: {
     getNoteList (menuId) {
       request.get('/note/list?menuId=' + menuId).then(res => {
+        // 过滤有parentId，这里只能选择 主笔记
+        res = res.filter(v => !v.parentId)
         const ns = res.map(v => ({
           label: v.title,
           value: v.id
@@ -131,15 +138,13 @@ export default {
     },
     handleOpen(row) {
       this.form = row
+      // console.log('handleOpen', row);
       this.editor.txt.html(row.content);
       // console.log(row.parentPath);
       if (row.parentPath) {
         this.dialogCascaderSelected = row.parentPath.split(',').map(Number)
       }
-      if (row.menuId) {
-        this.getNoteList(row.menuId)
-      }
-      // console.log('handleOpen', o);
+      this.getNoteList('')
     },
     submitForm(formName) {
       this.form.content = this.editor.txt.html()

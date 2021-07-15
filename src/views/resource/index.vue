@@ -116,8 +116,7 @@ export default {
       },
       typeOptions: [
         {label: '首页Banner', value: 1},
-        {label: '目录', value: 2},
-        {label: '笔记', value: 3},
+        {label: '笔记背景图', value: 2},
       ]
     }
   },

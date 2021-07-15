@@ -1,5 +1,7 @@
 export default class Note {
   id
+  menuId = ''
+  parentId
   sort = 1
   title=''
   subTitle=''
