@@ -265,7 +265,7 @@ export default {
         }))
         this.notes = ns
         this.noteSelectOptionUpdate++
-        console.log(this.notes);
+        // console.log(this.notes);
       })
     },
     handlePageSelected (e) {
@@ -294,7 +294,7 @@ export default {
     },
     submitForm(formName) {
       this.form.parentId = this.dialogCascaderSelected ? this.dialogCascaderSelected[this.dialogCascaderSelected.length - 1] : ''
-      console.log(this.form.parentId, this.form.id);
+      // console.log(this.form.parentId, this.form.id);
       if (this.form.parentId === this.form.id) {
         this.$message.error('菜单不能属于自己');
         return;
