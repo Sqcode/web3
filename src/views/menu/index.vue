@@ -319,6 +319,11 @@ export default {
             url = '/menu/update'
           }
           request.post(url, this.form).then(res => {
+            console.log(res);
+            this.$message({
+              type: 'success',
+              message: '操作成功！',
+            })
             this.dialogFormVisible = false
             this.getList()
             this.cascaderKey++

@@ -36,21 +36,23 @@
         </template>
       </el-table-column>
   </sh-table>
-  <el-dialog :title="dialogTitle" v-model="dialogFormVisible" :close-on-click-modal="false" fullscreen>
+  <!-- <router-view /> -->
+  <!-- <el-dialog :title="dialogTitle" v-model="dialogFormVisible" :close-on-click-modal="false" >
     <form-dialog ref="insertRef" @getList="getList" :note="note"></form-dialog>
-  </el-dialog>
+  </el-dialog> -->
 </template>
 
 <script>
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
 import { clone } from '@/utils/util'
-import formDialog from './dialog';
+// import formDialog from './dialog';
 import Note from 'models/note'
+
 export default {
   components: {
     shTable,
-    formDialog
+    // formDialog
   },
   data() {
     var table = {
@@ -62,9 +64,9 @@ export default {
     }
     return {
       table: table,
-      dialogFormVisible: false,
-      dialogTitle: '',
-      note: new Note()
+      // dialogFormVisible: false,
+      // dialogTitle: '',
+      // note: new Note()
     }
   },
   mounted() {
@@ -73,23 +75,26 @@ export default {
   methods: {
     getList () {
       this.table.update++
-      this.dialogFormVisible = false
+      // this.dialogFormVisible = false
     },
     handleInsertClick(){
-      this.dialogFormVisible = true
-      this.dialogTitle = '新增'
-      this.note = new Note()
-      this.$nextTick(() => {
-        this.$refs.insertRef.handleOpen(this.note)
-      })
+      this.$router.push({ name:'note_edit', params: { id: 0} })
+      // this.dialogFormVisible = true
+      // this.dialogTitle = '新增'
+      // this.note = new Note()
+      // this.$nextTick(() => {
+      //   this.$refs.insertRef.handleOpen(this.note)
+      // })
     },
     handleEdit (index, row) {
-      this.dialogFormVisible = true
-      this.dialogTitle = '编辑'
-      this.note = clone(row)
-      this.$nextTick(() => {
-        this.$refs.insertRef.handleOpen(row)
-      })
+      this.$router.push({ name:'note_edit', params: { id: row.id} })
+      // this.$router.push({ path:'edit', query: { id: 2}})
+      // this.dialogFormVisible = true
+      // this.dialogTitle = '编辑'
+      // this.note = clone(row)
+      // this.$nextTick(() => {
+      //   this.$refs.insertRef.handleOpen(row)
+      // })
     },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {

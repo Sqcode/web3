@@ -128,6 +128,10 @@ export default class Request {
     return service.get(url, data).then(res => {
       let code = res.code;
       if (code === '00000') {
+        // ElMessage({
+        //   type: 'success',
+        //   message: '操作成功！',
+        // })
         return res.data;
       }
     })
@@ -137,6 +141,10 @@ export default class Request {
     return service.post(url, data).then(res => {
       let code = res.code;
       if (code === '00000') {
+        // ElMessage({
+        //   type: 'success',
+        //   message: '操作成功！',
+        // })
         return res.data;
       }
     })

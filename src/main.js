@@ -22,6 +22,7 @@ import vueConfig from '../vue.config'
 
 const app = createApp(App)
 app.config.globalProperties.$utils =  utils
+app.config.globalProperties.$goBack =  goBack
 app.use(store).use(router).use(ElementPlus, { locale }).mount('#app')
 
 router.beforeEach((to, from, next) => {
@@ -33,3 +34,7 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
+
+function goBack () {
+  router.back(-1)
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="shTable" >
-    <div class="div-form">
+    <div class="shTable-div-form">
       <el-form :model="search" label-width="80px">
         <slot name="search">
           <!-- 搜索条件 -->

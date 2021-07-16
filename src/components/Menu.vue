@@ -1,5 +1,5 @@
 <template>
-  <el-menu :default-active="this.$route.path" class="el-menu-vertical-demo" @open="handleOpen"
+  <el-menu :default-active="routerPath" class="el-menu-vertical-demo" @open="handleOpen"
     @close="handleClose" router
     background-color="white"
     text-color="black"
@@ -14,6 +14,21 @@
 export default {
   name: 'Menu',
   components: {},
+  mounted() {
+  },
+  computed: {
+    routerPath: function () {
+      // 匹配第一个/ 的路径
+      var path = this.$route.path
+      var index = path.indexOf( '/' );
+      var index_2 = path.indexOf( '/', index + 1 );
+      if (index_2 != -1) {
+        return path.substring(0, index_2);
+      } else {
+        return path;
+      }
+    }
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath)

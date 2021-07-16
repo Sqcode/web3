@@ -1,5 +1,5 @@
 <template>
-  <!-- <el-dialog :title="dialogTitle" v-model="dialogFormVisible" :close-on-click-modal="false" fullscreen> -->
+  <div id="note-edit-form">
     <el-form :model="form" :rules="rules" ref="form" label-width="100px" >
       <el-form-item label="标题" prop="title">
         <el-input v-model="form.title"></el-input>
@@ -15,8 +15,8 @@
           clearable
           filterable
           :props="props"
-          v-model="dialogCascaderSelected"
-          @change="handleDialogCascaderChange">
+          v-model="cascaderSelected"
+          @change="handleCascaderChange">
         </el-cascader>
       </el-form-item>
       <el-form-item label="所属笔记" prop="">
@@ -29,50 +29,34 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="status" prop="status">
-        <el-radio-group v-model="form.status">
-          <el-radio label="0"></el-radio>
-          <el-radio label="1"></el-radio>
-        </el-radio-group>
-      </el-form-item> -->
       <el-form-item label="内容" prop="content">
-        <!-- <div id="editor"></div> -->
         <TEditor ref="editor" v-model="content" />
       </el-form-item>
-      <el-form-item>
-        <!-- <el-button >取 消</el-button> -->
-        <el-button type="primary" @click="submitForm('form')">提交</el-button>
-        <!-- <el-button @click="resetForm('form')">重置</el-button> -->
-      </el-form-item>
     </el-form>
-  <!-- </dialog> -->
-  <el-button @click="handleButtonClick">按钮</el-button>
+  </div>
+  <el-footer>
+    <el-button type="warning" @click="$goBack">返 回</el-button>
+    <el-button type="primary" @click="submitForm('form')">提 交</el-button>
+    <!-- <el-button @click="handleButtonClick">按钮</el-button> -->
+  </el-footer>
+
+
 </template>
 <script>
-// require styles
-// import E from 'wangeditor'
 import TEditor from '@/components/TEditor.vue'
 import Note from 'models/note'
 import request from '@/utils/request'
-// import Request from 'utils/request';
 
 export default {
   props: {
-    note: {
-      type: Object,
-      required: true
-    },
   },
-  emits: ['getList'],
   components: {
     TEditor
   },
   data() {
     return {
       content: '',
-      form: this.note,
-      // dialogFormVisible: false,
-      // dialogTitle: '',
+      form: new Note(),
       rules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' },
@@ -86,7 +70,7 @@ export default {
         ],
       },
       notes: [],
-      dialogCascaderSelected: [],
+      cascaderSelected: [],
       props: {
         checkStrictly: true,
         lazy: true,
@@ -109,18 +93,18 @@ export default {
   computed: {
   },
   mounted() {
-    // const editor = new E("#editor")
-    // editor.create()
-    // this.editor = editor
-    //var note = this.note
-    // 配置触发 onchange 的时间频率，默认为 200ms
-    // editor.config.onchangeTimeout = 500; // 修改为 500ms
-    // editor.config.onchange  = function (newHtml) {
-    //   note.content = editor.txt.html()
-    //   console.log('onchange ', newHtml) // 获取最新的 html 内容
-    // }
-    // editor.txt.html(this.note.content);
-    // editor.txt.html(this.note.content);
+    // console.log('我是子路由页面,params:id', this.$route.params.id);
+    var id = this.$route.params.id
+    request.get('/note/' + id).then(data => {
+      console.log('note', data);
+      if (data) {
+        this.form = data
+        setTimeout(() => {
+          tinyMCE.activeEditor.setContent(data.content)
+        }, 500);
+      }
+    })
+    this.getNoteList('');// 加载所有笔记
   },
   methods: {
     getNoteList (menuId) {
@@ -135,33 +119,28 @@ export default {
         // console.log(this.notes);
       })
     },
-    handleDialogCascaderChange (node) {
-      // console.log(this.dialogCascaderSelected.join(','));
+    handleCascaderChange (node) {
+      // console.log(this.cascaderSelected.join(','));
       this.getNoteList (node[node.length - 1])
     },
-    handleOpen(row) {
-      this.form = row
-      // console.log('handleOpen', row);
-      // this.editor.txt.html(row.content);
-      // console.log(row.parentPath);
-      if (row.parentPath) {
-        this.dialogCascaderSelected = row.parentPath.split(',').map(Number)
-      }
-      this.getNoteList('')
-    },
     submitForm(formName) {
-      // this.form.content = this.editor.txt.html()
-      this.form.menuId = this.dialogCascaderSelected ? this.dialogCascaderSelected[this.dialogCascaderSelected.length - 1] : ''
-      // console.log(this.form);
+      this.form.content = tinyMCE.activeEditor.getContent()
+      this.form.menuId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
+      console.log(this.form);
       this.$refs[formName].validate((valid) => {
         if (valid) {
           var url = '/note/insert'
           if (this.form.id) {
             url = '/note/update'
           }
-
           request.post(url, this.form).then(res => {
-            this.$emit('getList');
+            this.$message({
+              type: 'success',
+              message: '操作成功，即将返回列表',
+            })
+            setTimeout(() => {
+              this.$router.push({name: 'note'});
+            }, 1000);
           });
         } else {
           console.log('error submit!!');
@@ -179,7 +158,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  #editor {
-    margin-top: 20px;
+  #note-edit-form {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+    overflow-y: scroll;
   }
 </style>
