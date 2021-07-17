@@ -1,18 +1,77 @@
 <template>
-    <div class="home">
-        <img alt="Vue logo" src="../assets/images/logo.png" />
-        <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-    </div>
+  <el-container>
+    <el-aside width="240px">
+      <Menu></Menu>
+    </el-aside>
+    <el-container>
+      <el-header>
+        <el-dropdown @command="handleCommand">
+          <div style="height: 100%;">
+            <img style="height: 100%;" alt="avatar_url"
+              :src=" user ? user.avatarUrl ? user.avatarUrl : require('../assets/logo.png') : require('../assets/logo.png')" />
+            <!-- <span>{{ user.userName }}</span> -->
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <!-- <el-dropdown-item>查看信息</el-dropdown-item> -->
+              <el-dropdown-item command="updatePwd">修改密码</el-dropdown-item>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </el-header>
+      <HeaderDropdown ref="dropDownDialog" :show="dialog" />
+      <el-divider></el-divider>
+      <router-view />
+    </el-container>
+  </el-container>
 </template>
-
 <script>
-// @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
-
-export default {
-  name: 'Home',
-  components: {
-    // HelloWorld,
+  import Menu from '@/components/Menu.vue'
+  import HeaderMenu from '@/components/HeaderMenu.vue'
+  import HeaderDropdown from '@/components/HeaderDropdown.vue'
+  import {
+    useStore
+  } from "vuex";
+  export default {
+    name: 'Home',
+    components: {
+      Menu,
+      HeaderMenu,
+      HeaderDropdown
+    },
+    mounted() {
+      // console.log('mounted', this.$store.state.user);
+    },
+    data() {
+      return {
+        user: this.$store.state.user,
+        dialog: false
+      }
+    },
+    methods: {
+      handleCommand(command) {
+        // console.log(command);
+        if ('updatePwd' === command) {
+          this.$nextTick(() => {
+            this.$refs.dropDownDialog.handleOpen(true)
+          })
+        }
+        if ('logout' === command) {
+          this.$store.commit('REMOVE_INFO', this.$store.state);
+          this.$router.push({name: 'login'});
+        }
+      }
+    }
   }
-}
 </script>
+<style lang="scss" scoped>
+  .el-header {
+    display: flex;
+    flex-flow: row;
+    flex-direction: row;
+    font-size: 12px;
+    background-color: white;
+    justify-content: flex-end;
+  }
+</style>

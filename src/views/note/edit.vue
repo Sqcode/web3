@@ -37,7 +37,7 @@
   <el-footer>
     <el-button type="warning" @click="$goBack">返 回</el-button>
     <el-button type="primary" @click="submitForm('form')">提 交</el-button>
-    <!-- <el-button @click="handleButtonClick">按钮</el-button> -->
+    <el-button @click="handleButtonClick">按钮</el-button>
   </el-footer>
 
 
@@ -95,15 +95,19 @@ export default {
   mounted() {
     // console.log('我是子路由页面,params:id', this.$route.params.id);
     var id = this.$route.params.id
-    request.get('/note/' + id).then(data => {
-      console.log('note', data);
-      if (data) {
-        this.form = data
-        setTimeout(() => {
-          tinyMCE.activeEditor.setContent(data.content)
-        }, 500);
-      }
-    })
+
+    if (id != 0) {
+      request.get('/note/' + id).then(data => {
+        // console.log('note', data);
+        if (data) {
+          this.form = data
+          setTimeout(() => {
+            tinyMCE.activeEditor.setContent(data.content)
+          }, 500);
+        }
+      })
+    }
+
     this.getNoteList('');// 加载所有笔记
   },
   methods: {

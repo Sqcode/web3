@@ -200,6 +200,9 @@ export default {
         dataJson: [
           { required: true, message: '请选择选择页面', trigger: 'blur' }
         ],
+        note: [
+          { required: true, message: '请选择选择笔记', trigger: 'blur' }
+        ],
       },
       typeOptions: [
         {label: '管理后台', value: 1},

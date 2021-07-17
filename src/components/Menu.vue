@@ -41,21 +41,29 @@ export default {
     return {
       navList: [
         {
-          name: 'About',
-          route: '/about'
+          name: '欢迎页',
+          route: '/welcome'
         },
         {
-          name: 'Menu',
+          name: '用户',
+          route: '/user'
+        },
+        {
+          name: '菜单',
           route: '/menu'
         },
         {
-          name: 'Note',
+          name: '笔记',
           route: '/note'
         },
         {
-          name: 'Resource',
+          name: '资源',
           route: '/resource'
         },
+        {
+          name: '关于',
+          route: '/about'
+        }
         // { name: 'Goods', route: '/goods' },
         // { name: 'Goods', route: '/goods' },
       ]

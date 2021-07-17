@@ -74,7 +74,7 @@
     },
     watch: {
       update(newVal, oldVal) {
-        console.log(newVal, oldVal)
+        // console.log(newVal, oldVal)
         var name = this.method || 'getList'
         var method = this[name]
         if (typeof method === 'function') {

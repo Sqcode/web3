@@ -72,6 +72,8 @@ module.exports = {
         'utils': resolve('./src/utils'),
         'models': resolve('./src/models'),
         'router': resolve('./src/router'),
+        'assets': resolve('./src/assets'),
+        'api': resolve('./src/api'),
         'views': resolve('./src/views')
       }
     }
