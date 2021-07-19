@@ -147,7 +147,7 @@
   .shTable {
     height: 100%;
     // height: calc(100% - 60px);
-    width: 90%;
+    width: 98%;
     display: flex;
     flex-direction: column;
     margin-left: 10px;

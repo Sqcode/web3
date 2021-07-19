@@ -133,7 +133,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="跳转笔记" prop="note" v-if="form.jumpType == 2 && pageSelected == 0">
+      <el-form-item label="跳转笔记" prop="dataJson.noteId" :rules="[{ required: true, message: '请选择笔记', trigger: 'blur' }]" v-if="form.jumpType == 2 && pageSelected == 0">
         <el-select :key="noteSelectOptionUpdate" clearable filterable style="width: 100%" v-model="noteSelected" placeholder="请选择">
           <el-option
             v-for="item in notes"
@@ -198,11 +198,11 @@ export default {
           { required: true, message: '请选择菜单跳转类型', trigger: 'blur' }
         ],
         dataJson: [
-          { required: true, message: '请选择选择页面', trigger: 'blur' }
+          { required: true, message: '请选择选择跳转页面', trigger: 'blur' }
         ],
-        note: [
-          { required: true, message: '请选择选择笔记', trigger: 'blur' }
-        ],
+        // "dataJson.noteId": [
+        //   { required: true, message: '请选择笔记', trigger: 'blur' }
+        // ],
       },
       typeOptions: [
         {label: '管理后台', value: 1},

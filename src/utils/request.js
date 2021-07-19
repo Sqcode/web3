@@ -43,7 +43,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     // res.access_token 获取tonken接口  && !res.access_token
-    if (response.status !== 200 || (res.code !== '00000')) {
+    if (response.status !== 200) {
       ElNotification({
         title: '错误',
         type: 'error',
@@ -59,7 +59,17 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
       return Promise.reject(res.msg || 'Error')
-    } else {
+    } else if (res.code === '020005') {
+      ElNotification({
+        title: '错误',
+        type: 'error',
+        message: res.msg || 'Error',
+        duration: 5 * 1000
+      })
+      router.push({name: 'login'});
+      return Promise.reject(res.msg || 'Error')
+    }
+    else {
       return res
     }
   },
@@ -70,7 +80,7 @@ service.interceptors.response.use(
     console.log('错误的status', status, '错误的code', code)
     if (status === 401 && code === '020001') {
       ElNotification({
-        title: '登录超时，请先登录!',
+        title: '登录超时，请重新登录!',
         type: 'error',
         message: res.data || res.msg || 'Error'
       })
