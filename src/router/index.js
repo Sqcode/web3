@@ -29,12 +29,20 @@ const routes = [
           title: 'Welcome'
         }
       },
+      // {
+      //   path: '/goods',
+      //   name: 'goods',
+      //   component: () => import('views/goods'),
+      //   meta: {
+      //     title: 'Goods'
+      //   }
+      // },
       {
-        path: '/goods',
-        name: 'goods',
-        component: () => import('views/goods'),
+        path: '/sys_user',
+        name: 'sys_user',
+        component: () => import('views/sysUser'),
         meta: {
-          title: 'Goods'
+          title: 'SysUser'
         }
       },
       {
@@ -60,13 +68,6 @@ const routes = [
         meta: {
           title: 'Note'
         },
-        // children: [
-        //   {
-        //     path: 'edit/:id',
-        //     name: 'edit',
-        //     component: NOTE_EDIT
-        //   }
-        // ]
       },
       {
         path: '/note/edit/:id',

@@ -163,6 +163,7 @@ import request from '@/utils/request'
 import Menu from 'models/menu'
 
 export default {
+  name: 'Menu',
   components: {shTable},
   data() {
     return {

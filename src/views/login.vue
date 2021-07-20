@@ -19,7 +19,6 @@
   import {
     login
   } from "api/login";
-  import { useStore } from "vuex";
   export default {
     name: "Login",
     data() {
@@ -36,8 +35,7 @@
             { required: true, message: '请填写密码', trigger: 'blur' },
             { min: 2, max: 11, message: '密码过短，长度因在 2 到 11 个字符', trigger: 'blur' }
           ],
-        },
-        responseResult: [],
+        }
       };
     },
     mounted (){
@@ -68,7 +66,7 @@
   };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   #login-page {
     background: url("../assets/images/bg.jpg") no-repeat;
     background-position: center;

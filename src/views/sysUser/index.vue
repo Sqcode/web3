@@ -91,7 +91,7 @@ import request from '@/utils/request'
 import User from 'models/sysUser'
 
 export default {
-  name: 'User',
+  name: 'SysUser',
   components: {shTable},
   data() {
     return {

@@ -28,16 +28,12 @@
 </template>
 <script>
   import Menu from '@/components/Menu.vue'
-  import HeaderMenu from '@/components/HeaderMenu.vue'
   import HeaderDropdown from '@/components/HeaderDropdown.vue'
-  import {
-    useStore
-  } from "vuex";
+
   export default {
     name: 'Home',
     components: {
       Menu,
-      HeaderMenu,
       HeaderDropdown
     },
     mounted() {

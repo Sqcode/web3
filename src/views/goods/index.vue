@@ -46,7 +46,7 @@
   import shTable from '@/components/shTable'
 
   export default {
-    name: 'goods',
+    name: 'Goods',
     components: {
       shTable
     },

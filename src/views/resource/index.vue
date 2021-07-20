@@ -87,6 +87,7 @@ import request from '@/utils/request'
 import Resource from 'models/resource'
 
 export default {
+  name: 'Resource',
   components: {shTable},
   data() {
     return {

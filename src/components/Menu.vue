@@ -45,8 +45,8 @@ export default {
           route: '/welcome'
         },
         {
-          name: '用户',
-          route: '/user'
+          name: '管理员',
+          route: '/sys_user'
         },
         {
           name: '菜单',

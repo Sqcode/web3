@@ -66,7 +66,7 @@ export function format (date, formatter) {
   return formatter;
 };
 //判断两个对象是否相等
-function isEqual (objA, objB) {
+export function isEqual (objA, objB) {
   //相等
   if(objA === objB) return objA !== 0 || 1/objA === 1/objB;
   //空判断

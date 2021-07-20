@@ -50,6 +50,7 @@ import { clone } from '@/utils/util'
 import Note from 'models/note'
 
 export default {
+  name: 'Note',
   components: {
     shTable,
     // formDialog
