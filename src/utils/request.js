@@ -43,15 +43,8 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     // res.access_token 获取tonken接口  && !res.access_token
-    if (response.status !== 200) {
-      ElNotification({
-        title: '错误',
-        type: 'error',
-        message: res.data || res.msg || 'Error',
-        duration: 5 * 1000
-      })
-      return Promise.reject(res.msg || 'Error')
-    } else if (res.code === '020000') {
+
+    if (res.code === '020000') {// 请求参数校验不通过
       ElNotification({
         title: '错误',
         type: 'warning',
@@ -59,7 +52,8 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
       return Promise.reject(res.msg || 'Error')
-    } else if (res.code === '020005') {
+    }
+    if (res.code === '020005') {// 无效的Token
       ElNotification({
         title: '错误',
         type: 'error',
@@ -69,7 +63,15 @@ service.interceptors.response.use(
       router.push({name: 'login'});
       return Promise.reject(res.msg || 'Error')
     }
-    else {
+    if (response.status !== 200 || res.code !== '00000') {
+      ElNotification({
+        title: '错误',
+        type: 'error',
+        message: res.data || res.msg || 'Error',
+        duration: 5 * 1000
+      })
+      return Promise.reject(res.msg || 'Error')
+    } else {
       return res
     }
   },
@@ -78,7 +80,7 @@ service.interceptors.response.use(
     const status = error.response.status
     const code = error.response.data.code
     console.log('错误的status', status, '错误的code', code)
-    if (status === 401 && code === '020001') {
+    if (status === 401 && code === '020001') {// 登录超时
       ElNotification({
         title: '登录超时，请重新登录!',
         type: 'error',
@@ -90,7 +92,7 @@ service.interceptors.response.use(
       router.push({name: 'login'});
       // if (path.startsWith('/login')) return
       // store.dispatch('user/logout')
-    } else if (status === 403 && code === '20001') {
+    } else if (status === 403 && code === '20001') {// 未登录
       ElNotification({
         title: '未登录，请先登录!',
         type: 'error',

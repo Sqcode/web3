@@ -113,7 +113,7 @@ export default {
         ],
         password: [
           { required: true, message: '请填写密码', trigger: 'blur' },
-          { min: 2, max: 11, message: '密码长度在 2 到 11 个字符', trigger: 'blur' }
+          { min: 2, max: 64, message: '密码长度在 2 到 64 个字符', trigger: 'blur' }
         ],
       },
     }

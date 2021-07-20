@@ -51,7 +51,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          request.post('/user/update/pwd/' + store.state.user.id, this.form).then(res => {
+          request.post('/sys/user/update/pwd/' + store.state.user.id, this.form).then(res => {
             this.dialogFormVisible = false
           });
         } else {
