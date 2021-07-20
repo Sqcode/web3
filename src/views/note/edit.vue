@@ -130,7 +130,7 @@ export default {
     submitForm(formName) {
       this.form.content = tinyMCE.activeEditor.getContent()
       this.form.menuId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
-      console.log(this.form);
+      // console.log(this.form);
       this.$refs[formName].validate((valid) => {
         if (valid) {
           var url = '/note/insert'

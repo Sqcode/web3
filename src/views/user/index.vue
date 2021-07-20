@@ -4,8 +4,8 @@
       <!-- 搜索条件 -->
       <template #search>
         <el-col :span="8">
-          <el-form-item label="登录名">
-            <el-input v-model="table.search.loginName"></el-input>
+          <el-form-item label="用户名">
+            <el-input v-model="table.search.userName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -30,7 +30,7 @@
           </el-image>
         </template>
       </el-table-column>
-      <el-table-column prop="loginName" label="登录名"></el-table-column>
+      <el-table-column prop="deptName" label="部门"></el-table-column>
       <el-table-column prop="userName" label="用户名"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
       <el-table-column prop="createdTime" label="创建时间" width="175">
@@ -48,11 +48,14 @@
   <!-- </div> -->
   <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="登录名" prop="loginName">
-        <el-input v-model="form.loginName" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password"></el-input>
+      <el-form-item label="所属部门" prop="deptId" >
+        <el-cascader style="width: 100%"
+          clearable
+          filterable
+          :props="props"
+          v-model="cascaderSelected"
+          @change="handleCascaderChange">
+        </el-cascader>
       </el-form-item>
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="form.userName"></el-input>
@@ -88,7 +91,7 @@
 import { clone } from '@/utils/util'
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
-import User from 'models/sysUser'
+import User from 'models/user'
 
 export default {
   name: 'User',
@@ -97,39 +100,61 @@ export default {
     return {
       table: {
         search: {
-          loginName: '',
+          userName: '',
           phone: '',
         },
-        remote: '/sys/user/page',
+        remote: '/user/page',
         update: 0
       },
       dialogFormVisible: false,
       dialogTitle: '',
       form: new User(),
       rules: {
-        loginName: [
-          { required: true, message: '请填写登录名', trigger: 'blur' },
+        userName: [
+          { required: true, message: '请填写用户名', trigger: 'blur' },
           { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
         ],
-        password: [
-          { required: true, message: '请填写密码', trigger: 'blur' },
-          { min: 2, max: 11, message: '密码长度在 2 到 11 个字符', trigger: 'blur' }
+        phone: [
+          { required: true, message: '请填写手机', trigger: 'blur' },
+          { min: 11, max: 11, message: '手机号11位', trigger: 'blur' }
         ],
       },
+      cascaderSelected: [],
+      props: {
+        checkStrictly: true,
+        lazy: true,
+        lazyLoad (node, resolve) {
+          const { value, label, level } = node;
+          if (level === 0) {
+            request.get('/dept/option/list?parentId=0').then(res => {
+              resolve(res)
+            })
+          }
+          else {
+            request.get(`/dept/option/list?parentId=${value}`).then(res => {
+              resolve(res)
+            })
+          }
+        }
+      }
     }
   },
   mounted() {
   },
   methods: {
+    handleCascaderChange (node) {
+
+    },
     getList () {
       this.table.update++
     },
     submitForm(formName) {
+      this.form.deptId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var url = '/sys/user/insert'
+          var url = '/user/insert'
           if (this.form.id) {
-            url = '/sys/user/update'
+            url = '/user/update'
           }
           request.post(url, this.form).then(res => {
             this.dialogFormVisible = false
@@ -150,6 +175,9 @@ export default {
       this.dialogFormVisible = true
       this.dialogTitle = '编辑'
       this.form = clone(row)
+      if (row.parentPath) {
+        this.cascaderSelected = row.parentPath.split(',').map(Number)
+      }
     },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
@@ -157,7 +185,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          request.post(`/sys/user/del/${row.id}`).then(res => {
+          request.post(`/user/del/${row.id}`).then(res => {
             this.$message({
               type: 'success',
               message: '删除成功!'

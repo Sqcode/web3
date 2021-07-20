@@ -1,5 +1,5 @@
 export default class Resource {
-  id
+  id = ''
   name
   url
   sort = 1

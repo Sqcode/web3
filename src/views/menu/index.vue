@@ -303,7 +303,7 @@ export default {
         this.$message.error('菜单不能属于自己');
         return;
       }
-      this.form.parentPath = this.dialogCascaderSelected.join(',')
+      this.form.parentPath = this.dialogCascaderSelected ? this.dialogCascaderSelected.join(',') : ''
       var dataJson = this.pages[this.pageSelected]
       // 如果是 笔记&选择笔记，dataJson中放入笔记id
       if (this.pageSelected === 0 && this.noteSelected) {

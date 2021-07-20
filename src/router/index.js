@@ -46,6 +46,14 @@ const routes = [
         }
       },
       {
+        path: '/dept',
+        name: 'dept',
+        component: () => import('views/dept'),
+        meta: {
+          title: 'Dept'
+        }
+      },
+      {
         path: '/user',
         name: 'user',
         component: () => import('views/user'),

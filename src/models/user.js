@@ -1,9 +1,10 @@
-export default class SysUser {
+export default class User {
   id = ''
-  loginName
+  deptId
+  roleId
   userName
+  type
   phone
-  password
   avatarUrl
   sex = 2
   email

@@ -1,5 +1,5 @@
 export default class Note {
-  id
+  id = ''
   menuId = ''
   parentId
   sort = 1

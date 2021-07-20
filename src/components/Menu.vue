@@ -49,6 +49,14 @@ export default {
           route: '/sys_user'
         },
         {
+          name: '部门',
+          route: '/dept'
+        },
+        {
+          name: '用户',
+          route: '/user'
+        },
+        {
           name: '菜单',
           route: '/menu'
         },
