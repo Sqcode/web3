@@ -23,10 +23,10 @@ export default {
     show: {
       type: Boolean,
       required: true
-    },
+    }
   },
   components: {},
-  data() {
+  data () {
     return {
       dialogFormVisible: this.show,
       form: {
@@ -37,29 +37,29 @@ export default {
         newPassword: [
           { required: true, message: '请填写新密码', trigger: 'blur' },
           { min: 2, max: 11, message: '密码长度在 2 到 11 个字符', trigger: 'blur' }
-        ],
-      },
+        ]
+      }
     }
   },
-  mounted() {
+  mounted () {
     // console.log(store.state.user.userName);
   },
   methods: {
-    handleOpen(v) {
+    handleOpen (v) {
       this.dialogFormVisible = v
     },
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           request.post('/sys/user/update/pwd/' + store.state.user.id, this.form).then(res => {
             this.dialogFormVisible = false
-          });
+          })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>

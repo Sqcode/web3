@@ -42,12 +42,12 @@
 
 <script>
 export default {
-    name: 'HeaderMenu',
-    components: {},
-    methods: {
-        handleSelect (key, keyPath) {
-        console.log(key, keyPath)
-        }
+  name: 'HeaderMenu',
+  components: {},
+  methods: {
+    handleSelect (key, keyPath) {
+      console.log(key, keyPath)
     }
+  }
 }
 </script>

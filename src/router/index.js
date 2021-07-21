@@ -16,7 +16,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
-    redirect: { name:"login" },
+    redirect: { name: 'login' },
     meta: {
       title: '主页'
     },
@@ -75,7 +75,7 @@ const routes = [
         component: () => import('views/note'),
         meta: {
           title: 'Note'
-        },
+        }
       },
       {
         path: '/note/edit/:id',
@@ -102,7 +102,7 @@ const routes = [
         }
       }
     ]
-  },
+  }
 ]
 const router = createRouter({
   history: createWebHashHistory(),

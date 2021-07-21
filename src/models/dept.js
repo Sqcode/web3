@@ -6,6 +6,6 @@ export default class User {
   name
   description
   status = 1
-  constructor(obj) {
+  constructor (obj) {
   }
 }

@@ -92,13 +92,13 @@ import SysUser from 'models/sysUser'
 
 export default {
   name: 'SysUser',
-  components: {shTable},
-  data() {
+  components: { shTable },
+  data () {
     return {
       table: {
         search: {
           loginName: '',
-          phone: '',
+          phone: ''
         },
         remote: '/sys/user/page',
         update: 0
@@ -114,17 +114,17 @@ export default {
         password: [
           { required: true, message: '请填写密码', trigger: 'blur' },
           { min: 2, max: 64, message: '密码长度在 2 到 64 个字符', trigger: 'blur' }
-        ],
-      },
+        ]
+      }
     }
   },
-  mounted() {
+  mounted () {
   },
   methods: {
     getList () {
       this.table.update++
     },
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           var url = '/sys/user/insert'
@@ -134,14 +134,14 @@ export default {
           request.post(url, this.form).then(res => {
             this.dialogFormVisible = false
             this.getList()
-          });
+          })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    handleInsertClick(){
+    handleInsertClick () {
       this.dialogFormVisible = true
       this.dialogTitle = '新增'
       this.form = new SysUser()
@@ -157,16 +157,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          request.post(`/sys/user/del/${row.id}`).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            this.dialogFormVisible = false
-            this.getList()
-        });
+        request.post(`/sys/user/del/${row.id}`).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.dialogFormVisible = false
+          this.getList()
+        })
       })
-    },
-  },
-};
+    }
+  }
+}
 </script>

@@ -88,14 +88,14 @@ import Resource from 'models/resource'
 
 export default {
   name: 'Resource',
-  components: {shTable},
-  data() {
+  components: { shTable },
+  data () {
     return {
       table: {
         search: {
           name: '',
           type: '',
-          parentId: '',
+          parentId: ''
         },
         remote: '/resource/page',
         update: 0
@@ -107,7 +107,7 @@ export default {
         name: [
           { required: true, message: '请输入资源描述名称', trigger: 'blur' },
           { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
-        ],
+        ]
         // url: [
         //   { required: true, message: '请上传图片', trigger: 'blur' }
         // ],
@@ -116,20 +116,20 @@ export default {
         // ],
       },
       typeOptions: [
-        {label: '首页Banner', value: 1},
-        {label: '笔记背景图', value: 2},
-        {label: '菜单Banner', value: 3},
-        {label: '笔记列表Banner', value: 4},
+        { label: '首页Banner', value: 1 },
+        { label: '笔记背景图', value: 2 },
+        { label: '菜单Banner', value: 3 },
+        { label: '笔记列表Banner', value: 4 }
       ]
     }
   },
-  mounted() {
+  mounted () {
   },
   methods: {
     getList () {
       this.table.update++
     },
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           var url = '/resource/insert'
@@ -139,14 +139,14 @@ export default {
           request.post(url, this.form).then(res => {
             this.dialogFormVisible = false
             this.getList()
-          });
+          })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    handleInsertClick(){
+    handleInsertClick () {
       this.dialogFormVisible = true
       this.dialogTitle = '新增'
       this.form = new Resource()
@@ -162,16 +162,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          request.post(`/resource/del/${row.id}`).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            this.dialogFormVisible = false
-            this.getList()
-        });
+        request.post(`/resource/del/${row.id}`).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.dialogFormVisible = false
+          this.getList()
+        })
       })
-    },
-  },
-};
+    }
+  }
+}
 </script>

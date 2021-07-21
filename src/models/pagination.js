@@ -3,21 +3,21 @@ export default class Pagination {
   totalCount = 0;
   pageSize = 10;
 
-  constructor(pageSize) {
+  constructor (pageSize) {
     if (pageSize !== undefined) {
-      this.pageSize = pageSize;
+      this.pageSize = pageSize
     }
   }
 
-  getTotalPage() {
-    let totalPage = Math.ceil(this.totalCount / this.pageSize);
-    return totalPage;
+  getTotalPage () {
+    const totalPage = Math.ceil(this.totalCount / this.pageSize)
+    return totalPage
   }
 
-  getObject() {
+  getObject () {
     return {
       size: this.pageSize,
       current: this.currentPage
-    };
+    }
   }
 }

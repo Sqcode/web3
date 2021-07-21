@@ -8,6 +8,6 @@ export default class SysUser {
   sex = 2
   email
   address
-  constructor(obj) {
+  constructor (obj) {
   }
 }

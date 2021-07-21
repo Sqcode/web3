@@ -27,39 +27,39 @@
   </el-container>
 </template>
 <script>
-  import Menu from '@/components/Menu.vue'
-  import HeaderDropdown from '@/components/HeaderDropdown.vue'
+import Menu from '@/components/Menu.vue'
+import HeaderDropdown from '@/components/HeaderDropdown.vue'
 
-  export default {
-    name: 'Home',
-    components: {
-      Menu,
-      HeaderDropdown
-    },
-    mounted() {
-      // console.log('mounted', this.$store.state.user);
-    },
-    data() {
-      return {
-        user: this.$store.state.user,
-        dialog: false
+export default {
+  name: 'Home',
+  components: {
+    Menu,
+    HeaderDropdown
+  },
+  mounted () {
+    // console.log('mounted', this.$store.state.user);
+  },
+  data () {
+    return {
+      user: this.$store.state.user,
+      dialog: false
+    }
+  },
+  methods: {
+    handleCommand (command) {
+      // console.log(command);
+      if (command === 'updatePwd') {
+        this.$nextTick(() => {
+          this.$refs.dropDownDialog.handleOpen(true)
+        })
       }
-    },
-    methods: {
-      handleCommand(command) {
-        // console.log(command);
-        if ('updatePwd' === command) {
-          this.$nextTick(() => {
-            this.$refs.dropDownDialog.handleOpen(true)
-          })
-        }
-        if ('logout' === command) {
-          this.$store.commit('REMOVE_INFO', this.$store.state);
-          this.$router.push({name: 'login'});
-        }
+      if (command === 'logout') {
+        this.$store.commit('REMOVE_INFO', this.$store.state)
+        this.$router.push({ name: 'login' })
       }
     }
   }
+}
 </script>
 <style lang="scss" scoped>
   .el-header {

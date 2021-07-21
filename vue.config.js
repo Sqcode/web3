@@ -1,7 +1,7 @@
 'use strict'
 const path = require('path')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -68,13 +68,13 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        'components': resolve('./src/components'),
-        'utils': resolve('./src/utils'),
-        'models': resolve('./src/models'),
-        'router': resolve('./src/router'),
-        'assets': resolve('./src/assets'),
-        'api': resolve('./src/api'),
-        'views': resolve('./src/views')
+        components: resolve('./src/components'),
+        utils: resolve('./src/utils'),
+        models: resolve('./src/models'),
+        router: resolve('./src/router'),
+        assets: resolve('./src/assets'),
+        api: resolve('./src/api'),
+        views: resolve('./src/views')
       }
     }
   }

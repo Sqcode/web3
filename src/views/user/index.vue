@@ -17,6 +17,9 @@
       <!-- 功能按钮 -->
       <template #button>
         <el-button type="primary" icon="el-icon-plus" @click="handleInsertClick">添加</el-button>
+        <import-button
+        :file-type="'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
+        :import-fileMethod="handleImport" @load-template="loadTemplate"></import-button>
       </template>
 
       <!-- 表格字段 -->
@@ -92,16 +95,17 @@ import { clone } from '@/utils/util'
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
 import User from 'models/user'
-
+import ImportButton from 'components/importButton'
+import Request from 'utils/request'
 export default {
   name: 'User',
-  components: {shTable},
-  data() {
+  components: { shTable, ImportButton },
+  data () {
     return {
       table: {
         search: {
           userName: '',
-          phone: '',
+          phone: ''
         },
         remote: '/user/page',
         update: 0
@@ -117,20 +121,19 @@ export default {
         phone: [
           { required: true, message: '请填写手机', trigger: 'blur' },
           { min: 11, max: 11, message: '手机号11位', trigger: 'blur' }
-        ],
+        ]
       },
       cascaderSelected: [],
       props: {
         checkStrictly: true,
         lazy: true,
         lazyLoad (node, resolve) {
-          const { value, label, level } = node;
+          const { value, label, level } = node
           if (level === 0) {
             request.get('/dept/option/list?parentId=0').then(res => {
               resolve(res)
             })
-          }
-          else {
+          } else {
             request.get(`/dept/option/list?parentId=${value}`).then(res => {
               resolve(res)
             })
@@ -139,7 +142,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
   },
   methods: {
     handleCascaderChange (node) {
@@ -148,7 +151,7 @@ export default {
     getList () {
       this.table.update++
     },
-    submitForm(formName) {
+    submitForm (formName) {
       this.form.deptId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -159,14 +162,14 @@ export default {
           request.post(url, this.form).then(res => {
             this.dialogFormVisible = false
             this.getList()
-          });
+          })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    handleInsertClick(){
+    handleInsertClick () {
       this.dialogFormVisible = true
       this.dialogTitle = '新增'
       this.form = new User()
@@ -185,16 +188,48 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          request.post(`/user/del/${row.id}`).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            this.dialogFormVisible = false
-            this.getList()
-        });
+        request.post(`/user/del/${row.id}`).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.dialogFormVisible = false
+          this.getList()
+        })
       })
     },
-  },
-};
+    loadTemplate (cb) {
+      // window.location.href = "/user/export/model";
+      cb(true)
+      // request.post('/user/export/model', {}, {
+      //   timeout: 60 * 1000,
+      //   responseType: 'blob'
+      // }).then(res => {
+      //   console.log(res)
+      //   const data = res.data
+      //   if (!data) {
+      //     reject(res.statusText)
+      //     return
+      //   }
+      //   cb(false)
+      // })
+      return Request.exportFile('/user/model', {}, `用户导入模板${this.$utils.format(new Date(), 'yyyyMMddHHmmss')}`, ).then(data => {
+        console.log('user', data)
+        cb(false)
+      })
+    },
+    handleImport (file) {
+      this.loading = true
+      request.parsingExcel(file).then((res) => {
+        this.tableData = res
+        this.loading = false
+        this.update++
+        return res
+      }).catch(error => {
+        this.$message.error('服务接口异常')
+        this.loading = false
+      })
+    }
+  }
+}
 </script>

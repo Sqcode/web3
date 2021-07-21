@@ -52,10 +52,10 @@ import Note from 'models/note'
 export default {
   name: 'Note',
   components: {
-    shTable,
+    shTable
     // formDialog
   },
-  data() {
+  data () {
     var table = {
       search: {
         title: ''
@@ -64,13 +64,13 @@ export default {
       update: 0
     }
     return {
-      table: table,
+      table: table
       // dialogFormVisible: false,
       // dialogTitle: '',
       // note: new Note()
     }
   },
-  mounted() {
+  mounted () {
     // this.getList ()
   },
   methods: {
@@ -78,8 +78,8 @@ export default {
       this.table.update++
       // this.dialogFormVisible = false
     },
-    handleInsertClick(){
-      this.$router.push({ name:'note_edit', params: { id: 0} })
+    handleInsertClick () {
+      this.$router.push({ name: 'note_edit', params: { id: 0 } })
       // this.dialogFormVisible = true
       // this.dialogTitle = '新增'
       // this.note = new Note()
@@ -88,7 +88,7 @@ export default {
       // })
     },
     handleEdit (index, row) {
-      this.$router.push({ name:'note_edit', params: { id: row.id} })
+      this.$router.push({ name: 'note_edit', params: { id: row.id } })
       // this.$router.push({ path:'edit', query: { id: 2}})
       // this.dialogFormVisible = true
       // this.dialogTitle = '编辑'
@@ -103,13 +103,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          request.post(`/note/del/${row.id}`).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            this.getList()
-        });
+        request.post(`/note/del/${row.id}`).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.getList()
+        })
       })
       // .catch(() => {
       //   this.$message({
@@ -117,7 +117,7 @@ export default {
       //     message: '已取消删除'
       //   });
       // });
-    },
-  },
-};
+    }
+  }
+}
 </script>

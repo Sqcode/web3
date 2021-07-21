@@ -7,6 +7,7 @@ import router from 'router'
 // create an axios instance
 const service = axios.create({
   baseURL: '/api',
+  responseType: 'json',
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
@@ -17,7 +18,7 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
     if (store.state.token) {
-      config.headers['token'] = window.sessionStorage.getItem("token")
+      config.headers.token = window.sessionStorage.getItem('token')
     }
     return config
   },
@@ -30,21 +31,16 @@ service.interceptors.request.use(
 
 // response interceptor
 service.interceptors.response.use(
-  /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
-  */
-
-  /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
   response => {
+    const responseType = response.config.responseType
+    if (responseType === 'blob') {
+      // 文件下载，直接返回
+      return response
+    }
     const res = response.data
     // res.access_token 获取tonken接口  && !res.access_token
 
-    if (res.code === '020000') {// 请求参数校验不通过
+    if (res.code === '020000') { // 请求参数校验不通过
       ElNotification({
         title: '错误',
         type: 'warning',
@@ -53,14 +49,14 @@ service.interceptors.response.use(
       })
       return Promise.reject(res.msg || 'Error')
     }
-    if (res.code === '020005') {// 无效的Token
+    if (res.code === '20005') { // 无效的Token
       ElNotification({
         title: '错误',
         type: 'error',
         message: res.msg || 'Error',
         duration: 5 * 1000
       })
-      router.push({name: 'login'});
+      router.push({ name: 'login' })
       return Promise.reject(res.msg || 'Error')
     }
     if (response.status !== 200 || res.code !== '00000') {
@@ -80,7 +76,7 @@ service.interceptors.response.use(
     const status = error.response.status
     const code = error.response.data.code
     console.log('错误的status', status, '错误的code', code)
-    if (status === 401 && code === '020001') {// 登录超时
+    if (status === 401 && code === '020001') { // 登录超时
       ElNotification({
         title: '登录超时，请重新登录!',
         type: 'error',
@@ -89,10 +85,10 @@ service.interceptors.response.use(
       // removeToken()
       window.localStorage.clear()
       window.sessionStorage.clear()
-      router.push({name: 'login'});
+      router.push({ name: 'login' })
       // if (path.startsWith('/login')) return
       // store.dispatch('user/logout')
-    } else if (status === 403 && code === '20001') {// 未登录
+    } else if (status === 403 && code === '20001') { // 未登录
       ElNotification({
         title: '未登录，请先登录!',
         type: 'error',
@@ -100,7 +96,7 @@ service.interceptors.response.use(
       })
       window.localStorage.clear()
       window.sessionStorage.clear()
-      router.push({name: 'login'});
+      router.push({ name: 'login' })
     } else {
       ElNotification({
         title: '错误!',
@@ -114,116 +110,97 @@ service.interceptors.response.use(
 // export default service
 
 export default class Request {
-  static get(url, data = {}) {
+  static get (url, data = {}) {
     return service.get(url, data).then(res => {
-      let code = res.code;
+      const code = res.code
       if (code === '00000') {
-        // ElMessage({
-        //   type: 'success',
-        //   message: '操作成功！',
-        // })
-        return res.data;
+        return res.data
       }
     })
   }
 
-  static post(url, data = {}) {
+  static post (url, data = {}) {
     return service.post(url, data).then(res => {
-      let code = res.code;
+      const code = res.code
       if (code === '00000') {
-        // ElMessage({
-        //   type: 'success',
-        //   message: '操作成功！',
-        // })
-        return res.data;
+        return res.data
       }
     })
   }
 
-  static exportFile(url, data = {}) {
+  static exportFile (url, data, fileName) {
     return new Promise((resolve, reject) => {
-      service.post(url, data, {
-        timeout: 60 * 1000,
-        responseType: 'blob'
-      }).then(res => {
-        let data = res.data;
-        if (!data) {
-          reject(res.statusText);
-          return;
-        }
-
-        const r = new FileReader();
-        r.onload = function () {
-          try {
-            const resData = JSON.parse(this.result);
-            console.log('resData', resData);
-            if (resData.code === '-1') {
-              let msg = resData.msg;
-              ElMessage.closeAll();
-              ElMessage({
-                message: msg,
-                type: 'error',
-                duration: 2000,
-                showClose: true
-              });
-              reject(new Error(msg));
-            }
-          } catch (error) {
-            resolve(data);
+      service.post(url, data, {responseType: 'blob'}).then(
+        response => {
+          resolve(response.data)
+          let blob = new Blob([response.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          })
+          // console.log(blob)
+          // let fileName = Date.parse(new Date()) + '.xlsx'
+          if (window.navigator.msSaveOrOpenBlob) {
+            navigator.msSaveBlob(blob, fileName)
+          } else {
+            var link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = fileName
+            link.click()
+            //释放内存
+            window.URL.revokeObjectURL(link.href)
           }
-        };
-        r.readAsText(data);
-      }).catch(error => {
-        reject(error);
-      });
-    });
+        },
+        err => {
+          reject(err)
+        }
+      )
+    }).catch(error => {console.log(error)})
   }
 
-  static uploadFile(url, file,callback, data = {},config = {}) {
-    const param = new FormData();
-    param.append("file", file);
-    if (!SystemUtil.isEmpty(data)) {
-      for (const key in data) {
-        let value = data[key];
-        if (value !== undefined) {
-          param.append(key, value);
-        }
-      }
-    }
+  static uploadFile (url, file, callback, data = {}, config = {}) {
+    const param = new FormData()
+    param.append('file', file)
+    // if (!SystemUtil.isEmpty(data)) {
+    //   for (const key in data) {
+    //     const value = data[key]
+    //     if (value !== undefined) {
+    //       param.append(key, value)
+    //     }
+    //   }
+    // }
 
     if (!config.headers) {
-      config.headers = {};
+      config.headers = {}
     }
-    config.headers['Content-Type'] = 'multipart/form-data;charset=utf-8';
+    config.headers['Content-Type'] = 'multipart/form-data;charset=utf-8'
     config.onUploadProgress = function (progressEvent) {
-      if (callback=== undefined) {
-        return;
+      if (callback === undefined) {
+        return
       }
       if (progressEvent.lengthComputable) {
-        callback(progressEvent);
+        callback(progressEvent)
       }
-    };
+    }
 
     return service.post(url, param, config).then(res => {
-      let status = res.status;
+      const status = res.status
       if (status !== 200) {
-        throw new Error(res.statusText);
+        throw new Error(res.statusText)
       }
 
-      res = res.data;
-      let code = res.code;
-      if (code === '000000') {
-        return res.data;
+      res = res.data
+      const code = res.code
+      if (code === '00000') {
+        return res.data
       }
-      throw new Error(res.msg);
+      throw new Error(res.msg)
     }).catch(error => {
       ElMessage({
         message: error.message,
         type: 'error',
         duration: 2000,
         showClose: true
-      });
-      throw new Error(error);
-    });
+      })
+      throw new Error(error)
+    })
   }
 }

@@ -25,45 +25,45 @@
 </template>
 
 <script>
-  import {
-    ElMessage
-  } from 'element-plus'
-  import request from '@/utils/request'
-  import Pagination from 'models/pagination';
+import {
+  ElMessage
+} from 'element-plus'
+import request from '@/utils/request'
+import Pagination from 'models/pagination'
 
-  export default {
-    components: {},
-    data() {
-      return {
-        tableData: [],
-        pagination: new Pagination(),
-        loading: false,
-        update: 0,
-        search: {
-          size: 10,
-          current: 1
-        }
-      };
+export default {
+  components: {},
+  data () {
+    return {
+      tableData: [],
+      pagination: new Pagination(),
+      loading: false,
+      update: 0,
+      search: {
+        size: 10,
+        current: 1
+      }
+    }
+  },
+  mounted () {
+    this.getList()
+  },
+  methods: {
+
+    getList () {
+      request.post('menu/page', this.search).then(res => {
+        this.tableData = res.records || []
+        this.pagination.totalCount = res.total || null
+        this.pagination.currentPage = res.current
+      })
     },
-    mounted() {
+    pageChange () {
+      this.search.size = this.pagination.pageSize
+      this.search.current = this.pagination.currentPage
       this.getList()
-    },
-    methods: {
-
-      getList() {
-        request.post(`menu/page`, this.search).then(res => {
-          this.tableData = res.records || []
-          this.pagination.totalCount = res.total || null
-          this.pagination.currentPage = res.current;
-        });
-      },
-      pageChange() {
-        this.search.size = this.pagination.pageSize
-        this.search.current = this.pagination.currentPage
-        this.getList();
-      },
-    },
-  };
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
   // .table {

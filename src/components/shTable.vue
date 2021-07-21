@@ -33,115 +33,115 @@
 </template>
 
 <script>
-  import { format } from '@/utils/util'
-  import request from '@/utils/request'
+import { format } from '@/utils/util'
+import request from '@/utils/request'
 
-  export default {
-    // Vue.component('shTable', {
-    //     template: 'shTable',
-    name: 'shTable',
-    props: {
-      remote: {
-        type: String,
-        required: true
-      },
-      // 搜索条件
-      criteria: Object,
-      // 默认排序
-      sort: Object,
-      // 请求方法
-      method: String,
-      // 请求计数
-      update: Number
+export default {
+  // Vue.component('shTable', {
+  //     template: 'shTable',
+  name: 'shTable',
+  props: {
+    remote: {
+      type: String,
+      required: true
     },
-    data() {
-      // var sort = this.sort
-      var search = {
-        current: 1,
-        size: 10,
-        orders: [{
-          column: 'created_time',
-          asc: false
-        }]
-      }
-      // search = CACHE.restore(search, this.remote)
-      return {
-        search: search,
-        loading: true,
-        tableData: [],
-        totalCount: 0
-      }
-    },
-    watch: {
-      update(newVal, oldVal) {
-        // console.log(newVal, oldVal)
-        var name = this.method || 'getList'
-        var method = this[name]
-        if (typeof method === 'function') {
-          method()
-        } else {
-          console.log("Can't invoke method '" + name + "'")
-        }
-      }
-    },
-    mounted() {
-      // console.log($(`#btn`))
-      this.getList()
-    },
-    methods: {
-      getList() {
-        var criteria = Object.assign(this.search, this.criteria)
-        request.post(this.remote, criteria).then(res => {
-          // res.records.forEach(e => {
-          //   e.createdTime = format(e.createdTime, 'yyyy-MM-dd HH:mm:ss')
-          // });
-          // console.log('tableData', res.records);
-          this.tableData = res.records || []
-          this.totalCount = res.total || 0
-          this.loading = false
-        });
-      },
-
-      // async getList (value) {
-      //   var criteria = Object.assign(this.search, this.criteria)
-      //   // console.log(criteria)
-      //   // CACHE.reserve(criteria, this.remote)
-      //   const { data } = await request({
-      //     url: this.remote,
-      //     method: 'post',
-      //     data: criteria
-      //   })
-      //   // console.log(data)
-      //   this.tableData = data.records || []
-      //   this.totalCount = data.total || null
-      //   this.loading = false
-      //   // this.$emit('search-after')
-      // },
-      handleSizeChange(val) {// 修改显示条数
-        this.search.size = val
-        this.getList()
-      },
-      handleCurrentChange(val) {// 修改页数
-        this.search.current = val
-        this.getList()
-      },
-      handleSortChange(column, prop, order) {// 排序
-        console.log(column, prop, order)
-        this.search.orderBy = column.prop + ' ' + column.order
-        this.getList()
-      },
-      handleSelectionChange(rows) {
-        this.$emit('selection', rows)
-      },
-      handleRowClick(row, event, column) {
-        this.$emit('row-click', row, event, column)
-      },
-      handleExpandChange(row, expandedRows, expanded) {
-        this.$emit('expand-change', row, expandedRows, expanded)
+    // 搜索条件
+    criteria: Object,
+    // 默认排序
+    sort: Object,
+    // 请求方法
+    method: String,
+    // 请求计数
+    update: Number
+  },
+  data () {
+    // var sort = this.sort
+    var search = {
+      current: 1,
+      size: 10,
+      orders: [{
+        column: 'created_time',
+        asc: false
+      }]
+    }
+    // search = CACHE.restore(search, this.remote)
+    return {
+      search: search,
+      loading: true,
+      tableData: [],
+      totalCount: 0
+    }
+  },
+  watch: {
+    update (newVal, oldVal) {
+      // console.log(newVal, oldVal)
+      var name = this.method || 'getList'
+      var method = this[name]
+      if (typeof method === 'function') {
+        method()
+      } else {
+        console.log("Can't invoke method '" + name + "'")
       }
     }
+  },
+  mounted () {
+    // console.log($(`#btn`))
+    this.getList()
+  },
+  methods: {
+    getList () {
+      var criteria = Object.assign(this.search, this.criteria)
+      request.post(this.remote, criteria).then(res => {
+        // res.records.forEach(e => {
+        //   e.createdTime = format(e.createdTime, 'yyyy-MM-dd HH:mm:ss')
+        // });
+        // console.log('tableData', res.records);
+        this.tableData = res.records || []
+        this.totalCount = res.total || 0
+        this.loading = false
+      })
+    },
+
+    // async getList (value) {
+    //   var criteria = Object.assign(this.search, this.criteria)
+    //   // console.log(criteria)
+    //   // CACHE.reserve(criteria, this.remote)
+    //   const { data } = await request({
+    //     url: this.remote,
+    //     method: 'post',
+    //     data: criteria
+    //   })
+    //   // console.log(data)
+    //   this.tableData = data.records || []
+    //   this.totalCount = data.total || null
+    //   this.loading = false
+    //   // this.$emit('search-after')
+    // },
+    handleSizeChange (val) { // 修改显示条数
+      this.search.size = val
+      this.getList()
+    },
+    handleCurrentChange (val) { // 修改页数
+      this.search.current = val
+      this.getList()
+    },
+    handleSortChange (column, prop, order) { // 排序
+      console.log(column, prop, order)
+      this.search.orderBy = column.prop + ' ' + column.order
+      this.getList()
+    },
+    handleSelectionChange (rows) {
+      this.$emit('selection', rows)
+    },
+    handleRowClick (row, event, column) {
+      this.$emit('row-click', row, event, column)
+    },
+    handleExpandChange (row, expandedRows, expanded) {
+      this.$emit('expand-change', row, expandedRows, expanded)
+    }
   }
-  // })
+}
+// })
 </script>
 <style lang="scss" scoped>
   .shTable {

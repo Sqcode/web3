@@ -61,13 +61,13 @@ export default {
     note: {
       type: Object,
       required: true
-    },
+    }
   },
   emits: ['getList'],
   components: {
     TEditor
   },
-  data() {
+  data () {
     return {
       content: '',
       form: this.note,
@@ -83,7 +83,7 @@ export default {
         // ],
         content: [
           { required: true, message: '请填写内容', trigger: 'blur' }
-        ],
+        ]
       },
       notes: [],
       dialogCascaderSelected: [],
@@ -91,13 +91,12 @@ export default {
         checkStrictly: true,
         lazy: true,
         lazyLoad (node, resolve) {
-          const { value, label, level } = node;
+          const { value, label, level } = node
           if (level === 0) {
             request.get('/menu/option/list?parentId=0&level=0').then(res => {
               resolve(res)
             })
-          }
-          else {
+          } else {
             request.get(`/menu/option/list?parentId=${value}`).then(res => {
               resolve(res)
             })
@@ -108,11 +107,11 @@ export default {
   },
   computed: {
   },
-  mounted() {
+  mounted () {
     // const editor = new E("#editor")
     // editor.create()
     // this.editor = editor
-    //var note = this.note
+    // var note = this.note
     // 配置触发 onchange 的时间频率，默认为 200ms
     // editor.config.onchangeTimeout = 500; // 修改为 500ms
     // editor.config.onchange  = function (newHtml) {
@@ -137,9 +136,9 @@ export default {
     },
     handleDialogCascaderChange (node) {
       // console.log(this.dialogCascaderSelected.join(','));
-      this.getNoteList (node[node.length - 1])
+      this.getNoteList(node[node.length - 1])
     },
-    handleOpen(row) {
+    handleOpen (row) {
       this.form = row
       // console.log('handleOpen', row);
       // this.editor.txt.html(row.content);
@@ -149,7 +148,7 @@ export default {
       }
       this.getNoteList('')
     },
-    submitForm(formName) {
+    submitForm (formName) {
       // this.form.content = this.editor.txt.html()
       this.form.menuId = this.dialogCascaderSelected ? this.dialogCascaderSelected[this.dialogCascaderSelected.length - 1] : ''
       // console.log(this.form);
@@ -161,19 +160,19 @@ export default {
           }
 
           request.post(url, this.form).then(res => {
-            this.$emit('getList');
-          });
+            this.$emit('getList')
+          })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     // resetForm(formName) {
     //   this.$refs[formName].resetFields();
     // },
     handleButtonClick () {
-      console.log(tinyMCE.activeEditor.getContent() );
+      console.log(tinyMCE.activeEditor.getContent())
     }
   }
 }

@@ -16,54 +16,53 @@
 </template>
 
 <script>
-  import {
-    login
-  } from "api/login";
-  export default {
-    name: "Login",
-    data() {
-      return {
-        loginForm: {
-          loginName: "",
-          password: "",
-        },
-        rules: {
-          loginName: [
-            { required: true, message: '请填写账号', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: '请填写密码', trigger: 'blur' },
-            { min: 2, max: 11, message: '密码过短，长度因在 2 到 11 个字符', trigger: 'blur' }
-          ],
-        }
-      };
-    },
-    mounted (){
-    },
-    methods: {
-      login() {
-        this.$refs['loginForm'].validate((valid) => {
-          if (valid) {
-            login ({
-              loginName: this.loginForm.loginName,
-              password: this.loginForm.password,
-            }).then((data) => {
-              // console.log('user', data);
-              let token = data.token;
-              // 存储token
-              this.$store.commit('SET_TOKEN', token);
-              // 存储user，优雅一点的做法是token和user分开获取
-              this.$store.commit('SET_USER', data);
-              // console.log('token', this.$store.state.token);
-              // console.log('user', this.$store.state.user);
-              this.$router.push({name: 'welcome'});
-            });
-          }
-        })
-
+import {
+  login
+} from 'api/login'
+export default {
+  name: 'Login',
+  data () {
+    return {
+      loginForm: {
+        loginName: '',
+        password: ''
       },
-    },
-  };
+      rules: {
+        loginName: [
+          { required: true, message: '请填写账号', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请填写密码', trigger: 'blur' },
+          { min: 2, max: 11, message: '密码过短，长度因在 2 到 11 个字符', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  mounted () {
+  },
+  methods: {
+    login () {
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          login({
+            loginName: this.loginForm.loginName,
+            password: this.loginForm.password
+          }).then((data) => {
+            // console.log('user', data);
+            const token = data.token
+            // 存储token
+            this.$store.commit('SET_TOKEN', token)
+            // 存储user，优雅一点的做法是token和user分开获取
+            this.$store.commit('SET_USER', data)
+            // console.log('token', this.$store.state.token);
+            // console.log('user', this.$store.state.user);
+            this.$router.push({ name: 'welcome' })
+          })
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -164,8 +164,8 @@ import Menu from 'models/menu'
 
 export default {
   name: 'Menu',
-  components: {shTable},
-  data() {
+  components: { shTable },
+  data () {
     return {
       table: {
         search: {
@@ -200,33 +200,33 @@ export default {
         ],
         dataJson: [
           { required: true, message: '请选择选择跳转页面', trigger: 'blur' }
-        ],
+        ]
         // "dataJson.noteId": [
         //   { required: true, message: '请选择笔记', trigger: 'blur' }
         // ],
       },
       typeOptions: [
-        {label: '管理后台', value: 1},
-        {label: '小程序', value: 2},
+        { label: '管理后台', value: 1 },
+        { label: '小程序', value: 2 }
       ],
       jumpTypeOptions: [],
       pageSelected: null,
       pageOptions: [
-        {label: '笔记', value: 0},
-        {label: '笔记列表', value: 1},
-        {label: '原版工具卡', value: 2},
+        { label: '笔记', value: 0 },
+        { label: '笔记列表', value: 1 },
+        { label: '原版工具卡', value: 2 }
       ],
       pages: [
-        {label: "page", value: "/note/index", noteId: ''},
-        {label: "page", value: "/notes/index"},
-        {label: "page", value: "/menu_icon/index"},
+        { label: 'page', value: '/note/index', noteId: '' },
+        { label: 'page', value: '/notes/index' },
+        { label: 'page', value: '/menu_icon/index' }
       ],
       cascaderKey: 0,
       props: {
         checkStrictly: true,
         lazy: true,
         lazyLoad (node, resolve) {
-          const { value, label, level } = node;
+          const { value, label, level } = node
           // console.log('value', value, 'label', label, 'level', level);
           if (level === 0) {
             request.get('/menu/option/list?parentId=0&level=0').then(res => {
@@ -234,13 +234,14 @@ export default {
                 value: 0,
                 label: '首页菜单',
                 leaf: true,
-                hasChildren: false, selected: false, children: []
+                hasChildren: false,
+                selected: false,
+                children: []
               })
               resolve(res)
               // this.optionsKey ++
             })
-          }
-          else {
+          } else {
             request.get(`/menu/option/list?parentId=${value}`).then(res => {
               // console.log('children', !res, res);
               resolve(res)
@@ -253,7 +254,7 @@ export default {
       noteSelected: ''
     }
   },
-  mounted() {
+  mounted () {
     this.getJumpTypeOptionList()
     // console.log(this.$utils.format(new Date(), 'yyyy-MM-dd'));
     // this.getNoteList ('')
@@ -264,8 +265,8 @@ export default {
         // 过滤有parentId，这里只能选择 主笔记
         res = res.filter(v => !v.parentId)
         const ns = res.map(v => ({
-            label: v.title,
-            value: v.id
+          label: v.title,
+          value: v.id
         }))
         this.notes = ns
         this.noteSelectOptionUpdate++
@@ -284,7 +285,7 @@ export default {
         if (res) {
           this.jumpTypeOptions = res
         }
-      });
+      })
     },
     handleCascaderSearchChange (node) {
       this.table.search.parentId = this.cascaderSearchSelected ? this.cascaderSearchSelected[this.cascaderSearchSelected.length - 1] : ''
@@ -296,12 +297,12 @@ export default {
     getList () {
       this.table.update++
     },
-    submitForm(formName) {
+    submitForm (formName) {
       this.form.parentId = this.dialogCascaderSelected ? this.dialogCascaderSelected[this.dialogCascaderSelected.length - 1] : ''
       // console.log(this.form.parentId, this.form.id);
       if (this.form.parentId === this.form.id) {
-        this.$message.error('菜单不能属于自己');
-        return;
+        this.$message.error('菜单不能属于自己')
+        return
       }
       this.form.parentPath = this.dialogCascaderSelected ? this.dialogCascaderSelected.join(',') : ''
       var dataJson = this.pages[this.pageSelected]
@@ -309,7 +310,7 @@ export default {
       if (this.pageSelected === 0 && this.noteSelected) {
         dataJson.noteId = this.noteSelected
       }
-      if (this.form.jumpType === 1) {// 如果跳菜单，清空dataJSON
+      if (this.form.jumpType === 1) { // 如果跳菜单，清空dataJSON
         dataJson = {}
       }
 
@@ -323,22 +324,22 @@ export default {
             url = '/menu/update'
           }
           request.post(url, this.form).then(res => {
-            console.log(res);
+            console.log(res)
             this.$message({
               type: 'success',
-              message: '操作成功！',
+              message: '操作成功！'
             })
             this.dialogFormVisible = false
             this.getList()
             this.cascaderKey++
-          });
+          })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    handleInsertClick(){
+    handleInsertClick () {
       this.dialogFormVisible = true
       this.dialogTitle = '新增'
       this.form = new Menu()
@@ -354,15 +355,15 @@ export default {
         if (v.value === row.dataJson.value) {
           // console.log(v.value, row.dataJson, k);
           this.pageSelected = k
-          if (k === 0) {// 笔记，获取笔记id，列表
-            this.getNoteList ('')
+          if (k === 0) { // 笔记，获取笔记id，列表
+            this.getNoteList('')
             this.noteSelected = row.dataJson.noteId
           }
         }
         // if (this.$utils.isEqual(v, row.dataJson)) {
         //   this.pageSelected = k
         // }
-      });
+      })
       // console.log(this.pages.indexOf(row.dataJson));
       // this.pageSelected = this.pages.indexOf(row.dataJson)
       this.form = clone(row)
@@ -373,14 +374,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          request.post(`/menu/del/${row.id}`).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            this.dialogFormVisible = false
-            this.getList()
-        });
+        request.post(`/menu/del/${row.id}`).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.dialogFormVisible = false
+          this.getList()
+        })
       })
       // .catch(() => {
       //   this.$message({
@@ -388,7 +389,7 @@ export default {
       //     message: '已取消删除'
       //   });
       // });
-    },
-  },
-};
+    }
+  }
+}
 </script>

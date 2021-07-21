@@ -73,12 +73,12 @@ import Dept from 'models/dept'
 
 export default {
   name: 'Dept',
-  components: {shTable},
-  data() {
+  components: { shTable },
+  data () {
     return {
       table: {
         search: {
-          name: '',
+          name: ''
         },
         remote: '/dept/page',
         update: 0
@@ -90,7 +90,7 @@ export default {
         name: [
           { required: true, message: '请填写名称', trigger: 'blur' },
           { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
-        ],
+        ]
       },
       cascaderSelected: [],
       cascaderKey: 0,
@@ -98,13 +98,12 @@ export default {
         checkStrictly: true,
         lazy: true,
         lazyLoad (node, resolve) {
-          const { value, label, level } = node;
+          const { value, label, level } = node
           if (level === 0) {
             request.get('/dept/option/list?parentId=0').then(res => {
               resolve(res)
             })
-          }
-          else {
+          } else {
             request.get(`/dept/option/list?parentId=${value}`).then(res => {
               resolve(res)
             })
@@ -113,7 +112,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
   },
   methods: {
     handleCascaderChange (node) {
@@ -122,11 +121,11 @@ export default {
     getList () {
       this.table.update++
     },
-    submitForm(formName) {
+    submitForm (formName) {
       this.form.parentId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : 0
       if (this.form.parentId === this.form.id) {
-        this.$message.error('部门不能属于自己');
-        return;
+        this.$message.error('部门不能属于自己')
+        return
       }
       this.form.parentPath = this.cascaderSelected ? this.cascaderSelected.join(',') : null
 
@@ -139,14 +138,14 @@ export default {
           request.post(url, this.form).then(res => {
             this.dialogFormVisible = false
             this.getList()
-          });
+          })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
-    handleInsertClick(){
+    handleInsertClick () {
       this.dialogFormVisible = true
       this.dialogTitle = '新增'
       this.form = new Dept()
@@ -165,17 +164,17 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          request.post(`/dept/del/${row.id}`).then(res => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-            this.dialogFormVisible = false
-            this.getList()
-            this.cascaderKey++
-        });
+        request.post(`/dept/del/${row.id}`).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.dialogFormVisible = false
+          this.getList()
+          this.cascaderKey++
+        })
       })
-    },
-  },
-};
+    }
+  }
+}
 </script>

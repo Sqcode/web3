@@ -9,6 +9,6 @@ export default class User {
   sex = 2
   email
   address
-  constructor(obj) {
+  constructor (obj) {
   }
 }

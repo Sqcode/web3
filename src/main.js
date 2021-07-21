@@ -6,7 +6,7 @@ import utils from './utils/util'
 import ElementPlus from 'element-plus'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 
-import './styles/base.scss';
+import './styles/base.scss'
 import 'element-plus/lib/theme-chalk/index.css'
 import vueConfig from '../vue.config'
 
@@ -21,8 +21,8 @@ import vueConfig from '../vue.config'
 // Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
 
 const app = createApp(App)
-app.config.globalProperties.$utils =  utils
-app.config.globalProperties.$goBack =  goBack
+app.config.globalProperties.$utils = utils
+app.config.globalProperties.$goBack = goBack
 app.use(store).use(router).use(ElementPlus, { locale }).mount('#app')
 
 router.beforeEach((to, from, next) => {

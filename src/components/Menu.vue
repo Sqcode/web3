@@ -14,30 +14,30 @@
 export default {
   name: 'Menu',
   components: {},
-  mounted() {
+  mounted () {
   },
   computed: {
     routerPath: function () {
       // 匹配第一个/ 的路径
       var path = this.$route.path
-      var index = path.indexOf( '/' );
-      var index_2 = path.indexOf( '/', index + 1 );
+      var index = path.indexOf('/')
+      var index_2 = path.indexOf('/', index + 1)
       if (index_2 != -1) {
-        return path.substring(0, index_2);
+        return path.substring(0, index_2)
       } else {
-        return path;
+        return path
       }
     }
   },
   methods: {
-    handleOpen(key, keyPath) {
+    handleOpen (key, keyPath) {
       console.log(key, keyPath)
     },
-    handleClose(key, keyPath) {
+    handleClose (key, keyPath) {
       console.log(key, keyPath)
     }
   },
-  data() {
+  data () {
     return {
       navList: [
         {

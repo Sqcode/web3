@@ -5,6 +5,6 @@ export default class Resource {
   sort = 1
   absoluteUrl
   type
-  constructor(obj) {
+  constructor (obj) {
   }
 }

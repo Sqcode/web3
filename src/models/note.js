@@ -8,6 +8,6 @@ export default class Note {
   content=''
   status='1'
   parentId
-  constructor(bj) {
+  constructor (bj) {
   }
 }

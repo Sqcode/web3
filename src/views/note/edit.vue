@@ -40,7 +40,6 @@
     <el-button @click="handleButtonClick">按钮</el-button>
   </el-footer>
 
-
 </template>
 <script>
 import TEditor from '@/components/TEditor.vue'
@@ -53,7 +52,7 @@ export default {
   components: {
     TEditor
   },
-  data() {
+  data () {
     return {
       content: '',
       form: new Note(),
@@ -67,7 +66,7 @@ export default {
         // ],
         content: [
           { required: true, message: '请填写内容', trigger: 'blur' }
-        ],
+        ]
       },
       notes: [],
       cascaderSelected: [],
@@ -75,13 +74,12 @@ export default {
         checkStrictly: true,
         lazy: true,
         lazyLoad (node, resolve) {
-          const { value, label, level } = node;
+          const { value, label, level } = node
           if (level === 0) {
             request.get('/menu/option/list?parentId=0&level=0').then(res => {
               resolve(res)
             })
-          }
-          else {
+          } else {
             request.get(`/menu/option/list?parentId=${value}`).then(res => {
               resolve(res)
             })
@@ -92,7 +90,7 @@ export default {
   },
   computed: {
   },
-  mounted() {
+  mounted () {
     // console.log('我是子路由页面,params:id', this.$route.params.id);
     var id = this.$route.params.id
 
@@ -103,12 +101,12 @@ export default {
           this.form = data
           setTimeout(() => {
             tinyMCE.activeEditor.setContent(data.content)
-          }, 500);
+          }, 500)
         }
       })
     }
 
-    this.getNoteList('');// 加载所有笔记
+    this.getNoteList('')// 加载所有笔记
   },
   methods: {
     getNoteList (menuId) {
@@ -125,9 +123,9 @@ export default {
     },
     handleCascaderChange (node) {
       // console.log(this.cascaderSelected.join(','));
-      this.getNoteList (node[node.length - 1])
+      this.getNoteList(node[node.length - 1])
     },
-    submitForm(formName) {
+    submitForm (formName) {
       this.form.content = tinyMCE.activeEditor.getContent()
       this.form.menuId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
       // console.log(this.form);
@@ -140,23 +138,23 @@ export default {
           request.post(url, this.form).then(res => {
             this.$message({
               type: 'success',
-              message: '操作成功，即将返回列表',
+              message: '操作成功，即将返回列表'
             })
             setTimeout(() => {
-              this.$router.push({name: 'note'});
-            }, 1000);
-          });
+              this.$router.push({ name: 'note' })
+            }, 1000)
+          })
         } else {
-          console.log('error submit!!');
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     // resetForm(formName) {
     //   this.$refs[formName].resetFields();
     // },
     handleButtonClick () {
-      console.log(tinyMCE.activeEditor.getContent() );
+      console.log(tinyMCE.activeEditor.getContent())
     }
   }
 }

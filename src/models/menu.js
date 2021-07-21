@@ -11,6 +11,6 @@ export default class Menu {
   status = ''
   parentId = 0
 
-  constructor(obj) {
+  constructor (obj) {
   }
 }
