@@ -199,20 +199,7 @@ export default {
       })
     },
     loadTemplate (cb) {
-      // window.location.href = "/user/export/model";
       cb(true)
-      // request.post('/user/export/model', {}, {
-      //   timeout: 60 * 1000,
-      //   responseType: 'blob'
-      // }).then(res => {
-      //   console.log(res)
-      //   const data = res.data
-      //   if (!data) {
-      //     reject(res.statusText)
-      //     return
-      //   }
-      //   cb(false)
-      // })
       return Request.exportFile('/user/model', {}, `用户导入模板${this.$utils.format(new Date(), 'yyyyMMddHHmmss')}`, ).then(data => {
         console.log('user', data)
         cb(false)
@@ -220,11 +207,14 @@ export default {
     },
     handleImport (file) {
       this.loading = true
-      request.parsingExcel(file).then((res) => {
-        this.tableData = res
-        this.loading = false
-        this.update++
-        return res
+      request.uploadFile('/user/parsing', file).then((res) => {
+        if (res) {
+          this.$message({
+            type: 'success',
+            message: '导入成功!'
+          })
+          this.getList
+        }
       }).catch(error => {
         this.$message.error('服务接口异常')
         this.loading = false

@@ -182,12 +182,6 @@ export default class Request {
     }
 
     return service.post(url, param, config).then(res => {
-      const status = res.status
-      if (status !== 200) {
-        throw new Error(res.statusText)
-      }
-
-      res = res.data
       const code = res.code
       if (code === '00000') {
         return res.data

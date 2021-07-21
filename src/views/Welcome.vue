@@ -2,6 +2,11 @@
   <div class="">
     <p style="font-size: 2em;">欢 迎 您... {{ $store.state.user ? $store.state.user.userName : '?' }}</p>
     <div style="font-size: 1em; text-align: left; margin-left: 100px;">
+      <p>07/21 更新内容</p>
+      <ol>
+        <li>导出，导入用户模板</li>
+        <li>导入用户</li>
+      </ol>
       <p>07/20 更新内容</p>
       <ol>
         <li>新增 用户</li>
