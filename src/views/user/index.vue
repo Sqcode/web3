@@ -213,7 +213,7 @@ export default {
             type: 'success',
             message: '导入成功!'
           })
-          this.getList
+          this.getList()
         }
       }).catch(error => {
         this.$message.error('服务接口异常')
