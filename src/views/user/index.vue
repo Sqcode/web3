@@ -36,6 +36,7 @@
       <el-table-column prop="deptName" label="部门"></el-table-column>
       <el-table-column prop="userName" label="用户名"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
+      <el-table-column prop="sort" label="排序"></el-table-column>
       <el-table-column prop="createdTime" label="创建时间" width="175">
         <template #default="scope">
           {{ this.$utils.format(scope.row.createdTime, 'yyyy-MM-dd HH:mm:ss') }}
@@ -65,6 +66,9 @@
       </el-form-item>
       <el-form-item label="手机号" prop="phone">
         <el-input v-model="form.phone"></el-input>
+      </el-form-item>
+      <el-form-item label="排序">
+        <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
       </el-form-item>
       <el-form-item label="性别" prop="sex">
         <el-radio-group v-model="form.sex">

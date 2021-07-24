@@ -4,11 +4,11 @@ import router from './router'
 import store from './store'
 import utils from './utils/util'
 import ElementPlus from 'element-plus'
+import { ElNotification } from 'element-plus'
 import locale from 'element-plus/lib/locale/lang/zh-cn'
 
 import './styles/base.scss'
 import 'element-plus/lib/theme-chalk/index.css'
-import vueConfig from '../vue.config'
 
 // import filters from './filters/timeFormat'
 // import { format } from 'date-fns'
@@ -31,6 +31,15 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title
   } else {
     document.title = 'cn.su'
+  }
+  if ('/welcome' === to.path) {
+    if (!store.state.token) {
+      ElNotification.error({
+        title: '错误',
+        message: '请先登录'
+      });
+      router.push({name: 'login'})
+    }
   }
   next()
 })

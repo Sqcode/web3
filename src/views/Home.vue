@@ -20,7 +20,7 @@
           </template>
         </el-dropdown>
       </el-header>
-      <HeaderDropdown ref="dropDownDialog" :show="dialog" />
+      <HeaderDropdownPwd ref="dropDownDialog" :show="dialog" />
       <el-divider></el-divider>
       <router-view />
     </el-container>
@@ -28,13 +28,14 @@
 </template>
 <script>
 import Menu from '@/components/Menu.vue'
-import HeaderDropdown from '@/components/HeaderDropdown.vue'
+import HeaderDropdownPwd from '@/components/HeaderDropdownPwd.vue'
+import request from '@/utils/request'
 
 export default {
   name: 'Home',
   components: {
     Menu,
-    HeaderDropdown
+    HeaderDropdownPwd
   },
   mounted () {
     // console.log('mounted', this.$store.state.user);
@@ -54,8 +55,10 @@ export default {
         })
       }
       if (command === 'logout') {
-        this.$store.commit('REMOVE_INFO', this.$store.state)
-        this.$router.push({ name: 'login' })
+        // request.get('/manage/logout/' + this.$store.state.user.id).then(res => {
+          this.$store.commit('REMOVE_INFO', this.$store.state)
+          this.$router.push({ name: 'login' })
+        // })
       }
     }
   }

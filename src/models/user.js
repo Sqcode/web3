@@ -9,6 +9,7 @@ export default class User {
   sex = 2
   email
   address
+  sort = 1
   constructor (obj) {
   }
 }
