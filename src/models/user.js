@@ -10,6 +10,7 @@ export default class User {
   email
   address
   sort = 1
+  status = 1
   constructor (obj) {
   }
 }
