@@ -6,7 +6,7 @@ export default class Note {
   title=''
   subTitle=''
   content=''
-  status='1'
+  status= 1
   parentId
   constructor (bj) {
   }

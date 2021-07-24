@@ -24,6 +24,11 @@
     <el-table-column prop="title" label="标题"></el-table-column>
     <el-table-column prop="sort" label="排序"></el-table-column>
     <el-table-column prop="content" label="内容" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="status" label="状态">
+      <template #default="scope">
+          <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{ scope.row.status === 1 ? '开启' : '禁用' }}</el-tag>
+      </template>
+    </el-table-column>
     <el-table-column prop="createdTime" label="创建时间" width="175">
       <template #default="scope">
         {{ this.$utils.format(scope.row.createdTime, 'yyyy-MM-dd HH:mm:ss') }}

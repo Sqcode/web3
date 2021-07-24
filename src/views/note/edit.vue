@@ -7,6 +7,12 @@
       <!-- <el-form-item label="子标题" prop="subTitle">
         <el-input v-model="form.subTitle"></el-input>
       </el-form-item> -->
+      <el-form-item label="状态" prop="status">
+        <el-radio-group v-model="form.status">
+          <el-radio :label="1">开启</el-radio>
+          <el-radio :label="0">禁用</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="排序">
         <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
       </el-form-item>
@@ -37,7 +43,7 @@
   <el-footer>
     <el-button type="warning" @click="$goBack">返 回</el-button>
     <el-button type="primary" @click="submitForm('form')">提 交</el-button>
-    <el-button @click="handleButtonClick">按钮</el-button>
+    <el-button @click="handleButtonClick">打印内容</el-button>
   </el-footer>
 
 </template>
@@ -103,7 +109,11 @@ export default {
             tinyMCE.activeEditor.setContent(data.content)
           }, 500)
         }
+        if (data.parentPath) {
+          this.cascaderSelected = data.parentPath.split(',').map(Number)
+        }
       })
+
     }
 
     this.getNoteList('')// 加载所有笔记
@@ -138,11 +148,9 @@ export default {
           request.post(url, this.form).then(res => {
             this.$message({
               type: 'success',
-              message: '操作成功，即将返回列表'
+              message: '操作成功！'
             })
-            setTimeout(() => {
-              this.$router.push({ name: 'note' })
-            }, 1000)
+            this.$router.push({ name: 'note' })
           })
         } else {
           console.log('error submit!!')

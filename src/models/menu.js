@@ -8,7 +8,7 @@ export default class Menu {
   dataJson = '{}'
   url = ''
   absoluteUrl = ''
-  status = ''
+  status = 1
   parentId = 0
 
   constructor (obj) {

@@ -19,6 +19,11 @@
       <el-table-column prop="parentName" label="所属部门"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="description" label="介绍"></el-table-column>
+      <el-table-column prop="status" label="状态">
+        <template #default="scope">
+            <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{ scope.row.status === 1 ? '开启' : '禁用' }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="createdTime" label="创建时间" width="175">
         <template #default="scope">
           {{ this.$utils.format(scope.row.createdTime, 'yyyy-MM-dd HH:mm:ss') }}

@@ -68,6 +68,11 @@
       <el-table-column prop="sort" label="排序"></el-table-column>
       <el-table-column prop="typeName" label="菜单类型"></el-table-column>
       <el-table-column prop="jumpTypeName" label="跳转类型"></el-table-column>
+      <el-table-column prop="status" label="状态">
+        <template #default="scope">
+            <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{ scope.row.status === 1 ? '开启' : '禁用' }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="createdTime" label="创建时间" width="175">
         <template #default="scope">
           {{ this.$utils.format(scope.row.createdTime, 'yyyy-MM-dd HH:mm:ss') }}
@@ -85,6 +90,12 @@
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-radio-group v-model="form.status">
+          <el-radio :label="1">开启</el-radio>
+          <el-radio :label="0">禁用</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="排序">
         <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="小程序菜单排序"></el-input-number>
