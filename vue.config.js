@@ -77,8 +77,8 @@ module.exports = {
         views: resolve('./src/views')
       }
     }
-  }
-  // chainWebpack (config) {
+  },
+  chainWebpack (config) {
   //   config.plugins.delete('preload') // TODO: need test
   //   config.plugins.delete('prefetch') // TODO: need test
 
@@ -99,12 +99,11 @@ module.exports = {
   //     })
   //     .end()
 
-  //   config
-  //     // https://webpack.js.org/configuration/devtool/#development
-  //     .when(process.env.NODE_ENV === 'development',
-  //       // config => config.devtool('cheap-source-map')
-  //       config => config.devtool('source-map')
-  //     )
+    config
+      // https://webpack.js.org/configuration/devtool/#development
+      .when(process.env.NODE_ENV === 'development',
+        config => config.devtool('source-map')
+      )
 
   //   config
   //     .when(process.env.NODE_ENV !== 'development',
@@ -144,5 +143,5 @@ module.exports = {
   //         config.optimization.runtimeChunk('single')
   //       }
   //     )
-  // }
+  }
 }
