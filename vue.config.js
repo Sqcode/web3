@@ -36,21 +36,21 @@ module.exports = {
       errors: false
     },
     proxy: {
-      '/api': {
+      // '/api': {
+      //   target: 'http://localhost:10086',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/api': ''
+      //   }
+      // }
+      // ,
+      [process.env.VUE_APP_BASE_API]: {
         target: 'http://localhost:10086',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       }
-      // ,
-      // [process.env.VUE_APP_BASE_API]: {
-      //   target: 'http://127.0.0.1:7777',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     ['^' + process.env.VUE_APP_BASE_API]: ''
-      //   }
-      // }
     }
   },
   configureWebpack: {

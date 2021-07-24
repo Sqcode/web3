@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve --open --mode dev",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "test": "vue-cli-service serve --mode production",
     "lint": "vue-cli-service lint",
-    "development": "vue-cli-service build --mode development",
-    "prod": "vue-cli-service build --mode prod"
+    "dev": "vue-cli-service build --mode development",
+    "prod": "vue-cli-service build --mode production"
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^4.0.4",
