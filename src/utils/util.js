@@ -17,6 +17,12 @@
 //   }
 //   return o;
 // };
+export function absoluteUrl (url) {
+  if (url.indexOf(',') != -1) {
+    return '';
+  }
+  return process.env.VUE_APP_IMAGE_URL_PREFIX + url
+}
 
 export function clone (obj) {
   const _obj = JSON.stringify(obj)
@@ -27,7 +33,8 @@ export function clone (obj) {
 export default {
   clone,
   format,
-  isEqual
+  isEqual,
+  absoluteUrl
 }
 
 export function format (date, formatter) {

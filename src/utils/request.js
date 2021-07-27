@@ -156,18 +156,19 @@ export default class Request {
     }).catch(error => {console.log(error)})
   }
 
-  static uploadFile (url, file, callback, data = {}, config = {}) {
+  static uploadFile (url, file, data, callback, config = {}) {
+    console.log(file, data);
     const param = new FormData()
     param.append('file', file)
-    // if (!SystemUtil.isEmpty(data)) {
-    //   for (const key in data) {
-    //     const value = data[key]
-    //     if (value !== undefined) {
-    //       param.append(key, value)
-    //     }
-    //   }
-    // }
-
+    if (data) {
+      for (const key in data) {
+        const value = data[key]
+        if (value !== undefined) {
+          param.append(key, value)
+        }
+      }
+    }
+console.log(param);
     if (!config.headers) {
       config.headers = {}
     }

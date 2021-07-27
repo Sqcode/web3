@@ -150,7 +150,7 @@ export default {
               type: 'success',
               message: '操作成功！'
             })
-            this.$router.push({ name: 'note' })
+            this.$goBack()
           })
         } else {
           console.log('error submit!!')

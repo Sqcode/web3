@@ -23,6 +23,7 @@ import 'element-plus/lib/theme-chalk/index.css'
 const app = createApp(App)
 app.config.globalProperties.$utils = utils
 app.config.globalProperties.$goBack = goBack
+app.config.globalProperties.$www = 'https://su1888.cn/'
 app.use(store).use(router).use(ElementPlus, { locale }).mount('#app')
 
 router.beforeEach((to, from, next) => {

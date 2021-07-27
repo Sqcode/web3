@@ -5,7 +5,7 @@ export default class User {
   userName
   type
   phone
-  avatarUrl
+  avatarUrl = ''
   sex = 2
   email
   address

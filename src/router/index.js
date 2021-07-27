@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import Home from 'views/Home.vue'
 import NOTE_EDIT from 'views/note/edit.vue'
+import SYS_USER_EDIT from 'views/sysUser/edit.vue'
 import Login from 'views/login.vue'
 
 const routes = [
@@ -41,6 +42,14 @@ const routes = [
         path: '/sys_user',
         name: 'sys_user',
         component: () => import('views/sysUser'),
+        meta: {
+          title: 'SysUser'
+        }
+      },
+      {
+        path: '/sys_user/edit/:id',
+        name: 'sys_user_edit',
+        component: SYS_USER_EDIT,
         meta: {
           title: 'SysUser'
         }

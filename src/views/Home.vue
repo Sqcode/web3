@@ -8,7 +8,7 @@
         <el-dropdown @command="handleCommand">
           <div style="height: 100%;">
             <img style="height: 100%;" alt="avatar_url"
-              :src=" user ? user.avatarUrl ? user.avatarUrl : require('../assets/logo.png') : require('../assets/logo.png')" />
+              :src=" user ? user.avatarUrl ? prefix + user.avatarUrl : require('../assets/logo.png') : require('../assets/logo.png')" />
             <!-- <span>{{ user.userName }}</span> -->
           </div>
           <template #dropdown>
@@ -36,6 +36,9 @@ export default {
   components: {
     Menu,
     HeaderDropdownPwd
+  },
+  created () {
+    this.prefix = process.env.VUE_APP_IMAGE_URL_PREFIX
   },
   mounted () {
     // console.log('mounted', this.$store.state.user);

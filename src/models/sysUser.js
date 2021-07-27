@@ -4,7 +4,7 @@ export default class SysUser {
   userName
   phone
   password
-  avatarUrl
+  avatarUrl = ''
   sex = 2
   email
   address

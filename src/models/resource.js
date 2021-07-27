@@ -3,7 +3,7 @@ export default class Resource {
   name
   url
   sort = 1
-  absoluteUrl
+  absoluteUrl = ''
   type
   constructor (obj) {
   }

@@ -25,8 +25,8 @@
         <template #default="scope">
           <el-image v-if="scope.row.avatarUrl"
             style="width: 100%; height: 100px"
-            :src="scope.row.avatarUrl"
-            fit="fill" :preview-src-list="[scope.row.avatarUrl]">
+            :src="this.$utils.absoluteUrl(scope.row.avatarUrl)"
+            fit="fill" :preview-src-list="[this.$utils.absoluteUrl(scope.row.avatarUrl)]">
           </el-image>
         </template>
       </el-table-column>
@@ -46,7 +46,7 @@
         </el-table-column>
     </sh-table>
   <!-- </div> -->
-  <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
+  <!-- <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
       <el-form-item label="登录名" prop="loginName">
         <el-input v-model="form.loginName" autocomplete="off"></el-input>
@@ -71,6 +71,20 @@
         <el-input v-model="form.email"></el-input>
       </el-form-item>
       <el-form-item label="头像" prop="avatarUrl">
+        <template>
+          <el-upload
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        </template>
+      </el-form-item>
+      <el-form-item label="头像" prop="avatarUrl">
         <el-input v-model="form.avatarUrl"></el-input>
         <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
       </el-form-item>
@@ -81,7 +95,7 @@
         <el-button type="primary" @click="submitForm('form')">确 定</el-button>
       </span>
     </template>
-  </el-dialog>
+  </el-dialog> -->
 </template>
 
 <script>
@@ -103,19 +117,19 @@ export default {
         remote: '/sys/user/page',
         update: 0
       },
-      dialogFormVisible: false,
-      dialogTitle: '',
-      form: new SysUser(),
-      rules: {
-        loginName: [
-          { required: true, message: '请填写登录名', trigger: 'blur' },
-          { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请填写密码', trigger: 'blur' },
-          { min: 2, max: 64, message: '密码长度在 2 到 64 个字符', trigger: 'blur' }
-        ]
-      }
+      // dialogFormVisible: false,
+      // dialogTitle: '',
+      // form: new SysUser(),
+      // rules: {
+      //   loginName: [
+      //     { required: true, message: '请填写登录名', trigger: 'blur' },
+      //     { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
+      //   ],
+      //   password: [
+      //     { required: true, message: '请填写密码', trigger: 'blur' },
+      //     { min: 2, max: 64, message: '密码长度在 2 到 64 个字符', trigger: 'blur' }
+      //   ]
+      // }
     }
   },
   mounted () {
@@ -124,32 +138,18 @@ export default {
     getList () {
       this.table.update++
     },
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          var url = '/sys/user/insert'
-          if (this.form.id) {
-            url = '/sys/user/update'
-          }
-          request.post(url, this.form).then(res => {
-            this.dialogFormVisible = false
-            this.getList()
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
+
     handleInsertClick () {
-      this.dialogFormVisible = true
-      this.dialogTitle = '新增'
-      this.form = new SysUser()
+      // this.dialogFormVisible = true
+      // this.dialogTitle = '新增'
+      // this.form = new SysUser()
+      this.$router.push({ name: 'sys_user_edit', params: { id: 0 } })
     },
     handleEdit (index, row) {
-      this.dialogFormVisible = true
-      this.dialogTitle = '编辑'
-      this.form = clone(row)
+      // this.dialogFormVisible = true
+      // this.dialogTitle = '编辑'
+      // this.form = clone(row)
+      this.$router.push({ name: 'sys_user_edit', params: { id: row.id } })
     },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
