@@ -138,7 +138,6 @@ export default {
     getList () {
       this.table.update++
     },
-
     handleInsertClick () {
       // this.dialogFormVisible = true
       // this.dialogTitle = '新增'

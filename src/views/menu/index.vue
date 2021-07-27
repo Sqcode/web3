@@ -57,12 +57,13 @@
       </el-table-column>
       <el-table-column prop="" label="图片">
         <template #default="scope">
-          <el-image v-if="scope.row.absoluteUrl"
-            style="width: 100%; height: 100%"
-            :src="scope.row.absoluteUrl"
-            fit="fill" :preview-src-list="[scope.row.absoluteUrl]">
+          <el-image v-if="scope.row.url"
+            style="width: 100%; height: 100px"
+            :src="scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)"
+            fit="fill" :preview-src-list="[scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)]">
           </el-image>
         </template>
+
       </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="sort" label="排序"></el-table-column>
@@ -86,7 +87,7 @@
         </el-table-column>
     </sh-table>
   <!-- </div> -->
-  <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
+  <!-- <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -164,14 +165,14 @@
         <el-button type="primary" @click="submitForm('form')">确 定</el-button>
       </span>
     </template>
-  </el-dialog>
+  </el-dialog> -->
 </template>
 
 <script>
-import { clone } from '@/utils/util'
+// import { clone } from '@/utils/util'
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
-import Menu from 'models/menu'
+// import Menu from 'models/menu'
 
 export default {
   name: 'Menu',
@@ -189,80 +190,80 @@ export default {
         remote: '/menu/page',
         update: 0
       },
-      optionsKey: 0,
-      cascaderSearchSelected: [],
-      dialogCascaderSelected: [0],
-      dialogFormVisible: false,
-      dialogTitle: '',
-      form: new Menu(),
-      rules: {
-        name: [
-          { required: true, message: '请输入名称', trigger: 'blur' },
-          { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
-        ],
-        parentId: [
-          { required: true, message: '请选择所属菜单', trigger: 'blur' }
-        ],
-        type: [
-          { required: true, message: '请选择菜单类型', trigger: 'blur' }
-        ],
-        jumpType: [
-          { required: true, message: '请选择菜单跳转类型', trigger: 'blur' }
-        ],
-        dataJson: [
-          { required: true, message: '请选择选择跳转页面', trigger: 'blur' }
-        ]
-        // "dataJson.noteId": [
-        //   { required: true, message: '请选择笔记', trigger: 'blur' }
-        // ],
-      },
-      typeOptions: [
-        { label: '管理后台', value: 1 },
-        { label: '小程序', value: 2 }
-      ],
+      // optionsKey: 0,
+      // cascaderSearchSelected: [],
+      // dialogCascaderSelected: [0],
+      // dialogFormVisible: false,
+      // dialogTitle: '',
+      // form: new Menu(),
+      // rules: {
+      //   name: [
+      //     { required: true, message: '请输入名称', trigger: 'blur' },
+      //     { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+      //   ],
+      //   parentId: [
+      //     { required: true, message: '请选择所属菜单', trigger: 'blur' }
+      //   ],
+      //   type: [
+      //     { required: true, message: '请选择菜单类型', trigger: 'blur' }
+      //   ],
+      //   jumpType: [
+      //     { required: true, message: '请选择菜单跳转类型', trigger: 'blur' }
+      //   ],
+      //   dataJson: [
+      //     { required: true, message: '请选择选择跳转页面', trigger: 'blur' }
+      //   ]
+      //   // "dataJson.noteId": [
+      //   //   { required: true, message: '请选择笔记', trigger: 'blur' }
+      //   // ],
+      // },
+      // typeOptions: [
+      //   { label: '管理后台', value: 1 },
+      //   { label: '小程序', value: 2 }
+      // ],
       jumpTypeOptions: [],
-      pageSelected: null,
-      pageOptions: [
-        { label: '笔记', value: 0 },
-        { label: '笔记列表', value: 1 },
-        { label: '原版工具卡', value: 2 }
-      ],
-      pages: [
-        { label: 'page', value: '/note/index', noteId: '' },
-        { label: 'page', value: '/notes/index' },
-        { label: 'page', value: '/menu_icon/index' }
-      ],
-      cascaderKey: 0,
-      props: {
-        checkStrictly: true,
-        lazy: true,
-        lazyLoad (node, resolve) {
-          const { value, label, level } = node
-          // console.log('value', value, 'label', label, 'level', level);
-          if (level === 0) {
-            request.get('/menu/option/list?parentId=0&level=0').then(res => {
-              res.unshift({
-                value: 0,
-                label: '首页菜单',
-                leaf: true,
-                hasChildren: false,
-                selected: false,
-                children: []
-              })
-              resolve(res)
-              // this.optionsKey ++
-            })
-          } else {
-            request.get(`/menu/option/list?parentId=${value}`).then(res => {
-              // console.log('children', !res, res);
-              resolve(res)
-            })
-          }
-        }
-      },
-      notes: [],
-      noteSelectOptionUpdate: 0,
-      noteSelected: ''
+      // pageSelected: null,
+      // pageOptions: [
+      //   { label: '笔记', value: 0 },
+      //   { label: '笔记列表', value: 1 },
+      //   { label: '原版工具卡', value: 2 }
+      // ],
+      // pages: [
+      //   { label: 'page', value: '/note/index', noteId: '' },
+      //   { label: 'page', value: '/notes/index' },
+      //   { label: 'page', value: '/menu_icon/index' }
+      // ],
+      // cascaderKey: 0,
+      // props: {
+      //   checkStrictly: true,
+      //   lazy: true,
+      //   lazyLoad (node, resolve) {
+      //     const { value, label, level } = node
+      //     // console.log('value', value, 'label', label, 'level', level);
+      //     if (level === 0) {
+      //       request.get('/menu/option/list?parentId=0&level=0').then(res => {
+      //         res.unshift({
+      //           value: 0,
+      //           label: '首页菜单',
+      //           leaf: true,
+      //           hasChildren: false,
+      //           selected: false,
+      //           children: []
+      //         })
+      //         resolve(res)
+      //         // this.optionsKey ++
+      //       })
+      //     } else {
+      //       request.get(`/menu/option/list?parentId=${value}`).then(res => {
+      //         // console.log('children', !res, res);
+      //         resolve(res)
+      //       })
+      //     }
+      //   }
+      // },
+      // notes: [],
+      // noteSelectOptionUpdate: 0,
+      // noteSelected: ''
     }
   },
   mounted () {
@@ -271,26 +272,26 @@ export default {
     // this.getNoteList ('')
   },
   methods: {
-    getNoteList (menuId) {
-      request.get('/note/list?menuId=' + menuId).then(res => {
-        // 过滤有parentId，这里只能选择 主笔记
-        res = res.filter(v => !v.parentId)
-        const ns = res.map(v => ({
-          label: v.title,
-          value: v.id
-        }))
-        this.notes = ns
-        this.noteSelectOptionUpdate++
-        // console.log(this.notes);
-      })
-    },
-    handlePageSelected (e) {
-      if (e === 0) {
-        this.getNoteList(this.form.id)
-      }
-      // console.log(e);
-      // console.log(this.pages[e]);
-    },
+    // getNoteList (menuId) {
+    //   request.get('/note/list?menuId=' + menuId).then(res => {
+    //     // 过滤有parentId，这里只能选择 主笔记
+    //     res = res.filter(v => !v.parentId)
+    //     const ns = res.map(v => ({
+    //       label: v.title,
+    //       value: v.id
+    //     }))
+    //     this.notes = ns
+    //     this.noteSelectOptionUpdate++
+    //     // console.log(this.notes);
+    //   })
+    // },
+    // handlePageSelected (e) {
+    //   if (e === 0) {
+    //     this.getNoteList(this.form.id)
+    //   }
+    //   // console.log(e);
+    //   // console.log(this.pages[e]);
+    // },
     getJumpTypeOptionList () {
       request.get('/menu/jumpType/option/list').then(res => {
         if (res) {
@@ -298,87 +299,93 @@ export default {
         }
       })
     },
-    handleCascaderSearchChange (node) {
-      this.table.search.parentId = this.cascaderSearchSelected ? this.cascaderSearchSelected[this.cascaderSearchSelected.length - 1] : ''
-      // console.log(node);
-    },
-    handleDialogCascaderChange (node) {
-      // console.log(this.dialogCascaderSelected.join(','));
-    },
+    // handleCascaderSearchChange (node) {
+    //   this.table.search.parentId = this.cascaderSearchSelected ? this.cascaderSearchSelected[this.cascaderSearchSelected.length - 1] : ''
+    //   // console.log(node);
+    // },
+    // handleDialogCascaderChange (node) {
+    //   // console.log(this.dialogCascaderSelected.join(','));
+    // },
     getList () {
       this.table.update++
     },
-    submitForm (formName) {
-      this.form.parentId = this.dialogCascaderSelected ? this.dialogCascaderSelected[this.dialogCascaderSelected.length - 1] : ''
-      // console.log(this.form.parentId, this.form.id);
-      if (this.form.parentId === this.form.id) {
-        this.$message.error('菜单不能属于自己')
-        return
-      }
-      this.form.parentPath = this.dialogCascaderSelected ? this.dialogCascaderSelected.join(',') : ''
-      var dataJson = this.pages[this.pageSelected]
-      // 如果是 笔记&选择笔记，dataJson中放入笔记id
-      if (this.pageSelected === 0 && this.noteSelected) {
-        dataJson.noteId = this.noteSelected
-      }
-      if (this.form.jumpType === 1) { // 如果跳菜单，清空dataJSON
-        dataJson = {}
-      }
+    // submitForm (formName) {
+    //   this.form.parentId = this.dialogCascaderSelected ? this.dialogCascaderSelected[this.dialogCascaderSelected.length - 1] : ''
+    //   // console.log(this.form.parentId, this.form.id);
+    //   if (this.form.parentId === this.form.id) {
+    //     this.$message.error('菜单不能属于自己')
+    //     return
+    //   }
+    //   this.form.parentPath = this.dialogCascaderSelected ? this.dialogCascaderSelected.join(',') : ''
+    //   var dataJson = this.pages[this.pageSelected]
+    //   // 如果是 笔记&选择笔记，dataJson中放入笔记id
+    //   if (this.pageSelected === 0 && this.noteSelected) {
+    //     dataJson.noteId = this.noteSelected
+    //   }
+    //   if (this.form.jumpType === 1) { // 如果跳菜单，清空dataJSON
+    //     dataJson = {}
+    //   }
 
-      // console.log('dataJson', dataJson);
-      this.form.dataJson = dataJson
+    //   // console.log('dataJson', dataJson);
+    //   this.form.dataJson = dataJson
 
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          var url = '/menu/insert'
-          if (this.form.id) {
-            url = '/menu/update'
-          }
-          request.post(url, this.form).then(res => {
-            console.log(res)
-            this.$message({
-              type: 'success',
-              message: '操作成功！'
-            })
-            this.dialogFormVisible = false
-            this.getList()
-            this.cascaderKey++
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    handleInsertClick () {
-      this.dialogFormVisible = true
-      this.dialogTitle = '新增'
-      this.form = new Menu()
+    //   this.$refs[formName].validate((valid) => {
+    //     if (valid) {
+    //       var url = '/menu/insert'
+    //       if (this.form.id) {
+    //         url = '/menu/update'
+    //       }
+    //       request.post(url, this.form).then(res => {
+    //         console.log(res)
+    //         this.$message({
+    //           type: 'success',
+    //           message: '操作成功！'
+    //         })
+    //         this.dialogFormVisible = false
+    //         this.getList()
+    //         this.cascaderKey++
+    //       })
+    //     } else {
+    //       console.log('error submit!!')
+    //       return false
+    //     }
+    //   })
+    // },
+     handleInsertClick () {
+      this.$router.push({ name: 'menu_edit', params: { id: 0 } })
     },
     handleEdit (index, row) {
-      this.dialogFormVisible = true
-      this.dialogTitle = '编辑'
-      if (row.parentPath) {
-        this.dialogCascaderSelected = row.parentPath.split(',').map(Number)
-      }
-      // console.log(row);
-      this.pages.forEach((v, k) => {
-        if (v.value === row.dataJson.value) {
-          // console.log(v.value, row.dataJson, k);
-          this.pageSelected = k
-          if (k === 0) { // 笔记，获取笔记id，列表
-            this.getNoteList('')
-            this.noteSelected = row.dataJson.noteId
-          }
-        }
-        // if (this.$utils.isEqual(v, row.dataJson)) {
-        //   this.pageSelected = k
-        // }
-      })
-      // console.log(this.pages.indexOf(row.dataJson));
-      // this.pageSelected = this.pages.indexOf(row.dataJson)
-      this.form = clone(row)
+      this.$router.push({ name: 'menu_edit', params: { id: row.id } })
     },
+    // handleInsertClick () {
+    //   this.dialogFormVisible = true
+    //   this.dialogTitle = '新增'
+    //   this.form = new Menu()
+    // },
+    // handleEdit (index, row) {
+    //   this.dialogFormVisible = true
+    //   this.dialogTitle = '编辑'
+    //   if (row.parentPath) {
+    //     this.dialogCascaderSelected = row.parentPath.split(',').map(Number)
+    //   }
+    //   // console.log(row);
+    //   this.pages.forEach((v, k) => {
+    //     if (v.value === row.dataJson.value) {
+    //       // console.log(v.value, row.dataJson, k);
+    //       this.pageSelected = k
+    //       if (k === 0) { // 笔记，获取笔记id，列表
+    //         this.getNoteList('')
+    //         this.noteSelected = row.dataJson.noteId
+    //       }
+    //     }
+    //     // if (this.$utils.isEqual(v, row.dataJson)) {
+    //     //   this.pageSelected = k
+    //     // }
+    //   })
+    //   // console.log(this.pages.indexOf(row.dataJson));
+    //   // this.pageSelected = this.pages.indexOf(row.dataJson)
+    //   this.form = clone(row)
+    // },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',

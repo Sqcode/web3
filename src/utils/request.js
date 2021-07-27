@@ -157,7 +157,6 @@ export default class Request {
   }
 
   static uploadFile (url, file, data, callback, config = {}) {
-    console.log(file, data);
     const param = new FormData()
     param.append('file', file)
     if (data) {
@@ -168,7 +167,6 @@ export default class Request {
         }
       }
     }
-console.log(param);
     if (!config.headers) {
       config.headers = {}
     }

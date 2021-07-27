@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router
 import Home from 'views/Home.vue'
 import NOTE_EDIT from 'views/note/edit.vue'
 import SYS_USER_EDIT from 'views/sysUser/edit.vue'
+import MENU_EDIT from 'views/menu/edit.vue'
 import Login from 'views/login.vue'
 
 const routes = [
@@ -74,6 +75,14 @@ const routes = [
         path: '/menu',
         name: 'menu',
         component: () => import('views/menu'),
+        meta: {
+          title: 'Menu'
+        }
+      },
+      {
+        path: '/menu/edit/:id',
+        name: 'menu_edit',
+        component: MENU_EDIT,
         meta: {
           title: 'Menu'
         }

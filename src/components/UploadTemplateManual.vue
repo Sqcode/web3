@@ -11,6 +11,7 @@
 </template>
 <script>
 import request from '@/utils/request'
+import { isEmpty } from '@/utils/util'
 export default {
   props: {
     url: {
@@ -49,8 +50,10 @@ export default {
     handleChange(f, fileList){
       // console.log('handleChange', fileList);
       if (this.keys === 0) {
-        this.oldFilePath = this.imageUrl.replace(process.env.VUE_APP_IMAGE_URL_PREFIX, '')
+        var oldFilePath = this.imageUrl.replace(process.env.VUE_APP_IMAGE_URL_PREFIX, '')
+        this.oldFilePath = oldFilePath
         this.keys++
+        // console.log('oldFilePath', oldFilePath);
       }
       /* 本地预览方法 */
       this.$refs.upload.clearFiles();
@@ -76,17 +79,21 @@ export default {
     submit(){
       // console.log('子上传图片submit');
       // this.$refs.upload.submit()
-      this.loading = true
-      request.uploadFile(this.action, this.file, {'oldFilePath': this.oldFilePath}).then((res) => {
-        if (res) {
-          // console.log('result: ', res);
-          this.$emit('success', res)
+      if (!isEmpty(this.file)) {
+        this.loading = true
+        request.uploadFile(this.action, this.file, {'oldFilePath': this.oldFilePath}).then((res) => {
+          if (res) {
+            console.log('result: ', res);
+            this.$emit('success', res)
+            this.loading = false
+          }
+        }).catch(error => {
+          this.$message.error('服务接口异常')
           this.loading = false
-        }
-      }).catch(error => {
-        this.$message.error('服务接口异常')
-        this.loading = false
-      })
+        })
+      } else {
+        this.$emit('success', '')
+      }
     }
   }
 }

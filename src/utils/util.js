@@ -17,6 +17,34 @@
 //   }
 //   return o;
 // };
+export function isEmpty(value) {
+  if (value === null || value === undefined) {
+    return true;
+  }
+  let type = typeof value;
+  if (type === 'boolean') {
+    return false;
+  }
+  if (type === 'number') {
+    return isNaN(value);
+  }
+  if (type === 'string') {
+    return value === '';
+  }
+  if (type == 'object') {
+    if (value instanceof Array) {
+      return value.length === 0;
+    }
+    for (let key in value) {
+      if (!isEmpty(value[key])) {
+        return false
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 export function absoluteUrl (url) {
   if (url.indexOf(',') != -1) {
     return '';
@@ -34,7 +62,8 @@ export default {
   clone,
   format,
   isEqual,
-  absoluteUrl
+  absoluteUrl,
+  isEmpty
 }
 
 export function format (date, formatter) {

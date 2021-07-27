@@ -1,12 +1,6 @@
 <template>
   <div id="edit-form">
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="登录名" prop="loginName">
-        <el-input v-model="form.loginName" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password"></el-input>
-      </el-form-item>
       <el-form-item label="头像" prop="avatarUrl">
         <UploadTemplateManual ref="upload" @success="handleSuccess" :url="form.avatarUrl" />
       </el-form-item>
@@ -14,6 +8,12 @@
         <el-input v-model="form.avatarUrl"></el-input>
         <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
       </el-form-item> -->
+      <el-form-item label="登录名" prop="loginName">
+        <el-input v-model="form.loginName" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="form.password" type="password"></el-input>
+      </el-form-item>
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="form.userName"></el-input>
       </el-form-item>
@@ -92,8 +92,9 @@ export default {
     //   console.log(response);
     // },
     handleSuccess(imagePath) {
-      // console.log('parent: ', imagePath);
-      this.form.avatarUrl = imagePath
+      if (imagePath) {
+        this.form.avatarUrl = imagePath
+      }
       this.$nextTick(() => {
         // console.log('request');
         var url = '/sys/user/insert'
@@ -128,5 +129,6 @@ export default {
     display: flex;
     flex-direction: column;
     margin-right: 10px;
+    overflow: auto;
   }
 </style>
