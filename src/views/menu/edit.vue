@@ -2,7 +2,7 @@
   <div id="edit-form">
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
       <el-form-item label="图标" prop="url">
-        <UploadTemplateManual ref="upload" @success="handleSuccess" :url="form.url" />
+        <UploadTemplateManual ref="upload" @success="handleSuccess" :prefix="'menu/'" :url="form.url" />
       </el-form-item>
       <el-form-item label="图标地址" prop="absoluteUrl">
         <el-input v-model="form.absoluteUrl"></el-input>
@@ -270,7 +270,7 @@ export default {
       this.form.parentPath = this.cascaderMenuSelected ? this.cascaderMenuSelected.join(',') : ''
       var dataJson = this.pages[this.pageSelected]
       // 如果是 笔记&选择笔记，dataJson中放入笔记id
-      console.log(dataJson, this.pageSelected, this.noteSelected);
+      // console.log(dataJson, this.pageSelected, this.noteSelected);
       if (this.pageSelected === 0 && this.noteSelected) {
         dataJson.noteId = this.noteSelected
       }

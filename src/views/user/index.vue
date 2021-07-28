@@ -28,8 +28,8 @@
         <template #default="scope">
           <el-image v-if="scope.row.avatarUrl"
             style="width: 100%; height: 100px"
-            :src="scope.row.avatarUrl"
-            fit="fill" :preview-src-list="[scope.row.avatarUrl]">
+            :src="this.$utils.absoluteUrl(scope.row.avatarUrl)"
+            fit="fill" :preview-src-list="[this.$utils.absoluteUrl(scope.row.avatarUrl)]">
           </el-image>
         </template>
       </el-table-column>
@@ -47,7 +47,7 @@
           {{ this.$utils.format(scope.row.createdTime, 'yyyy-MM-dd HH:mm:ss') }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="160">
+      <el-table-column label="操作" width="160" fixed="right">
           <template v-slot="scope">
             <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -55,61 +55,11 @@
         </el-table-column>
     </sh-table>
   <!-- </div> -->
-  <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
-    <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="所属部门" prop="deptId" >
-        <el-cascader style="width: 100%"
-          clearable
-          filterable
-          :props="props"
-          v-model="cascaderSelected"
-          @change="handleCascaderChange">
-        </el-cascader>
-      </el-form-item>
-      <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号" prop="phone">
-        <el-input v-model="form.phone"></el-input>
-      </el-form-item>
-      <el-form-item label="排序">
-        <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
-      </el-form-item>
-      <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="form.sex">
-          <el-radio :label="0">男</el-radio>
-          <el-radio :label="1">女</el-radio>
-          <el-radio :label="2" disabled>未知</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email"></el-input>
-      </el-form-item>
-      <el-form-item label="头像" prop="avatarUrl">
-        <el-input v-model="form.avatarUrl"></el-input>
-        <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-radio-group v-model="form.status">
-          <el-radio :label="1">正常</el-radio>
-          <el-radio :label="0">禁用</el-radio>
-        </el-radio-group>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('form')">确 定</el-button>
-      </span>
-    </template>
-  </el-dialog>
 </template>
 
 <script>
-import { clone } from '@/utils/util'
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
-import User from 'models/user'
 import ImportButton from 'components/importButton'
 import Request from 'utils/request'
 export default {
@@ -124,19 +74,6 @@ export default {
         },
         remote: '/user/page',
         update: 0
-      },
-      dialogFormVisible: false,
-      dialogTitle: '',
-      form: new User(),
-      rules: {
-        userName: [
-          { required: true, message: '请填写用户名', trigger: 'blur' },
-          { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
-        ],
-        phone: [
-          { required: true, message: '请填写手机', trigger: 'blur' },
-          { min: 11, max: 11, message: '手机号11位', trigger: 'blur' }
-        ]
       },
       cascaderSelected: [],
       props: {
@@ -160,42 +97,14 @@ export default {
   mounted () {
   },
   methods: {
-    handleCascaderChange (node) {
-
-    },
     getList () {
       this.table.update++
     },
-    submitForm (formName) {
-      this.form.deptId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          var url = '/user/insert'
-          if (this.form.id) {
-            url = '/user/update'
-          }
-          request.post(url, this.form).then(res => {
-            this.dialogFormVisible = false
-            this.getList()
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
     handleInsertClick () {
-      this.dialogFormVisible = true
-      this.dialogTitle = '新增'
-      this.form = new User()
+      this.$router.push({ name: 'user_edit', params: { id: 0 } })
     },
     handleEdit (index, row) {
-      this.dialogFormVisible = true
-      this.dialogTitle = '编辑'
-      this.form = clone(row)
-      if (row.parentPath) {
-        this.cascaderSelected = row.parentPath.split(',').map(Number)
-      }
+      this.$router.push({ name: 'user_edit', params: { id: row.id } })
     },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {

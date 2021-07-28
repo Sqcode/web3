@@ -8,51 +8,77 @@
     <img v-if="imageUrl" :src="imageUrl" class="avatar">
     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
   </el-upload>
+  <!-- 触发computed -->
+  <el-button @click="handleButtonClick" v-show="0" >{{lazyLoad}}</el-button>
 </template>
 <script>
 import request from '@/utils/request'
 import { isEmpty } from '@/utils/util'
+import { computed } from 'vue'
+
 export default {
   props: {
     url: {
       type: String,
-      required: true
+      required: false
+    },
+    prefix: {
+      type: String,
+      required: false
     }
   },
   emits: ['success'],
   watch: {
-    url (v) {
-      // console.log('watch', v);
-      this.imageUrl = process.env.VUE_APP_IMAGE_URL_PREFIX + v
-    }
+    // url (newValue, oldValue) {
+    //   console.log('watch', newValue, oldValue);
+    //   if (newValue.indexOf('http') != -1 || newValue.indexOf('https') != -1) {
+    //     this.imageUrl = newValue
+    //   } else {
+    //     this.imageUrl = process.env.VUE_APP_IMAGE_URL_PREFIX + newValue
+    //   }
+    // }
   },
   components: {
   },
   created () {
-    this.action = process.env.VUE_APP_IMAGE_UPLOAD_DEL_URL
+    this.action = process.env.VUE_APP_IMAGE_UPLOAD_PLUS_URL
   },
   data () {
     return {
+      // imageUrl: computed(() => this.url ? (this.url.indexOf('http') != -1 || this.url.indexOf('https') != -1) ?
+      //   this.url : (process.env.VUE_APP_IMAGE_URL_PREFIX + this.url) : ''),
       imageUrl: '',
       loading: false,
       file: {},
       action: '',
       // 将旧的文件保存下来
-      keys: 0,
+      update: 0,
       oldFilePath: ''
     }
   },
   computed: {
+    lazyLoad : {
+      get ()  {
+        // console.log('get');
+        return this.imageUrl = this.url ? (this.url.indexOf('http') != -1 || this.url.indexOf('https') != -1) ? this.url : (process.env.VUE_APP_IMAGE_URL_PREFIX + this.url) : ''},
+      set (url) {
+        // console.log('set', url);
+        return this.imageUrl = url
+      },
+    }
   },
   mounted () {
   },
   methods: {
+    handleButtonClick () {
+      console.log(this.imageUrl)
+    },
     handleChange(f, fileList){
       // console.log('handleChange', fileList);
-      if (this.keys === 0) {
+      if (this.update === 0) {
         var oldFilePath = this.imageUrl.replace(process.env.VUE_APP_IMAGE_URL_PREFIX, '')
         this.oldFilePath = oldFilePath
-        this.keys++
+        this.update++
         // console.log('oldFilePath', oldFilePath);
       }
       /* 本地预览方法 */
@@ -81,9 +107,9 @@ export default {
       // this.$refs.upload.submit()
       if (!isEmpty(this.file)) {
         this.loading = true
-        request.uploadFile(this.action, this.file, {'oldFilePath': this.oldFilePath}).then((res) => {
+        request.uploadFile(this.action, this.file, {'prefix': this.prefix, 'oldFilePath': this.oldFilePath}).then((res) => {
           if (res) {
-            console.log('result: ', res);
+            // console.log('result: ', res);
             this.$emit('success', res)
             this.loading = false
           }

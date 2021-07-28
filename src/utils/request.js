@@ -86,6 +86,7 @@ service.interceptors.response.use(
       window.localStorage.clear()
       window.sessionStorage.clear()
       router.push({ name: 'login' })
+      store.commit('REMOVE_INFO', store.state)
       // if (path.startsWith('/login')) return
       // store.dispatch('user/logout')
     } else if (status === 403 && code === '20001') { // 未登录

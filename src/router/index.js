@@ -3,7 +3,8 @@ import Home from 'views/Home.vue'
 import NOTE_EDIT from 'views/note/edit.vue'
 import SYS_USER_EDIT from 'views/sysUser/edit.vue'
 import MENU_EDIT from 'views/menu/edit.vue'
-import Login from 'views/login.vue'
+import USER_EDIT from 'views/user/edit.vue'
+import Login from 'views/Login.vue'
 
 const routes = [
   {
@@ -67,6 +68,14 @@ const routes = [
         path: '/user',
         name: 'user',
         component: () => import('views/user'),
+        meta: {
+          title: 'User'
+        }
+      },
+      {
+        path: '/user/edit/:id',
+        name: 'user_edit',
+        component: USER_EDIT,
         meta: {
           title: 'User'
         }

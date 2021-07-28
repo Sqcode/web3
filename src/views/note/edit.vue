@@ -77,6 +77,7 @@ export default {
       notes: [],
       cascaderSelected: [],
       props: {
+        expandTrigger: 'hover',
         checkStrictly: true,
         lazy: true,
         lazyLoad (node, resolve) {
@@ -138,6 +139,10 @@ export default {
     submitForm (formName) {
       this.form.content = tinyMCE.activeEditor.getContent()
       this.form.menuId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
+      if (this.form.parentId) {
+        // 属于某个笔记的话，清空菜单
+        this.form.menuId = ''
+      }
       // console.log(this.form);
       this.$refs[formName].validate((valid) => {
         if (valid) {

@@ -14,7 +14,6 @@
               </el-option>
             </el-select>
           </el-form-item>
-
         </el-col>
       </template>
       <!-- 功能按钮 -->
@@ -26,10 +25,10 @@
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="" label="图片">
         <template #default="scope">
-          <el-image v-if="scope.row.absoluteUrl"
+          <el-image v-if="scope.row.url || scope.row.absoluteUrl"
             style="width: 100%; height: 100px"
-            :src="scope.row.absoluteUrl"
-            fit="fill" :preview-src-list="[scope.row.absoluteUrl]">
+            :src="scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)"
+            fit="fill" :preview-src-list="[scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)]">
           </el-image>
         </template>
       </el-table-column>
@@ -40,7 +39,7 @@
           {{ this.$utils.format(scope.row.createdTime, 'yyyy-MM-dd HH:mm:ss') }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="160">
+      <el-table-column label="操作" width="160" fixed="right">
           <template v-slot="scope">
             <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -50,6 +49,13 @@
   <!-- </div> -->
   <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
+      <el-form-item label="图标" prop="url">
+        <UploadTemplateManual ref="upload" @success="handleSuccess" :prefix="'resource/'" :url="form.absoluteUrl ? form.absoluteUrl : form.url" />
+      </el-form-item>
+      <el-form-item label="图标地址" prop="absoluteUrl">
+        <el-input v-model="form.absoluteUrl"></el-input>
+        <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
+      </el-form-item>
       <el-form-item label="资源描述" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
@@ -66,10 +72,6 @@
       <el-form-item label="排序">
         <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
       </el-form-item>
-      <el-form-item label="图标地址" prop="absoluteUrl">
-        <el-input v-model="form.absoluteUrl"></el-input>
-        <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
-      </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -85,10 +87,11 @@ import { clone } from '@/utils/util'
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
 import Resource from 'models/resource'
+import UploadTemplateManual from 'components/UploadTemplateManual';
 
 export default {
   name: 'Resource',
-  components: { shTable },
+  components: { shTable, UploadTemplateManual },
   data () {
     return {
       table: {
@@ -129,17 +132,25 @@ export default {
     getList () {
       this.table.update++
     },
+    handleSuccess(imagePath) {
+      if (imagePath) {
+        this.form.url = imagePath
+      }
+      this.$nextTick(() => {
+        var url = '/resource/insert'
+        if (this.form.id) {
+          url = '/resource/update'
+        }
+        request.post(url, this.form).then(res => {
+          this.dialogFormVisible = false
+          this.getList()
+        })
+      })
+    },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var url = '/resource/insert'
-          if (this.form.id) {
-            url = '/resource/update'
-          }
-          request.post(url, this.form).then(res => {
-            this.dialogFormVisible = false
-            this.getList()
-          })
+          this.$refs.upload.submit()
         } else {
           console.log('error submit!!')
           return false

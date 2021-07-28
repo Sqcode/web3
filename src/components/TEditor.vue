@@ -72,6 +72,8 @@ import 'tinymce/plugins/visualblocks' // 显示元素范围
 import 'tinymce/plugins/visualchars' // 显示不可见字符
 import 'tinymce/plugins/wordcount' // 字数统计
 
+import request from '@/utils/request'
+
 export default {
   name: 'TEditor',
   components: {
@@ -120,30 +122,30 @@ export default {
         content_style: 'img {max-width:100%;}', // 直接自定义可编辑区域的css样式
         // content_css: '/tinycontent.css',  //以css文件方式自定义可编辑区域的css样式，css文件需自己创建并引入
         // images_upload_url: '/apib/api-upload/uploadimg',  //后端处理程序的url，建议直接自定义上传函数image_upload_handler，这个就可以不用了
-        // images_upload_base_path: '/demo',  //相对基本路径--关于图片上传建议查看--http://tinymce.ax-z.cn/general/upload-images.php
+        // images_upload_base_path: process.env.VUE_APP_IMAGE_URL_PREFIX,  //相对基本路径--关于图片上传建议查看--http://tinymce.ax-z.cn/general/upload-images.php
         paste_data_images: true, // 图片是否可粘贴
         template_cdate_format: '[CDATE: %m/%d/%Y : %H:%M:%S]',
         template_mdate_format: '[MDATE: %m/%d/%Y : %H:%M:%S]',
-        images_upload_base_path: '/demo',
+        // convert_urls: true,// 绝对路径
+        relative_urls : false,// 相对路径
+        remove_script_host : false,
+        document_base_url : process.env.VUE_APP_IMAGE_URL_PREFIX,
         images_upload_handler: (blobInfo, success, failure) => {
-          if (blobInfo.blob().size / 1024 / 1024 > 2) {
-            failure('上传失败，图片大小请控制在 2M 以内')
+          var file = blobInfo.blob();
+          // console.log(file);
+          // let URL = window.URL || window.webkitURL
+          // var localUrl = URL.createObjectURL(file)
+          // success('test/202107281011377ac2a4d55fb3407ba37e30dd421da5eb.png')
+          if (file.size / 1024 / 1024 > 5) {
+            failure('上传失败，图片大小请控制在 5M 以内')
           } else {
-            const params = new FormData()
-            params.append('file', blobInfo.blob())
-            const config = {
-              headers: {
-                'Content-Type': 'multipart/form-data'
+            request.uploadFile(process.env.VUE_APP_IMAGE_UPLOAD_URL, file, {'prefix': 'note/'}).then((res) => {
+              if (res) {
+                // console.log('result: ', res);
+                success(res)
               }
-            }
-            this.$axios.post(`${api.baseUrl}/api-upload/uploadimg`, params, config).then(res => {
-              if (res.data.code == 200) {
-                success(res.data.msg) // 上传成功，在成功函数里填入图片路径
-              } else {
-                failure('上传失败')
-              }
-            }).catch(() => {
-              failure('上传出错，服务器开小差了呢')
+            }).catch(error => {
+              this.$message.error('上传图片失败')
             })
           }
         }

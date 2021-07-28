@@ -4,6 +4,20 @@
       <p style="font-size: 2em;">欢 迎 您... {{ $store.state.user ? $store.state.user.userName : '?' }}</p>
     </div>
     <div class="update">
+      <div style='color: red; margin-top: 20px;'>
+        <p>关于图片：如果有绝对路径的优先展示，其次展示oss服务图片。</p>
+        <p>1. 之前填写的绝对路径的图片不受影响</p>
+        <p>2. 如若使用图片上传功能，请删除绝对路径内容。否则还是会显示原先的图片</p>
+      </div><el-divider></el-divider>
+      <p>07/28 更新内容</p>
+      <ol>
+        <li>新增：资源、用户、笔记内的图片上传</li>
+      </ol>
+      <p>07/27 更新内容</p>
+      <ol>
+        <li>新增：管理员，菜单的图片上传</li>
+        <li>修复：一些问题</li>
+      </ol>
       <p>07/24 更新内容</p>
       <ol>
         <li>修复：笔记编辑中，菜单没有重新渲染的问题</li>

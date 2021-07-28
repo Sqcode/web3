@@ -50,20 +50,19 @@
       <!-- 表格字段 -->
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <!-- <el-table-column prop="id" label="序号" width="100"></el-table-column> -->
-      <el-table-column prop="" label="所属菜单">
-        <template #default="scope">
-          <span v-if="scope.row.parentName">{{ scope.row.parentName.split(',').reverse().join(' / ') }}</span>
-        </template>
-      </el-table-column>
       <el-table-column prop="" label="图片">
         <template #default="scope">
-          <el-image v-if="scope.row.url"
+          <el-image v-if="scope.row.url || scope.row.absoluteUrl"
             style="width: 100%; height: 100px"
             :src="scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)"
             fit="fill" :preview-src-list="[scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)]">
           </el-image>
         </template>
-
+      </el-table-column>
+      <el-table-column prop="" label="所属菜单">
+        <template #default="scope">
+          <span v-if="scope.row.parentName">{{ scope.row.parentName.split(',').reverse().join(' / ') }}</span>
+        </template>
       </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="sort" label="排序"></el-table-column>
@@ -351,7 +350,7 @@ export default {
     //     }
     //   })
     // },
-     handleInsertClick () {
+    handleInsertClick () {
       this.$router.push({ name: 'menu_edit', params: { id: 0 } })
     },
     handleEdit (index, row) {

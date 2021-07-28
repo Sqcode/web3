@@ -1,7 +1,7 @@
 export default class Resource {
   id = ''
   name
-  url
+  url = ''
   sort = 1
   absoluteUrl = ''
   type
