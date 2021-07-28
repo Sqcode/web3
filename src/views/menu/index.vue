@@ -52,7 +52,7 @@
       <!-- <el-table-column prop="id" label="序号" width="100"></el-table-column> -->
       <el-table-column prop="" label="图片">
         <template #default="scope">
-          <el-image v-if="scope.row.url || scope.row.absoluteUrl"
+          <el-image v-if="scope.row.absoluteUrl || scope.row.url"
             style="width: 100%; height: 100px"
             :src="scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)"
             fit="fill" :preview-src-list="[scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)]">

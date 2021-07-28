@@ -25,7 +25,7 @@
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="" label="图片">
         <template #default="scope">
-          <el-image v-if="scope.row.url || scope.row.absoluteUrl"
+          <el-image v-if="scope.row.absoluteUrl || scope.row.url"
             style="width: 100%; height: 100px"
             :src="scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)"
             fit="fill" :preview-src-list="[scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)]">
@@ -49,10 +49,10 @@
   <!-- </div> -->
   <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="图标" prop="url">
+      <el-form-item label="图片" prop="url">
         <UploadTemplateManual ref="upload" @success="handleSuccess" :prefix="'resource/'" :url="form.absoluteUrl ? form.absoluteUrl : form.url" />
       </el-form-item>
-      <el-form-item label="图标地址" prop="absoluteUrl">
+      <el-form-item label="图片地址" prop="absoluteUrl">
         <el-input v-model="form.absoluteUrl"></el-input>
         <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
       </el-form-item>
