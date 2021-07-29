@@ -107,7 +107,7 @@ export default {
         this.file = f.raw
         let URL = window.URL || window.webkitURL
         var localUrl = URL.createObjectURL(f.raw)
-        console.log('localUrl', localUrl)
+        // console.log('localUrl', localUrl)
         this.imageUrl = localUrl
         this.isChange = true
       }
@@ -140,7 +140,7 @@ export default {
     },
     submit(){
       if (this.isChange && !isEmpty(this.file)) {
-        console.log('上传oss');
+        // console.log('上传oss');
         return this.upload()
       }
     }

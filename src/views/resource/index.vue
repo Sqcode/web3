@@ -137,10 +137,10 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.$refs.upload.isChange) {
-            console.log(this.$refs.upload.isChange);
+            // console.log(this.$refs.upload.isChange);
             const response = this.$refs.upload.submit()
             response.then((imagePath) => {
-              console.log(imagePath);
+              // console.log(imagePath);
               if (imagePath) {
                 this.form.url = imagePath
               }
@@ -158,7 +158,7 @@ export default {
       })
     },
     handleSuccess () {
-      console.log('request');
+      // console.log('request');
       var url = '/resource/insert'
       if (this.form.id) {
         url = '/resource/update'
