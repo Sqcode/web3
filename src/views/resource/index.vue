@@ -47,10 +47,11 @@
         </el-table-column>
     </sh-table>
   <!-- </div> -->
-  <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
+  <el-dialog :title="dialogTitle" v-model="dialogFormVisible" :destroy-on-close="true">
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="图片" prop="url">
-        <UploadTemplateManual ref="upload" @success="handleSuccess" :prefix="'resource/'" :url="form.absoluteUrl ? form.absoluteUrl : form.url" />
+      <el-form-item label="图片" prop="url" >
+        <UploadTemplateManual v-if="form.absoluteUrl || form.url" ref="upload" :prefix="'resource/'" :url="form.absoluteUrl ? form.absoluteUrl : form.url" />
+        <UploadTemplateManual v-else ref="upload" :prefix="'resource/'" :url="form.absoluteUrl ? form.absoluteUrl : form.url" />
       </el-form-item>
       <el-form-item label="图片地址" prop="absoluteUrl">
         <el-input v-model="form.absoluteUrl"></el-input>
@@ -132,29 +133,39 @@ export default {
     getList () {
       this.table.update++
     },
-    handleSuccess(imagePath) {
-      if (imagePath) {
-        this.form.url = imagePath
-      }
-      this.$nextTick(() => {
-        var url = '/resource/insert'
-        if (this.form.id) {
-          url = '/resource/update'
-        }
-        request.post(url, this.form).then(res => {
-          this.dialogFormVisible = false
-          this.getList()
-        })
-      })
-    },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$refs.upload.submit()
+          if (this.$refs.upload.isChange) {
+            console.log(this.$refs.upload.isChange);
+            const response = this.$refs.upload.submit()
+            response.then((imagePath) => {
+              console.log(imagePath);
+              if (imagePath) {
+                this.form.url = imagePath
+              }
+              this.handleSuccess()
+            }).catch((err) => {
+              console.log('oss 异常')
+            });
+          } else {
+            this.handleSuccess()
+          }
         } else {
           console.log('error submit!!')
           return false
         }
+      })
+    },
+    handleSuccess () {
+      console.log('request');
+      var url = '/resource/insert'
+      if (this.form.id) {
+        url = '/resource/update'
+      }
+      request.post(url, this.form).then(res => {
+        this.dialogFormVisible = false
+        this.getList()
       })
     },
     handleInsertClick () {

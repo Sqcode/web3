@@ -133,6 +133,7 @@ const routes = [
 ]
 const router = createRouter({
   history: createWebHashHistory(),
+  // base: process.env.NODE_ENV === 'production' ? '/sqc/' : '',
   // history: createWebHistory(process.env.BASE_URL),
   routes
 })

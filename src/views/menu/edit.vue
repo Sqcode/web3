@@ -1,8 +1,9 @@
 <template>
   <div id="edit-form">
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="图标" prop="url">
-        <UploadTemplateManual ref="upload" @success="handleSuccess" :prefix="'menu/'" :url="form.url" />
+      <el-form-item label="图标" prop="url" >
+        <UploadTemplateManual v-if="form.absoluteUrl || form.url" ref="upload" :prefix="'menu/'" :url="form.url" />
+        <UploadTemplateManual v-else ref="upload" :prefix="'menu/'" :url="form.url" />
       </el-form-item>
       <el-form-item label="图标地址" prop="absoluteUrl">
         <el-input v-model="form.absoluteUrl"></el-input>
@@ -197,7 +198,6 @@ export default {
   },
   mounted () {
     this.getJumpTypeOptionList()
-
   },
   methods: {
     getNoteList (menuId) {
@@ -238,29 +238,7 @@ export default {
       // this.table.search.parentId = this.cascaderMenuSelected ? this.cascaderMenuSelected[this.cascaderMenuSelected.length - 1] : ''
       console.log(node);
     },
-    handleSuccess(imagePath) {
-      if (imagePath) {
-        // console.log('parent: ', imagePath);
-        this.form.url = imagePath
-      }
-      this.$nextTick(() => {
-        var url = '/menu/insert'
-        if (this.form.id) {
-          url = '/menu/update'
-        }
-        request.post(url, this.form).then(res => {
-          // console.log(res)
-          this.$message({
-            type: 'success',
-            message: '操作成功！'
-          })
-          this.$goBack()
-          this.cascaderKey++
-        })
-      })
-    },
     submitForm (formName) {
-      // console.log('request');
       this.form.parentId = this.cascaderMenuSelected ? this.cascaderMenuSelected[this.cascaderMenuSelected.length - 1] : ''
       // console.log(this.form.parentId, this.form.id);
       if (this.form.parentId === this.form.id) {
@@ -281,11 +259,40 @@ export default {
       this.form.dataJson = dataJson
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$refs.upload.submit()
+          if (this.$refs.upload.isChange) {
+            console.log(this.$refs.upload.isChange);
+            const response = this.$refs.upload.submit()
+            response.then((imagePath) => {
+              console.log(imagePath);
+              if (imagePath) {
+                this.form.url = imagePath
+              }
+              this.handleSuccess()
+            }).catch((err) => {
+              console.log('oss 异常')
+            });
+          } else {
+            this.handleSuccess()
+          }
         } else {
           console.log('error submit!!')
           return false
         }
+      })
+    },
+    handleSuccess () {
+      console.log('request');
+      var url = '/menu/insert'
+      if (this.form.id) {
+        url = '/menu/update'
+      }
+      request.post(url, this.form).then(res => {
+        this.$message({
+          type: 'success',
+          message: '操作成功！'
+        })
+        this.$goBack()
+        this.cascaderKey++
       })
     }
   }

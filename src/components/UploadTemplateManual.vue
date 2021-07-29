@@ -9,7 +9,8 @@
     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
   </el-upload>
   <!-- 触发computed -->
-  <el-button @click="handleButtonClick" v-show="0" >{{lazyLoad}}</el-button>
+  <!-- <el-button @click="handleButtonClick" v-show="1" >{{imageUrl}}</el-button> -->
+  <!-- <el-button @click="handleButtonClick" v-show="0" >{{lazyLoad}}</el-button> -->
 </template>
 <script>
 import request from '@/utils/request'
@@ -22,21 +23,50 @@ export default {
       type: String,
       required: false
     },
-    prefix: {
+    prefix: {// 上传oss的前缀路径
       type: String,
       required: false
     }
   },
-  emits: ['success'],
-  watch: {
-    // url (newValue, oldValue) {
-    //   console.log('watch', newValue, oldValue);
-    //   if (newValue.indexOf('http') != -1 || newValue.indexOf('https') != -1) {
-    //     this.imageUrl = newValue
-    //   } else {
-    //     this.imageUrl = process.env.VUE_APP_IMAGE_URL_PREFIX + newValue
+  // emits: ['success'], // this.$emit('success', res)
+  // watch: {
+  //   url (newValue, oldValue) {
+  //     console.log('watch', newValue, oldValue);
+  //     if (newValue.indexOf('http') != -1 || newValue.indexOf('https') != -1) {
+  //       this.imageUrl = newValue
+  //     } else {
+  //       this.imageUrl = process.env.VUE_APP_IMAGE_URL_PREFIX + newValue
+  //     }
+  //   }
+  // },
+  // computed: {
+  //   lazyLoad : {
+  //     get ()  {
+  //       console.log('get');
+  //       return this.imageUrl = this.url ? (this.url.indexOf('http') != -1 || this.url.indexOf('https') != -1) ? this.url : (process.env.VUE_APP_IMAGE_URL_PREFIX + this.url) : ''},
+  //     set (url) {
+  //       console.log('set', url);
+  //       return this.imageUrl = url
+  //     },
+  //   }
+  // },
+  setup(props) {
+    var url = props.url
+    var imageUrl = url ? (url.indexOf('http') != -1 || url.indexOf('https') != -1) ? url : (process.env.VUE_APP_IMAGE_URL_PREFIX + url) : ''
+    // var reset = computed({
+    //   get() {
+    //     console.log('get', url);
+    //     return imageUrl
+    //   },
+    //   set(val) {
+    //     console.log('set', imageUrl, val);
+    //     imageUrl = val
     //   }
-    // }
+    // });
+    return {
+      imageUrl
+      // reset
+    };
   },
   components: {
   },
@@ -45,26 +75,13 @@ export default {
   },
   data () {
     return {
-      // imageUrl: computed(() => this.url ? (this.url.indexOf('http') != -1 || this.url.indexOf('https') != -1) ?
-      //   this.url : (process.env.VUE_APP_IMAGE_URL_PREFIX + this.url) : ''),
-      imageUrl: '',
       loading: false,
       file: {},
       action: '',
-      // 将旧的文件保存下来
       update: 0,
-      oldFilePath: ''
-    }
-  },
-  computed: {
-    lazyLoad : {
-      get ()  {
-        // console.log('get');
-        return this.imageUrl = this.url ? (this.url.indexOf('http') != -1 || this.url.indexOf('https') != -1) ? this.url : (process.env.VUE_APP_IMAGE_URL_PREFIX + this.url) : ''},
-      set (url) {
-        // console.log('set', url);
-        return this.imageUrl = url
-      },
+      // 将旧的文件保存下来
+      oldFilePath: '',
+      isChange: false
     }
   },
   mounted () {
@@ -74,7 +91,7 @@ export default {
       console.log(this.imageUrl)
     },
     handleChange(f, fileList){
-      // console.log('handleChange', fileList);
+      // console.log('handleChange', f);
       if (this.update === 0) {
         var oldFilePath = this.imageUrl.replace(process.env.VUE_APP_IMAGE_URL_PREFIX, '')
         this.oldFilePath = oldFilePath
@@ -90,8 +107,9 @@ export default {
         this.file = f.raw
         let URL = window.URL || window.webkitURL
         var localUrl = URL.createObjectURL(f.raw)
-        // console.log('localUrl', localUrl)
+        console.log('localUrl', localUrl)
         this.imageUrl = localUrl
+        this.isChange = true
       }
     },
     async beforeUpload(file) {
@@ -102,23 +120,28 @@ export default {
       }
       return isLt2M;
     },
-    submit(){
-      // console.log('子上传图片submit');
-      // this.$refs.upload.submit()
-      if (!isEmpty(this.file)) {
-        this.loading = true
-        request.uploadFile(this.action, this.file, {'prefix': this.prefix, 'oldFilePath': this.oldFilePath}).then((res) => {
-          if (res) {
-            // console.log('result: ', res);
-            this.$emit('success', res)
+    async upload(file) {
+      const response = await new Promise(resolve => {
+        // setTimeout(() => {
+          this.loading = true
+          request.uploadFile(this.action, this.file, {'prefix': this.prefix, 'oldFilePath': this.oldFilePath}).then((res) => {
+            if (res) {
+              // console.log('result: ', res);
+              resolve(res);
+              this.loading = false
+            }
+          }).catch(error => {
+            this.$message.error('oss服务接口异常')
             this.loading = false
-          }
-        }).catch(error => {
-          this.$message.error('服务接口异常')
-          this.loading = false
-        })
-      } else {
-        this.$emit('success', '')
+          })
+        // }, 2000);
+      });
+      return response
+    },
+    submit(){
+      if (this.isChange && !isEmpty(this.file)) {
+        console.log('上传oss');
+        return this.upload()
       }
     }
   }

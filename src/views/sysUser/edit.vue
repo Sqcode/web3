@@ -2,7 +2,8 @@
   <div id="edit-form">
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
       <el-form-item label="头像" prop="avatarUrl">
-        <UploadTemplateManual ref="upload" @success="handleSuccess" :prefix="'sysUser/'" :url="form.avatarUrl" />
+        <UploadTemplateManual v-if="form.avatarUrl" ref="upload" :prefix="'sysUser/'" :url="form.avatarUrl" />
+        <UploadTemplateManual v-else  ref="upload" :prefix="'sysUser/'" :url="form.avatarUrl" />
       </el-form-item>
       <!-- <el-form-item label="头像" prop="avatarUrl">
         <el-input v-model="form.avatarUrl"></el-input>
@@ -83,41 +84,49 @@ export default {
   mounted () {
   },
   methods: {
-    // async getOne() {
+    // async wait() {
     //   const response = await new Promise(resolve => {
     //     setTimeout(() => {
     //       resolve("async await test...");
-    //     }, 1000);
+    //     }, 2000);
     //   });
-    //   console.log(response);
     // },
-    handleSuccess(imagePath) {
-      if (imagePath) {
-        this.form.avatarUrl = imagePath
-      }
-      this.$nextTick(() => {
-        // console.log('request');
-        var url = '/sys/user/insert'
-        if (this.form.id) {
-          url = '/sys/user/update'
-        }
-        request.post(url, this.form).then(res => {
-          this.$message({
-            type: 'success',
-            message: '操作成功！'
-          })
-          this.$goBack()
-        })
-      })
-    },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$refs.upload.submit()
+          if (this.$refs.upload.isChange) {
+            console.log(this.$refs.upload.isChange);
+            const response = this.$refs.upload.submit()
+            response.then((imagePath) => {
+              console.log(imagePath);
+              if (imagePath) {
+                this.form.avatarUrl = imagePath
+              }
+              this.handleSuccess()
+            }).catch((err) => {
+              console.log('oss 异常')
+            });
+          } else {
+            this.handleSuccess()
+          }
         } else {
           console.log('error submit!!')
           return false
         }
+      })
+    },
+    handleSuccess () {
+      console.log('request');
+      var url = '/sys/user/insert'
+      if (this.form.id) {
+        url = '/sys/user/update'
+      }
+      request.post(url, this.form).then(res => {
+        this.$message({
+          type: 'success',
+          message: '操作成功！'
+        })
+        this.$goBack()
       })
     }
   }
