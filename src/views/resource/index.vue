@@ -70,6 +70,39 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="跳转类型" prop="jumpType">
+        <el-select clearable style="width: 100%" v-model="form.jumpType" placeholder="请选择">
+          <el-option
+            v-for="item in jumpTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value" :disabled="item.value == 1 || item.value == 2">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="外链链接" v-if="form.jumpType == 3">
+        <el-input placeholder="请输入完整的外链url" v-model="outUrl" clearable></el-input>
+      </el-form-item>
+      <!-- <el-form-item label="跳转页面" prop="dataJson" v-if="form.jumpType == 2">
+        <el-select clearable style="width: 100%" v-model="pageSelected" placeholder="请选择" @change="handlePageSelected">
+          <el-option
+            v-for="item in pageOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="跳转笔记" prop="dataJson.noteId" :rules="[{ required: true, message: '请选择笔记', trigger: 'blur' }]" v-if="form.jumpType == 2 && pageSelected == 0">
+        <el-select :key="noteSelectOptionUpdate" clearable filterable style="width: 100%" v-model="noteSelected" placeholder="请选择">
+          <el-option
+            v-for="item in notes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item> -->
       <el-form-item label="排序">
         <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
       </el-form-item>
@@ -124,16 +157,57 @@ export default {
         { label: '笔记背景图', value: 2 },
         { label: '菜单Banner', value: 3 },
         { label: '笔记列表Banner', value: 4 }
-      ]
+      ],
+      jumpTypeOptions: [],
+      pageSelected: null,
+      outUrl: '',
+      pageOptions: [
+        { label: '笔记', value: 0 },
+        { label: '笔记列表', value: 1 },
+        { label: '原版工具卡', value: 2 }
+      ],
+      pages: [
+        { label: 'page', value: '/note/index', noteId: '' },
+        { label: 'page', value: '/notes/index' },
+        { label: 'page', value: '/menu_icon/index' }
+      ],
+      notes: [],
+      noteSelectOptionUpdate: 0,
+      noteSelected: ''
     }
   },
   mounted () {
+    this.getJumpTypeOptionList()
   },
   methods: {
+    getJumpTypeOptionList () {
+      request.get('/menu/jumpType/option/list').then(res => {
+        if (res) {
+          this.jumpTypeOptions = res
+        }
+      })
+    },
     getList () {
       this.table.update++
     },
     submitForm (formName) {
+      var dataJson = this.pages[this.pageSelected]
+      // 如果是 笔记&选择笔记，dataJson中放入笔记id
+      // console.log(dataJson, this.pageSelected, this.noteSelected);
+      if (this.pageSelected === 0 && this.noteSelected) {
+        dataJson.noteId = this.noteSelected
+      }
+      if (this.form.jumpType === 1) { // 如果跳菜单，清空dataJSON
+        dataJson = {}
+      }
+      if (this.form.jumpType === 3) { // 如果跳菜单，清空dataJSON
+        dataJson = {
+          url: this.outUrl
+        }
+      }
+      // console.log('dataJson', dataJson);
+      this.form.dataJson = dataJson
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.$refs.upload.isChange) {
@@ -171,12 +245,16 @@ export default {
     handleInsertClick () {
       this.dialogFormVisible = true
       this.dialogTitle = '新增'
+      this.outUrl = ''
       this.form = new Resource()
     },
     handleEdit (index, row) {
       this.dialogFormVisible = true
       this.dialogTitle = '编辑'
       this.form = clone(row)
+      if (row.jumpType === 3 && row.dataJson) {
+        this.outUrl = row.dataJson.url
+      }
     },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {

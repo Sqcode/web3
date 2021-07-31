@@ -5,6 +5,8 @@ export default class Resource {
   sort = 1
   absoluteUrl = ''
   type
+  jumpType = ''
+  dataJson = '{}'
   constructor (obj) {
   }
 }

@@ -1,5 +1,19 @@
 <template>
-  <el-menu :default-active="routerPath" class="el-menu-vertical-demo" @open="handleOpen"
+  <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+    <el-radio-button :label="false" v-if="isCollapse">展开</el-radio-button>
+    <el-radio-button :label="true" v-if="!isCollapse">收起</el-radio-button>
+  </el-radio-group> -->
+  <!-- <el-tooltip :content="'Switch value: ' + isCollapse" placement="top">
+    <el-switch
+      v-model="isCollapse"
+      active-color="#13ce66"
+      inactive-color="#ff4949"
+      :active-value="true"
+      :inactive-value="false"
+    >
+    </el-switch>
+  </el-tooltip> -->
+  <el-menu :collapse="isCollapse" :default-active="routerPath" class="el-menu-vertical-demo" @open="handleOpen"
     @close="handleClose" router
     background-color="white"
     text-color="black"
@@ -39,6 +53,7 @@ export default {
   },
   data () {
     return {
+      isCollapse: false,
       navList: [
         {
           name: '欢迎页',

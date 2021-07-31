@@ -105,7 +105,7 @@ export default {
       request.get('/note/' + id).then(data => {
         // console.log('note', data);
         if (data) {
-          data.parentId = data.parentId+''
+          data.parentId ? data.parentId + '' : ''
           this.form = data
           setTimeout(() => {
             tinyMCE.activeEditor.setContent(data.content)

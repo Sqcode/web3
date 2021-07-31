@@ -1,11 +1,11 @@
 <template>
   <div id="edit-form">
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="图标" prop="url" >
-        <UploadTemplateManual v-if="form.absoluteUrl || form.url" ref="upload" :prefix="'menu/'" :url="form.url" />
+      <el-form-item label="图片" prop="url" >
+        <UploadTemplateManual v-if="form.absoluteUrl || form.url" ref="upload" :prefix="'menu/'" :url="form.absoluteUrl ? form.absoluteUrl : form.url" />
         <UploadTemplateManual v-else ref="upload" :prefix="'menu/'" :url="form.url" />
       </el-form-item>
-      <el-form-item label="图标地址" prop="absoluteUrl">
+      <el-form-item label="图片地址" prop="absoluteUrl">
         <el-input v-model="form.absoluteUrl"></el-input>
         <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
       </el-form-item>
@@ -48,7 +48,7 @@
             v-for="item in jumpTypeOptions"
             :key="item.value"
             :label="item.label"
-            :value="item.value" :disabled="item.value == 3">
+            :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
@@ -71,6 +71,9 @@
             :value="item.value">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="外链链接" v-if="form.jumpType == 3">
+        <el-input placeholder="请输入完整的外链url" v-model="outUrl" clearable></el-input>
       </el-form-item>
     </el-form>
     <el-footer>
@@ -113,6 +116,9 @@ export default {
               }
             }
           })
+          if (response.jumpType === 3 && response.dataJson) {
+            this.outUrl = response.dataJson.url
+          }
         },
         err => {
           reject(err)
@@ -191,7 +197,8 @@ export default {
       },
       notes: [],
       noteSelectOptionUpdate: 0,
-      noteSelected: ''
+      noteSelected: '',
+      outUrl: ''
     }
   },
   computed: {
@@ -211,13 +218,6 @@ export default {
         this.notes = ns
         this.noteSelectOptionUpdate++
         // console.log(this.notes);
-      })
-    },
-    getJumpTypeOptionList () {
-      request.get('/menu/jumpType/option/list').then(res => {
-        if (res) {
-          this.jumpTypeOptions = res
-        }
       })
     },
     handlePageSelected (e) {
@@ -254,6 +254,11 @@ export default {
       }
       if (this.form.jumpType === 1) { // 如果跳菜单，清空dataJSON
         dataJson = {}
+      }
+      if (this.form.jumpType === 3) { // 如果跳菜单，清空dataJSON
+        dataJson = {
+          url: this.outUrl
+        }
       }
       // console.log('dataJson', dataJson);
       this.form.dataJson = dataJson
