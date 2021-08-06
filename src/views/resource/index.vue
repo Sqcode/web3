@@ -156,7 +156,8 @@ export default {
         { label: '首页Banner', value: 1 },
         { label: '笔记背景图', value: 2 },
         { label: '菜单Banner', value: 3 },
-        { label: '笔记列表Banner', value: 4 }
+        { label: '笔记列表Banner', value: 4 },
+        { label: '加密首页', value: 5 }
       ],
       jumpTypeOptions: [],
       pageSelected: null,

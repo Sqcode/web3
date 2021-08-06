@@ -7,6 +7,7 @@ export default class Note {
   subTitle=''
   content=''
   status= 1
+  encrypt=0
   parentId
   constructor (bj) {
   }

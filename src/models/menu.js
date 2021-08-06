@@ -9,6 +9,7 @@ export default class Menu {
   url = ''
   absoluteUrl = ''
   status = 1
+  encrypt = 0
   parentId = 0
 
   constructor (obj) {

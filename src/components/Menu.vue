@@ -68,7 +68,7 @@ export default {
           route: '/dept'
         },
         {
-          name: '用户',
+          name: '通讯录',
           route: '/user'
         },
         {

@@ -18,6 +18,12 @@
           <el-radio :label="0">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="是否加密" prop="encrypt">
+        <el-radio-group v-model="form.encrypt">
+          <el-radio :label="1">加密</el-radio>
+          <el-radio :label="0">正常</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="排序">
         <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="小程序菜单排序"></el-input-number>
       </el-form-item>
