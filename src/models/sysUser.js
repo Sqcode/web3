@@ -8,6 +8,7 @@ export default class SysUser {
   sex = 2
   email
   address
+  type=0
   constructor (obj) {
   }
 }

@@ -40,6 +40,7 @@ export default {
   // Vue.component('shTable', {
   //     template: 'shTable',
   name: 'shTable',
+  emits: ['selection'],
   props: {
     remote: {
       type: String,

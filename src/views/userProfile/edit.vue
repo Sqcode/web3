@@ -2,26 +2,16 @@
   <div id="edit-form">
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
       <el-form-item label="头像" prop="avatarUrl">
-        <UploadTemplateManual v-if="form.avatarUrl" ref="upload" :prefix="'sysUser/'" :url="form.avatarUrl" />
-        <UploadTemplateManual v-else  ref="upload" :prefix="'sysUser/'" :url="form.avatarUrl" />
+        <UploadTemplateManual v-if="form.avatarUrl" ref="upload" :prefix="'userProfile/'" :url="form.avatarUrl" />
+        <UploadTemplateManual v-else ref="upload" :prefix="'userProfile/'" :url="form.avatarUrl" />
       </el-form-item>
-      <!-- <el-form-item label="头像" prop="avatarUrl">
-        <el-input v-model="form.avatarUrl"></el-input>
-        <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
-      </el-form-item> -->
-      <el-form-item label="登录名" prop="loginName">
-        <el-input v-model="form.loginName" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password"></el-input>
-      </el-form-item>
-      <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName"></el-input>
+      <el-form-item label="用户名" prop="nickName">
+        <el-input v-model="form.nickName"></el-input>
       </el-form-item>
       <el-form-item label="手机号" prop="phone">
         <el-input v-model="form.phone"></el-input>
       </el-form-item>
-      <el-form-item label="账号权限" prop="type">
+      <el-form-item label="用户类型" prop="type">
         <el-select clearable style="width: 100%" v-model="form.type" placeholder="请选择">
           <el-option
             v-for="item in typeOptions"
@@ -31,17 +21,29 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="form.sex">
-          <el-radio :label="0">男</el-radio>
-          <el-radio :label="1">女</el-radio>
-          <el-radio :label="2" disabled>未知</el-radio>
+      <el-form-item label="权限" prop="permission">
+        <el-select v-model="permission" multiple clearable placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in permissionOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="性别" prop="gender">
+        <el-radio-group v-model="form.gender">
+          <el-radio :label="1">男</el-radio>
+          <el-radio :label="2">女</el-radio>
+          <el-radio :label="0" disabled>未知</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email"></el-input>
+      <el-form-item label="状态" prop="status">
+        <el-radio-group v-model="form.status">
+          <el-radio :label="1">正常</el-radio>
+          <el-radio :label="0">禁止登录</el-radio>
+        </el-radio-group>
       </el-form-item>
-
     </el-form>
     <el-footer>
       <el-button type="warning" @click="$goBack">返 回</el-button>
@@ -50,7 +52,7 @@
   </div>
 </template>
 <script>
-import SysUser from 'models/sysUser'
+import UserProfile from 'models/userProfile'
 import request from '@/utils/request'
 import UploadTemplateManual from 'components/UploadTemplateManual';
 import { clone } from '@/utils/util'
@@ -64,9 +66,13 @@ export default {
   created () {
     var id = this.$route.params.id
     if (id != 0) {
-      request.get('/sys/user/' + id).then(
+      request.get('/userProfile/' + id).then(
         response => {
+          console.log(response);
           this.form = clone(response)
+          if (response.permission) {
+            this.permission = response.permission.split(',').map(Number)
+          }
         },
         err => {
           reject(err)
@@ -76,21 +82,32 @@ export default {
   },
   data () {
     return {
-      form: new SysUser(),
-      typeOptions: [
-        { label: '管理员', value: 0 },
-        { label: '超级管理员', value: 1 }
-      ],
+      form: new UserProfile(),
       rules: {
-        loginName: [
-          { required: true, message: '请填写登录名', trigger: 'blur' },
+        nickName: [
+          { required: true, message: '请填写用户名', trigger: 'blur' },
           { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
         ],
-        password: [
-          { required: true, message: '请填写密码', trigger: 'blur' },
-          { min: 2, max: 64, message: '密码长度在 2 到 64 个字符', trigger: 'blur' }
+        phone: [
+          { required: true, message: '请填写手机', trigger: 'blur' },
+          { min: 11, max: 11, message: '手机号11位', trigger: 'blur' }
         ]
-      }
+      },
+      typeOptions: [
+        { label: '普通', value: 0 },
+        { label: 'SVIP', value: 1 },
+        { label: 'VIP', value: 2 }
+      ],
+      permission: [],
+      permissionOptions: [
+        { label: '普通', value: 0 },
+        { label: '超级管理员', value: 1 },
+        { label: '管理员', value: 2 },
+        { label: '体验更多内容', value: 3 },
+        { label: '访问加密', value: 4 },
+        { label: '访问加密文件二级，未使用', value: 5 },
+        { label: '访问加密文件三级，未使用', value: 6 }
+      ]
     }
   },
   computed: {
@@ -98,14 +115,8 @@ export default {
   mounted () {
   },
   methods: {
-    // async wait() {
-    //   const response = await new Promise(resolve => {
-    //     setTimeout(() => {
-    //       resolve("async await test...");
-    //     }, 2000);
-    //   });
-    // },
     submitForm (formName) {
+      this.form.permission = this.permission.join(',')
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.$refs.upload.isChange) {
@@ -131,9 +142,9 @@ export default {
     },
     handleSuccess () {
       // console.log('request');
-      var url = '/sys/user/insert'
+      var url = '/userProfile/insert'
       if (this.form.id) {
-        url = '/sys/user/update'
+        url = '/userProfile/update'
       }
       request.post(url, this.form).then(res => {
         this.$message({

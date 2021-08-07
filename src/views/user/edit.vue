@@ -39,6 +39,12 @@
           <el-radio :label="0">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="是否可见" prop="isShow">
+        <el-radio-group v-model="form.isShow">
+          <el-radio :label="1">展示</el-radio>
+          <el-radio :label="0">掩藏</el-radio>
+        </el-radio-group>
+      </el-form-item>
     </el-form>
     <el-footer>
       <el-button type="warning" @click="$goBack">返 回</el-button>

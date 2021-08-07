@@ -219,7 +219,8 @@ export default {
         res = res.filter(v => !v.parentId)
         const ns = res.map(v => ({
           label: v.title,
-          value: v.id
+          value: v.id,
+          encrypt: v.encrypt
         }))
         this.notes = ns
         this.noteSelectOptionUpdate++

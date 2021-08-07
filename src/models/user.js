@@ -11,6 +11,7 @@ export default class User {
   address
   sort = 1
   status = 1
+  isShow = 1
   constructor (obj) {
   }
 }

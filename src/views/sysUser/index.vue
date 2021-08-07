@@ -33,6 +33,13 @@
       <el-table-column prop="loginName" label="登录名"></el-table-column>
       <el-table-column prop="userName" label="用户名"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
+      <el-table-column prop="type" label="类型">
+        <template #default="scope">
+          <span v-for="item in typeOptions">
+            <span v-if="item.value === scope.row.type">{{item.label}}</span>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column prop="createdTime" label="创建时间" width="175">
         <template #default="scope">
           {{ this.$utils.format(scope.row.createdTime, 'yyyy-MM-dd HH:mm:ss') }}
@@ -45,57 +52,6 @@
           </template>
         </el-table-column>
     </sh-table>
-  <!-- </div> -->
-  <!-- <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
-    <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="登录名" prop="loginName">
-        <el-input v-model="form.loginName" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password"></el-input>
-      </el-form-item>
-      <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号" prop="phone">
-        <el-input v-model="form.phone"></el-input>
-      </el-form-item>
-      <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="form.sex">
-          <el-radio :label="0">男</el-radio>
-          <el-radio :label="1">女</el-radio>
-          <el-radio :label="2" disabled>未知</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="form.email"></el-input>
-      </el-form-item>
-      <el-form-item label="头像" prop="avatarUrl">
-        <template>
-          <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-        </template>
-      </el-form-item>
-      <el-form-item label="头像" prop="avatarUrl">
-        <el-input v-model="form.avatarUrl"></el-input>
-        <span style="color: red;">绝对路径，可以直接访问的网络图片</span>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('form')">确 定</el-button>
-      </span>
-    </template>
-  </el-dialog> -->
 </template>
 
 <script>
@@ -117,6 +73,10 @@ export default {
         remote: '/sys/user/page',
         update: 0
       },
+      typeOptions: [
+        { label: '管理员', value: 0 },
+        { label: '超级管理员', value: 1 }
+      ],
       // dialogFormVisible: false,
       // dialogTitle: '',
       // form: new SysUser(),

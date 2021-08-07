@@ -72,6 +72,10 @@ export default {
           route: '/user'
         },
         {
+          name: '微信用户',
+          route: '/userProfile'
+        },
+        {
           name: '菜单',
           route: '/menu'
         },

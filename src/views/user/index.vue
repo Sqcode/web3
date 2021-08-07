@@ -36,10 +36,20 @@
       <el-table-column prop="deptName" label="部门"></el-table-column>
       <el-table-column prop="userName" label="用户名"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
+      <el-table-column prop="sex" label="性别">
+        <template #default="scope">
+            {{ scope.row.sex === 0 ? '男' : scope.row.sex === 1 ? '女' : '未知'}}
+        </template>
+      </el-table-column>
       <el-table-column prop="sort" label="排序"></el-table-column>
       <el-table-column prop="status" label="状态">
         <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{ scope.row.status === 1 ? '正常' : '禁用' }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="isShow" label="是否可见">
+        <template #default="scope">
+            <el-tag :type="scope.row.isShow === 1 ? 'success' : 'danger'">{{ scope.row.isShow === 1 ? '展示' : '掩藏' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="createdTime" label="创建时间" width="175">
@@ -117,7 +127,6 @@ export default {
             type: 'success',
             message: '删除成功!'
           })
-          this.dialogFormVisible = false
           this.getList()
         })
       })

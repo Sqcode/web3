@@ -9,6 +9,7 @@ export default class Note {
   status= 1
   encrypt=0
   parentId
+  encrypt=0
   constructor (bj) {
   }
 }

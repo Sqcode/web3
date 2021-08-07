@@ -47,9 +47,11 @@ export function isEmpty(value) {
 
 export function absoluteUrl (url) {
   if (url.indexOf(',') != -1) {
-    return '';
+    var urls = url.split(',')
+    console.log(urls);
+    return url;
   }
-  return process.env.VUE_APP_IMAGE_URL_PREFIX + url
+  return url ? (url.indexOf('http') != -1 || url.indexOf('https') != -1) ? url : (process.env.VUE_APP_IMAGE_URL_PREFIX + url) : ''
 }
 
 export function clone (obj) {

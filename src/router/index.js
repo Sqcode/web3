@@ -4,6 +4,7 @@ import NOTE_EDIT from 'views/note/edit.vue'
 import SYS_USER_EDIT from 'views/sysUser/edit.vue'
 import MENU_EDIT from 'views/menu/edit.vue'
 import USER_EDIT from 'views/user/edit.vue'
+import USER_PROFILE_EDIT from 'views/userProfile/edit.vue'
 import Login from 'views/Login.vue'
 
 const routes = [
@@ -78,6 +79,22 @@ const routes = [
         component: USER_EDIT,
         meta: {
           title: 'User'
+        }
+      },
+      {
+        path: '/userProfile',
+        name: 'userProfile',
+        component: () => import('views/userProfile'),
+        meta: {
+          title: 'UserProfile'
+        }
+      },
+      {
+        path: '/userProfile/edit/:id',
+        name: 'userProfile_edit',
+        component: USER_PROFILE_EDIT,
+        meta: {
+          title: 'UserProfile'
         }
       },
       {

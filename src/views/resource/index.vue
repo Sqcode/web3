@@ -33,6 +33,13 @@
         </template>
       </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
+      <el-table-column prop="type" label="类型">
+        <template #default="scope">
+          <span v-for="item in typeOptions">
+            <span v-if="item.value === scope.row.type">{{item.label}}</span>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column prop="sort" label="排序"></el-table-column>
       <el-table-column prop="createdTime" label="创建时间" width="175">
         <template #default="scope">
