@@ -88,10 +88,10 @@ export default {
           { required: true, message: '请填写用户名', trigger: 'blur' },
           { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
         ],
-        phone: [
-          { required: true, message: '请填写手机', trigger: 'blur' },
-          { min: 11, max: 11, message: '手机号11位', trigger: 'blur' }
-        ]
+        // phone: [
+        //   { required: true, message: '请填写手机', trigger: 'blur' },
+        //   { min: 11, max: 11, message: '手机号11位', trigger: 'blur' }
+        // ]
       },
       typeOptions: [
         { label: '普通', value: 0 },
