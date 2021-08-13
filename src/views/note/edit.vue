@@ -7,39 +7,51 @@
       <!-- <el-form-item label="子标题" prop="subTitle">
         <el-input v-model="form.subTitle"></el-input>
       </el-form-item> -->
-      <el-form-item label="状态" prop="status">
-        <el-radio-group v-model="form.status">
-          <el-radio :label="1">开启</el-radio>
-          <el-radio :label="0">禁用</el-radio>
+      <template v-if="basicShow" >
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="form.status">
+            <el-radio :label="1">开启</el-radio>
+            <el-radio :label="0">禁用</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="是否加密" prop="encrypt">
+          <el-radio-group v-model="form.encrypt">
+            <el-radio :label="1">加密</el-radio>
+            <el-radio :label="0">正常</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="排序">
+          <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
+        </el-form-item>
+        <el-form-item label="所属菜单" prop="" v-if="!form.parentId">
+          <el-cascader style="width: 100%"
+            clearable
+            filterable
+            :props="props"
+            v-model="cascaderSelected"
+            @change="handleCascaderChange">
+          </el-cascader>
+        </el-form-item>
+        <el-form-item label="所属笔记" prop="">
+          <el-select clearable filterable style="width: 100%" v-model="form.parentId" placeholder="请选择">
+            <el-option
+              v-for="item in notes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" :disabled="item.value == form.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </template>
+      <el-form-item label="文件" prop="fileUrl">
+        <UploadFileTemplateManual v-if="form.fileUrl" ref="upload" :prefix="'note/file/'" :url="form.fileUrl" :name="form.fileName" />
+        <UploadFileTemplateManual v-else ref="upload" :prefix="'note/file/'" :url="form.fileUrl" :name="form.fileName" />
+      </el-form-item>
+      <el-form-item label="是否为附件" prop="attach">
+        <el-radio-group v-model="form.attach">
+          <el-radio :label="1">附件</el-radio>
+          <el-radio :label="0">直接打开</el-radio>
         </el-radio-group>
-      </el-form-item>
-      <el-form-item label="是否加密" prop="encrypt">
-        <el-radio-group v-model="form.encrypt">
-          <el-radio :label="1">加密</el-radio>
-          <el-radio :label="0">正常</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="排序">
-        <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
-      </el-form-item>
-      <el-form-item label="所属菜单" prop="" v-if="!form.parentId">
-        <el-cascader style="width: 100%"
-          clearable
-          filterable
-          :props="props"
-          v-model="cascaderSelected"
-          @change="handleCascaderChange">
-        </el-cascader>
-      </el-form-item>
-      <el-form-item label="所属笔记" prop="">
-        <el-select clearable filterable style="width: 100%" v-model="form.parentId" placeholder="请选择">
-          <el-option
-            v-for="item in notes"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value" :disabled="item.value == form.id">
-          </el-option>
-        </el-select>
       </el-form-item>
       <el-form-item label="内容" prop="content">
         <TEditor ref="editor" v-model="content" />
@@ -50,6 +62,7 @@
     <el-button type="warning" @click="$goBack">返 回</el-button>
     <el-button type="primary" @click="submitForm('form')">提 交</el-button>
     <el-button @click="handleButtonClick">打印内容</el-button>
+    <el-button @click="basicShow = basicShow?false:true">隐藏基本信息</el-button>
   </el-footer>
 
 </template>
@@ -57,16 +70,18 @@
 import TEditor from '@/components/TEditor.vue'
 import Note from 'models/note'
 import request from '@/utils/request'
+import UploadFileTemplateManual from 'components/UploadFileTemplateManual';
 
 export default {
   props: {
   },
   components: {
-    TEditor
+    TEditor, UploadFileTemplateManual
   },
   data () {
     return {
       content: '',
+      basicShow: true,
       form: new Note(),
       rules: {
         title: [
@@ -76,9 +91,9 @@ export default {
         // menuId: [
         //   { required: true, message: '请选择菜单', trigger: 'blur' }
         // ],
-        content: [
-          { required: true, message: '请填写内容', trigger: 'blur' }
-        ]
+        // content: [
+        //   { required: true, message: '请填写内容', trigger: 'blur' }
+        // ]
       },
       notes: [],
       cascaderSelected: [],
@@ -143,6 +158,19 @@ export default {
       // console.log(this.cascaderSelected.join(','));
       this.getNoteList(node[node.length - 1])
     },
+    handleSuccess () {
+      var url = '/note/insert'
+      if (this.form.id) {
+        url = '/note/update'
+      }
+      request.post(url, this.form).then(res => {
+        this.$message({
+          type: 'success',
+          message: '操作成功！'
+        })
+        this.$goBack()
+      })
+    },
     submitForm (formName) {
       this.form.content = tinyMCE.activeEditor.getContent()
       this.form.menuId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
@@ -153,17 +181,25 @@ export default {
       // console.log(this.form);
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var url = '/note/insert'
-          if (this.form.id) {
-            url = '/note/update'
+          // console.log(this.$refs.upload.isChange);
+          // if (this.$refs.upload.isDel) {
+          //   this.$refs.upload.del()
+          // }
+          if (this.$refs.upload.isChange) {
+            const response = this.$refs.upload.submit()
+            response.then((path) => {
+              console.log(path);
+              if (path) {
+                this.form.fileUrl = path
+                this.form.fileName =this.$refs.upload.fileName
+              }
+              this.handleSuccess()
+            }).catch((err) => {
+              console.log('oss 异常')
+            });
+          } else {
+            this.handleSuccess()
           }
-          request.post(url, this.form).then(res => {
-            this.$message({
-              type: 'success',
-              message: '操作成功！'
-            })
-            this.$goBack()
-          })
         } else {
           console.log('error submit!!')
           return false
@@ -174,7 +210,7 @@ export default {
     //   this.$refs[formName].resetFields();
     // },
     handleButtonClick () {
-      console.log(tinyMCE.activeEditor.getContent())
+      console.log(tinyMCE.activeEditor.getContent(), this.$refs.upload.url, this.$refs.upload.name)
     }
   }
 }

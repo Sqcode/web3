@@ -10,6 +10,9 @@ export default class Note {
   encrypt=0
   parentId
   encrypt=0
+  fileUrl=''
+  fileName=''
+  attach=0
   constructor (bj) {
   }
 }

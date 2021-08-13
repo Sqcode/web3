@@ -111,7 +111,7 @@ service.interceptors.response.use(
 // export default service
 
 export default class Request {
-  static get (url, data = {}) {
+  static get (url, data) {
     return service.get(url, data).then(res => {
       const code = res.code
       if (code === '00000') {
@@ -120,7 +120,7 @@ export default class Request {
     })
   }
 
-  static post (url, data = {}) {
+  static post (url, data) {
     return service.post(url, data).then(res => {
       const code = res.code
       if (code === '00000') {
