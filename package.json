@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
     "prod": "vue-cli-service build --mode production",
+    "taihe": "vue-cli-service build --mode taihe",
     "prev": "vue-cli-service build --mode prev"
   },
   "dependencies": {
