@@ -30,7 +30,7 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     // disableHostCheck: true,// 自定义域名访问
-    port: 8888,
+    port: 9999,
     open: true,
     overlay: {
       warnings: false,
