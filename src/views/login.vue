@@ -1,7 +1,7 @@
 <template>
   <div id="login-page">
     <el-form :model="loginForm" :rules="rules" ref="loginForm" class="login-container" label-position="left" label-width="0px">
-      <h3 class="login_title">拓奇</h3>
+      <h3 class="login_title">Su</h3>
       <el-form-item prop="loginName">
         <el-input type="text" v-model="loginForm.loginName" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
@@ -67,7 +67,7 @@ export default {
 
 <style lang="scss" scoped>
   #login-page {
-    background: url("../assets/images/bg.jpg") no-repeat;
+    background: url("../assets/images/login-bg.jpg") no-repeat;
     background-position: center;
     height: 100%;
     width: 100%;
