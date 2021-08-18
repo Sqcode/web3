@@ -1,13 +1,11 @@
 <template>
   <el-container>
-    <el-aside style="width: 15%; overflow: hidden;">
-      <Menu></Menu>
-    </el-aside>
-    <el-container style="width: 80%">
-      <el-header>
+    <el-header>
+      <HeaderMenu></HeaderMenu>
+      <div class="info" v-if="$store.state.user">
         <el-dropdown @command="handleCommand">
           <div style="height: 100%;">
-            <img style="height: 100%;" alt="avatar_url"
+            <img style="height: 100%;border-radius:50%;" alt="avatar_url"
               :src=" user ? user.avatarUrl ? prefix + user.avatarUrl : require('../assets/logo.png') : require('../assets/logo.png')" />
             <!-- <span>{{ user.userName }}</span> -->
           </div>
@@ -19,31 +17,24 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-      </el-header>
-      <HeaderDropdownPwd ref="dropDownDialog" :show="dialog" />
-      <el-divider></el-divider>
-      <!-- <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
-        <el-tab-pane
-          v-for="(item, index) in editableTabs"
-          :key="item.name"
-          :label="item.title"
-          :name="item.name"
-        >
-        </el-tab-pane>
-      </el-tabs> -->
+        <HeaderDropdownPwd ref="dropDownDialog" :show="dialog" />
+      </div>
+      <div v-else>登录</div>
+    </el-header>
+    <el-main>
       <router-view />
-    </el-container>
+    </el-main>
   </el-container>
 </template>
 <script>
-import Menu from '@/components/Menu.vue'
+import HeaderMenu from '@/components/HeaderMenu.vue'
 import HeaderDropdownPwd from '@/components/HeaderDropdownPwd.vue'
 import request from '@/utils/request'
 
 export default {
   name: 'Home',
   components: {
-    Menu,
+    HeaderMenu,
     HeaderDropdownPwd
   },
   created () {
@@ -115,12 +106,26 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .el-header {
+  .info {
     display: flex;
     flex-flow: row;
     flex-direction: row;
     font-size: 12px;
-    background-color: white;
+    background-color: rgb(255 255 255 / 0%);
     justify-content: flex-end;
+  }
+  .el-header {
+    position: relative;
+    display: flex;
+  }
+</style>
+<style lang="scss" >
+  #app {
+    background: url("../assets/images/2.jpg") no-repeat;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    position: fixed;
   }
 </style>

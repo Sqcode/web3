@@ -58,41 +58,7 @@ export default {
         {
           name: '欢迎页',
           route: '/welcome'
-        },
-        {
-          name: '管理员',
-          route: '/sys_user'
-        },
-        {
-          name: '部门',
-          route: '/dept'
-        },
-        {
-          name: '通讯录',
-          route: '/user'
-        },
-        {
-          name: '微信用户',
-          route: '/userProfile'
-        },
-        {
-          name: '菜单',
-          route: '/menu'
-        },
-        {
-          name: '笔记',
-          route: '/note'
-        },
-        {
-          name: '资源',
-          route: '/resource'
-        },
-        {
-          name: '关于',
-          route: '/about'
         }
-        // { name: 'Goods', route: '/goods' },
-        // { name: 'Goods', route: '/goods' },
       ]
     }
   }

@@ -33,13 +33,13 @@ router.beforeEach((to, from, next) => {
     document.title = 'cn.su'
   }
   if ('/welcome' === to.path) {
-    if (!store.state.token) {
-      ElNotification.error({
-        title: '错误',
-        message: '请先登录'
-      });
-      router.push({name: 'login'})
-    }
+    // if (!store.state.token) {
+    //   ElNotification.error({
+    //     title: '错误',
+    //     message: '请先登录'
+    //   });
+    //   router.push({name: 'login'})
+    // }
   }
   next()
 })
