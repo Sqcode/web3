@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import Home from 'views/Home.vue'
-import Welcome from 'views/Welcome.vue'
+import Main from 'views/Main.vue'
+import Login from 'views/Login.vue'
 import NOTE_EDIT from 'views/note/edit.vue'
 import SYS_USER_EDIT from 'views/sysUser/edit.vue'
 import MENU_EDIT from 'views/menu/edit.vue'
 import USER_EDIT from 'views/user/edit.vue'
 import USER_PROFILE_EDIT from 'views/userProfile/edit.vue'
-import Login from 'views/Login.vue'
 
 const routes = [
   {
@@ -43,7 +43,17 @@ const routes = [
         }
       },
     ]
-  }
+  },
+  {
+    path: '/main',
+    name: 'main',
+    component: Main,
+    meta: {
+      title: '主页'
+    },
+    children: [
+    ]
+  },
 ]
 const router = createRouter({
   history: createWebHashHistory(),

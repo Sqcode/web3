@@ -56,7 +56,7 @@ export default {
             this.$store.commit('SET_USER', data)
             // console.log('token', this.$store.state.token);
             // console.log('user', this.$store.state.user);
-            this.$router.push({ name: 'welcome' })
+            this.$router.push({ name: 'main' })
           })
         }
       })
