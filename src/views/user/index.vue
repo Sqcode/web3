@@ -4,6 +4,11 @@
       <!-- 搜索条件 -->
       <template #search>
         <el-col :span="8">
+          <el-form-item label="所属部门" prop="deptId" >
+            <Dept @selected="handleDeptSelected"></Dept>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
           <el-form-item label="用户名">
             <el-input v-model="table.search.userName"></el-input>
           </el-form-item>
@@ -34,6 +39,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="deptName" label="部门"></el-table-column>
+      <el-table-column prop="roleName" label="角色"></el-table-column>
       <el-table-column prop="userName" label="用户名"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
       <el-table-column prop="sex" label="性别">
@@ -72,19 +78,24 @@ import shTable from '@/components/shTable'
 import request from '@/utils/request'
 import ImportButton from 'components/importButton'
 import Request from 'utils/request'
+import Dept from 'components/common/Dept'
+
 export default {
   name: 'User',
-  components: { shTable, ImportButton },
+  components: { shTable, ImportButton, Dept },
   data () {
-    return {
-      table: {
-        search: {
-          userName: '',
-          phone: ''
-        },
-        remote: '/user/page',
-        update: 0
+    var table = {
+      search: {
+        userName: '',
+        phone: '',
+        deptId: ''
       },
+      remote: '/user/page',
+      update: 0
+    }
+    this.$utils.beanCopy(this.$store.state.search, table.search)
+    return {
+      table: table,
       cascaderSelected: [],
       props: {
         checkStrictly: true,
@@ -110,6 +121,9 @@ export default {
     getList () {
       this.table.update++
     },
+    handleDeptSelected(selected){
+      this.table.search.deptId = selected ? selected[selected.length - 1] : ''
+    },
     handleInsertClick () {
       this.$router.push({ name: 'user_edit', params: { id: 0 } })
     },
@@ -133,7 +147,7 @@ export default {
     },
     loadTemplate (cb) {
       cb(true)
-      return Request.exportFile('/user/model', {}, `用户导入模板${this.$utils.format(new Date(), 'yyyyMMddHHmmss')}`, ).then(data => {
+      return Request.exportFile('/user/model', {}, `通讯录导入模板${this.$utils.format(new Date(), 'yyyyMMddHHmmss')}`, ).then(data => {
         console.log('user', data)
         cb(false)
       })

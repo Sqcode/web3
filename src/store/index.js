@@ -3,9 +3,16 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     token: sessionStorage.getItem('token'),
-    user: JSON.parse(sessionStorage.getItem('user'))
+    user: JSON.parse(sessionStorage.getItem('user')),
+    search: JSON.parse(sessionStorage.getItem('search'))
   },
   mutations: {
+    // set
+    RESERVE_SEARCH: (state, search) => {
+      // console.log('store', search);
+      state.search = search
+      sessionStorage.setItem('search', JSON.stringify(search))
+    },
     // set
     SET_TOKEN: (state, token) => {
       // console.log('store', state, token);

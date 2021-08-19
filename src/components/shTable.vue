@@ -6,6 +6,7 @@
           <!-- 搜索条件 -->
         </slot>
         <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
+        <el-button type="danger" icon="el-icon-delete" @click="empty()">清空</el-button>
         <slot name="button">
           <!-- 功能按钮 -->
         </slot>
@@ -17,8 +18,8 @@
     <!-- 数据表格 -->
     <div class="div-table">
       <el-table height="100%" v-loading="loading" element-loading-text="拼命加载中" ref="defaultTable" border :data="tableData"
-        :default-sort="search" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
-        @row-click="handleRowClick" @expand-change="handleExpandChange">
+        :default-sort="search" @sort-change="handleSortChange" @selection-change="handleSelectionChange">
+        <!-- @row-click="handleRowClick" @expand-change="handleExpandChange" -->
         <slot>
           <!-- 表格字段 -->
         </slot>
@@ -33,7 +34,7 @@
 </template>
 
 <script>
-import { format } from '@/utils/util'
+import { format, beanCopy, clone, emptyValue } from '@/utils/util'
 import request from '@/utils/request'
 
 export default {
@@ -65,7 +66,8 @@ export default {
         asc: false
       }]
     }
-    // search = CACHE.restore(search, this.remote)
+    // 缓存赋值
+    search = Object.assign(search, this.$store.state.search)
     return {
       search: search,
       loading: true,
@@ -86,38 +88,26 @@ export default {
     }
   },
   mounted () {
-    // console.log($(`#btn`))
-    this.getList()
+    this.getList(this.search)
   },
   methods: {
-    getList () {
-      var criteria = Object.assign(this.search, this.criteria)
-      request.post(this.remote, criteria).then(res => {
-        // res.records.forEach(e => {
-        //   e.createdTime = format(e.createdTime, 'yyyy-MM-dd HH:mm:ss')
-        // });
-        // console.log('tableData', res.records);
+    getList (search) {
+      if (!search) {
+        // console.log(this.search);
+        search = Object.assign(this.search, this.criteria)
+        // console.log('RESERVE_SEARCH', this.criteria);
+        this.$store.commit('RESERVE_SEARCH', this.criteria)
+      }
+      request.post(this.remote, search).then(res => {
         this.tableData = res.records || []
         this.totalCount = res.total || 0
         this.loading = false
       })
     },
-
-    // async getList (value) {
-    //   var criteria = Object.assign(this.search, this.criteria)
-    //   // console.log(criteria)
-    //   // CACHE.reserve(criteria, this.remote)
-    //   const { data } = await request({
-    //     url: this.remote,
-    //     method: 'post',
-    //     data: criteria
-    //   })
-    //   // console.log(data)
-    //   this.tableData = data.records || []
-    //   this.totalCount = data.total || null
-    //   this.loading = false
-    //   // this.$emit('search-after')
-    // },
+    empty () {
+      emptyValue(this.$parent.table.search)
+      this.$parent.getList()
+    },
     handleSizeChange (val) { // 修改显示条数
       this.search.size = val
       this.getList()

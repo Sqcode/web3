@@ -1,8 +1,7 @@
-export default class Dept {
+export default class Role {
   id = ''
-  compId
-  parentId = 0
-  parentPath
+  deptId
+  deptIdPath
   name
   description
   status = 1

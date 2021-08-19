@@ -6,14 +6,18 @@
         <UploadTemplateManual v-else ref="upload" :prefix="'user/'" :url="form.avatarUrl" />
       </el-form-item>
       <el-form-item label="所属部门" prop="deptId" >
-        <el-cascader style="width: 100%"
-          clearable
-          filterable
-          :props="props"
-          v-model="cascaderSelected"
-          @change="handleCascaderChange">
-        </el-cascader>
+        <Dept @selected="handleDeptSelected"></Dept>
       </el-form-item>
+      <el-form-item label="所属角色" prop="roleId">
+          <el-select clearable filterable style="width: 100%" v-model="form.roleId" placeholder="请选择">
+            <el-option
+              v-for="item in roles"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="form.userName"></el-input>
       </el-form-item>
@@ -57,12 +61,13 @@ import User from 'models/user'
 import request from '@/utils/request'
 import UploadTemplateManual from 'components/UploadTemplateManual';
 import { clone } from '@/utils/util'
+import Dept from 'components/common/Dept'
 
 export default {
   props: {
   },
   components: {
-    UploadTemplateManual
+    UploadTemplateManual, Dept
   },
   created () {
     var id = this.$route.params.id
@@ -74,6 +79,11 @@ export default {
           if (response.parentPath) {
             this.cascaderSelected = response.parentPath.split(',').map(Number)
           }
+          if (response.deptId) {
+            this.geRoleList(response.deptId);
+          } else {
+            this.geRoleList('');
+          }
         },
         err => {
           reject(err)
@@ -84,6 +94,7 @@ export default {
   data () {
     return {
       form: new User(),
+      roles: [],
       rules: {
         userName: [
           { required: true, message: '请填写用户名', trigger: 'blur' },
@@ -94,24 +105,6 @@ export default {
           { min: 11, max: 11, message: '手机号11位', trigger: 'blur' }
         ]
       },
-      cascaderSelected: [],
-      props: {
-        expandTrigger: 'hover',
-        checkStrictly: true,
-        lazy: true,
-        lazyLoad (node, resolve) {
-          const { value, label, level } = node
-          if (level === 0) {
-            request.get('/dept/option/list?parentId=0').then(res => {
-              resolve(res)
-            })
-          } else {
-            request.get(`/dept/option/list?parentId=${value}`).then(res => {
-              resolve(res)
-            })
-          }
-        }
-      }
     }
   },
   computed: {
@@ -119,11 +112,22 @@ export default {
   mounted () {
   },
   methods: {
+    handleDeptSelected(selected){
+      this.form.deptId = selected ? selected[selected.length - 1] : ''
+    },
     handleCascaderChange (node) {
 
     },
+    geRoleList (deptId) {
+      request.get('/role/option/list?deptId=' + deptId).then(res => {
+        const ns = res.map(v => ({
+          label: v.label,
+          value: v.value
+        }))
+        this.roles = ns
+      })
+    },
     submitForm (formName) {
-      this.form.deptId = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.$refs.upload.isChange) {

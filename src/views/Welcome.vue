@@ -4,11 +4,20 @@
       <p style="font-size: 2em;">欢 迎 您... {{ $store.state.user ? $store.state.user.userName : '?' }}</p>
     </div>
     <div class="update">
+
+      <p>08/19 更新内容</p>
+      <ol>
+        <li>新增：角色关联、员工号，导入关联</li>
+        <li>优化：代码内部优化，复用。原正常的，可能有未知bug</li>
+        <li>优化：缓存通讯录中的搜索条件值，其他页面待优化（即跳页面后，返回保留搜索条件）</li>
+        <li>修复？：笔记无法重新上传的问题，无法重现</li>
+      </ol>
       <div style='color: red; margin-top: 20px;'>
+      <el-divider>以下历史</el-divider>
         <p>关于图片：如果有绝对路径的优先展示，其次展示oss服务图片。</p>
         <p>1. 之前填写的绝对路径的图片不受影响</p>
         <p>2. 如若使用图片上传功能，请删除绝对路径内容。否则还是会显示原先的图片</p>
-      </div><el-divider></el-divider>
+      </div>
       <p>08/09 更新内容</p>
       <ol>
         <li>修复已知bug</li>
@@ -18,7 +27,7 @@
         <li>新增：加密菜单的添加，超级管理员、管理员后、访问加密</li>
         <li>新增：笔记数据后台加密，超级管理员、访问加密权限、可查看解密内容</li>
       </ol>
-      <el-divider>以下历史</el-divider>
+
       <p>07/30 更新内容</p>
       <ol>
         <li>新增：资源图片可以跳转外部链接</li>

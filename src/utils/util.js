@@ -1,4 +1,14 @@
 
+
+export default {
+  clone,
+  format,
+  isEqual,
+  absoluteUrl,
+  isEmpty,
+  beanCopy,
+  emptyValue
+}
 // 深拷贝
 // const clone = (obj) => {
 //   let o = Array.isArray(obj)?[]:{};
@@ -58,14 +68,6 @@ export function clone (obj) {
   const _obj = JSON.stringify(obj)
   const o = JSON.parse(_obj)
   return o
-}
-
-export default {
-  clone,
-  format,
-  isEqual,
-  absoluteUrl,
-  isEmpty
 }
 
 export function format (date, formatter) {
@@ -150,3 +152,34 @@ export function isEqual (objA, objB) {
       return false
   }
 }
+
+export function beanCopy (source, target){
+  for (var prop in source) {
+    // if (typeof source[prop] == 'object') {
+    //   beanCopy (source[prop], target[prop])
+    // }
+    if (source[prop] && target.hasOwnProperty(prop)) {
+        console.log(prop, source[prop]);
+        target[prop] = source[prop]
+    }
+  }
+}
+
+export function emptyValue (source){
+  for (var prop in source) {
+    var value = source[prop]
+    let type = typeof value
+    if (type == 'object') {
+      source[prop] = {}
+    }
+    else if (type === 'boolean') {
+      source[prop] = false
+    }
+    else if (value instanceof Array) {
+      source[prop] = []
+    } else {
+      source[prop] = ''
+    }
+  }
+}
+

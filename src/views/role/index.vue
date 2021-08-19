@@ -16,7 +16,7 @@
 
       <!-- 表格字段 -->
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="parentName" label="所属部门"></el-table-column>
+      <el-table-column prop="deptName" label="所属部门"></el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="description" label="介绍"></el-table-column>
       <el-table-column prop="status" label="状态">
@@ -40,7 +40,7 @@
   <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
       <el-form-item label="所属部门" prop="deptId" >
-        <DeptSelected @selected="handleDeptSelected" :key="cascaderKey" :defaultSelected="cascaderSelected"></DeptSelected>
+        <Dept @selected="handleDeptSelected" :key="cascaderKey" :defaultSelected="cascaderSelected"></Dept>
       </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name"></el-input>
@@ -68,23 +68,24 @@
 import { clone } from '@/utils/util'
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
-import Dept from 'models/dept'
-import DeptSelected from 'components/common/Dept'
+import Role from 'models/role'
+import Dept from 'components/common/Dept'
+
 export default {
-  name: 'Dept',
-  components: { shTable, DeptSelected },
+  name: 'Role',
+  components: { shTable, Dept },
   data () {
     return {
       table: {
         search: {
           name: ''
         },
-        remote: '/dept/page',
+        remote: '/role/page',
         update: 0
       },
       dialogFormVisible: false,
       dialogTitle: '',
-      form: new Dept(),
+      form: new Role(),
       rules: {
         name: [
           { required: true, message: '请填写名称', trigger: 'blur' },
@@ -92,15 +93,15 @@ export default {
         ]
       },
       cascaderSelected: [],
-      cascaderKey: 0,
+      cascaderKey: 0
     }
   },
   mounted () {
   },
   methods: {
     handleDeptSelected(selected){
-      this.form.parentId = selected ? selected[selected.length - 1] : ''
-      this.form.parentPath = selected ? selected.join(',') : null
+      this.form.deptId = selected ? selected[selected.length - 1] : ''
+      this.form.deptIdPath = selected ? selected.join(',') : null
     },
     handleCascaderChange (node) {
 
@@ -109,15 +110,11 @@ export default {
       this.table.update++
     },
     submitForm (formName) {
-      if (this.form.parentId === this.form.id) {
-        this.$message.error('部门不能属于自己')
-        return
-      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var url = '/dept/insert'
+          var url = '/role/insert'
           if (this.form.id) {
-            url = '/dept/update'
+            url = '/role/update'
           }
           request.post(url, this.form).then(res => {
             this.dialogFormVisible = false
@@ -132,14 +129,16 @@ export default {
     handleInsertClick () {
       this.dialogFormVisible = true
       this.dialogTitle = '新增'
-      this.form = new Dept()
+      this.form = new Role()
     },
     handleEdit (index, row) {
       this.dialogFormVisible = true
       this.dialogTitle = '编辑'
       this.form = clone(row)
-      if (row.parentPath) {
-        this.cascaderSelected = row.parentPath.split(',').map(Number)
+      // console.log(row.deptIdPath);
+      if (row.deptIdPath) {
+        this.cascaderSelected = row.deptIdPath.split(',').map(Number)
+        this.cascaderKey++
       }
     },
     handleDelete (index, row) {
@@ -148,7 +147,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        request.post(`/dept/del/${row.id}`).then(res => {
+        request.post(`/role/del/${row.id}`).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功!'

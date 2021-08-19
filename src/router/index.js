@@ -66,6 +66,14 @@ const routes = [
         }
       },
       {
+        path: '/role',
+        name: 'role',
+        component: () => import('views/role'),
+        meta: {
+          title: 'Role'
+        }
+      },
+      {
         path: '/user',
         name: 'user',
         component: () => import('views/user'),

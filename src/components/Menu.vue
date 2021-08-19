@@ -68,6 +68,10 @@ export default {
           route: '/dept'
         },
         {
+          name: '角色',
+          route: '/role'
+        },
+        {
           name: '通讯录',
           route: '/user'
         },
