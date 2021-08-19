@@ -80,9 +80,9 @@ export default {
             this.cascaderSelected = response.parentPath.split(',').map(Number)
           }
           if (response.deptId) {
-            this.geRoleList(response.deptId);
+            this.getRoleList(response.deptId);
           } else {
-            this.geRoleList('');
+            this.getRoleList('');
           }
         },
         err => {
@@ -114,11 +114,12 @@ export default {
   methods: {
     handleDeptSelected(selected){
       this.form.deptId = selected ? selected[selected.length - 1] : ''
+      this.getRoleList (this.form.deptId)
     },
     handleCascaderChange (node) {
 
     },
-    geRoleList (deptId) {
+    getRoleList (deptId) {
       request.get('/role/option/list?deptId=' + deptId).then(res => {
         const ns = res.map(v => ({
           label: v.label,
