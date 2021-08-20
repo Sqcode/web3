@@ -79,11 +79,11 @@ export default {
           if (response.parentPath) {
             this.cascaderSelected = response.parentPath.split(',').map(Number)
           }
-          if (response.deptId) {
-            this.getRoleList(response.deptId);
-          } else {
+          // if (response.deptId) {
+          //   this.getRoleList(response.deptId);
+          // } else {
             this.getRoleList('');
-          }
+          // }
         },
         err => {
           reject(err)
@@ -114,7 +114,7 @@ export default {
   methods: {
     handleDeptSelected(selected){
       this.form.deptId = selected ? selected[selected.length - 1] : ''
-      this.getRoleList (this.form.deptId)
+      // this.getRoleList (this.form.deptId)
     },
     handleCascaderChange (node) {
 

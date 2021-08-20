@@ -16,7 +16,7 @@
 
       <!-- 表格字段 -->
       <el-table-column type="index" label="序号" width="100"></el-table-column>
-      <el-table-column prop="deptName" label="所属部门"></el-table-column>
+      <!-- <el-table-column prop="deptName" label="所属部门"></el-table-column> -->
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="description" label="介绍"></el-table-column>
       <el-table-column prop="status" label="状态">
@@ -39,9 +39,9 @@
   <!-- </div> -->
   <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
-      <el-form-item label="所属部门" prop="deptId" >
+      <!-- <el-form-item label="所属部门" prop="deptId" >
         <Dept @selected="handleDeptSelected" :key="cascaderKey" :defaultSelected="cascaderSelected"></Dept>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
@@ -69,11 +69,11 @@ import { clone } from '@/utils/util'
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
 import Role from 'models/role'
-import Dept from 'components/common/Dept'
+// import Dept from 'components/common/Dept'
 
 export default {
   name: 'Role',
-  components: { shTable, Dept },
+  components: { shTable },
   data () {
     return {
       table: {
