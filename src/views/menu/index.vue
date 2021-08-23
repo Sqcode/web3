@@ -53,7 +53,7 @@
       <el-table-column prop="" label="图片">
         <template #default="scope">
           <el-image v-if="scope.row.absoluteUrl || scope.row.url"
-            style="width: 100%; height: 100px"
+            style="width: 100%; height: 100px; border-radius: 50%;"
             :src="scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)"
             fit="fill" :preview-src-list="[scope.row.absoluteUrl ? scope.row.absoluteUrl : this.$utils.absoluteUrl(scope.row.url)]">
           </el-image>
@@ -65,9 +65,18 @@
         </template>
       </el-table-column>
       <el-table-column prop="name" label="名称"></el-table-column>
+      <!-- <el-table-column prop="typeName" label="菜单类型"></el-table-column> -->
+      <el-table-column prop="jumpTypeName" label="跳转">
+        <template #default="scope">
+          <span v-if="scope.row.jumpType == 2">
+            {{ scope.row.jumpTypeName}}
+            <span v-if="scope.row.dataJson.value == '/notes/index'"> - 笔记列表</span>
+            <span v-else-if="scope.row.dataJson.value == '/note/index'"> - 笔记</span>
+          </span>
+          <span v-else>{{ scope.row.jumpTypeName}}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="sort" label="排序"></el-table-column>
-      <el-table-column prop="typeName" label="菜单类型"></el-table-column>
-      <el-table-column prop="jumpTypeName" label="跳转类型"></el-table-column>
       <el-table-column prop="status" label="状态">
         <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{ scope.row.status === 1 ? '开启' : '禁用' }}</el-tag>

@@ -20,10 +20,15 @@
         <span v-if="scope.row.menuName">{{ scope.row.menuName.split(',').reverse().join(' / ') }}</span>
       </template>
     </el-table-column>
-    <el-table-column prop="parentName" label="所属笔记"></el-table-column>
     <el-table-column prop="title" label="标题"></el-table-column>
-    <el-table-column prop="sort" label="排序"></el-table-column>
+    <el-table-column prop="parentName" label="所属笔记"></el-table-column>
     <el-table-column prop="content" label="内容" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="attach" label="附件">
+      <template #default="scope">
+        <span v-if="scope.row.fileUrl">{{ scope.row.fileName }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="sort" label="排序"></el-table-column>
     <el-table-column prop="status" label="状态">
       <template #default="scope">
           <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{ scope.row.status === 1 ? '开启' : '禁用' }}</el-tag>
