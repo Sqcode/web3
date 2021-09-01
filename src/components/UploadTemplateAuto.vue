@@ -21,7 +21,7 @@ export default {
   watch: {
     url (v) {
       // console.log('watch', v);
-      this.imageUrl = process.env.VUE_APP_IMAGE_URL_PREFIX + v
+      this.imageUrl = process.env.VUE_APP_DOMAIN_URL + v
     }
   },
   components: {

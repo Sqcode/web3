@@ -25,8 +25,8 @@
   <el-menu class="menu" :default-active="routerPath" router mode="horizontal"
     @select="handleSelect"
     background-color="rgb(255 255 255 / 0%)"
-    text-color="white"
-    active-text-color="yellow">
+    text-color="black"
+    active-text-color="blue">
       <el-menu-item v-for="(item, i) in navList" :key="i" :index="item.route" :disabled="item.disable">
         <i :class="item.icon"></i>
         <template #title>{{ item.name }} </template>

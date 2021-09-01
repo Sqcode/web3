@@ -35,7 +35,7 @@ export default {
   //     if (newValue.indexOf('http') != -1 || newValue.indexOf('https') != -1) {
   //       this.imageUrl = newValue
   //     } else {
-  //       this.imageUrl = process.env.VUE_APP_IMAGE_URL_PREFIX + newValue
+  //       this.imageUrl = process.env.VUE_APP_DOMAIN_URL + newValue
   //     }
   //   }
   // },
@@ -43,7 +43,7 @@ export default {
   //   lazyLoad : {
   //     get ()  {
   //       console.log('get');
-  //       return this.imageUrl = this.url ? (this.url.indexOf('http') != -1 || this.url.indexOf('https') != -1) ? this.url : (process.env.VUE_APP_IMAGE_URL_PREFIX + this.url) : ''},
+  //       return this.imageUrl = this.url ? (this.url.indexOf('http') != -1 || this.url.indexOf('https') != -1) ? this.url : (process.env.VUE_APP_DOMAIN_URL + this.url) : ''},
   //     set (url) {
   //       console.log('set', url);
   //       return this.imageUrl = url
@@ -52,7 +52,7 @@ export default {
   // },
   setup(props) {
     var url = props.url
-    var imageUrl = url ? (url.indexOf('http') != -1 || url.indexOf('https') != -1) ? url : (process.env.VUE_APP_IMAGE_URL_PREFIX + url) : ''
+    var imageUrl = url ? (url.indexOf('http') != -1 || url.indexOf('https') != -1) ? url : (process.env.VUE_APP_DOMAIN_URL + url) : ''
     // var reset = computed({
     //   get() {
     //     console.log('get', url);
@@ -93,7 +93,7 @@ export default {
     handleChange(f, fileList){
       // console.log('handleChange', f);
       if (this.update === 0) {
-        var oldFilePath = this.imageUrl.replace(process.env.VUE_APP_IMAGE_URL_PREFIX, '')
+        var oldFilePath = this.imageUrl.replace(process.env.VUE_APP_DOMAIN_URL, '')
         this.oldFilePath = oldFilePath
         this.update++
         // console.log('oldFilePath', oldFilePath);

@@ -122,14 +122,14 @@ export default {
         content_style: 'img {max-width:100%;}', // 直接自定义可编辑区域的css样式
         // content_css: '/tinycontent.css',  //以css文件方式自定义可编辑区域的css样式，css文件需自己创建并引入
         // images_upload_url: '/apib/api-upload/uploadimg',  //后端处理程序的url，建议直接自定义上传函数image_upload_handler，这个就可以不用了
-        // images_upload_base_path: process.env.VUE_APP_IMAGE_URL_PREFIX,  //相对基本路径--关于图片上传建议查看--http://tinymce.ax-z.cn/general/upload-images.php
+        // images_upload_base_path: process.env.VUE_APP_DOMAIN_URL,  //相对基本路径--关于图片上传建议查看--http://tinymce.ax-z.cn/general/upload-images.php
         paste_data_images: true, // 图片是否可粘贴
         template_cdate_format: '[CDATE: %m/%d/%Y : %H:%M:%S]',
         template_mdate_format: '[MDATE: %m/%d/%Y : %H:%M:%S]',
         // convert_urls: true,// 绝对路径
         relative_urls : false,// 相对路径
         remove_script_host : false,
-        document_base_url : process.env.VUE_APP_IMAGE_URL_PREFIX,
+        document_base_url : process.env.VUE_APP_DOMAIN_URL,
         images_upload_handler: (blobInfo, success, failure) => {
           var file = blobInfo.blob();
           // console.log(file);

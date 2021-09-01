@@ -45,13 +45,13 @@ export default {
   setup(props) {
     var url = props.url
     var name = props.name
-    var fileUrl = url ? (url.indexOf('http') != -1 || url.indexOf('https') != -1) ? url : (process.env.VUE_APP_IMAGE_URL_PREFIX + url) : ''
+    var fileUrl = url ? (url.indexOf('http') != -1 || url.indexOf('https') != -1) ? url : (process.env.VUE_APP_DOMAIN_URL + url) : ''
     // console.log('setup', [{name: name, url: fileUrl}]);
     return {
       fileUrl,
       fileName: name,
       fileList: fileUrl ? [{name: name, url: fileUrl}] : [],
-      oldFilePath: fileUrl.replace(process.env.VUE_APP_IMAGE_URL_PREFIX, '')
+      oldFilePath: fileUrl.replace(process.env.VUE_APP_DOMAIN_URL, '')
     };
   },
   components: {

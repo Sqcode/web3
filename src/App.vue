@@ -29,7 +29,7 @@
     overflow: hidden;
     padding: 10px 0 0;
     background: linear-gradient(180deg
-      , rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%);
+      , rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
   }
   .icp {
     box-sizing: border-box;
@@ -50,7 +50,8 @@
     vertical-align: middle;
     margin: 0px 10px;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.8);text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
   }
   .icp img {
     display: inline-block;

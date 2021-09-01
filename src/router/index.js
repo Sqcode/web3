@@ -21,7 +21,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
-    redirect: { name: 'welcome' },
+    // redirect: { name: 'welcome' },
     meta: {
       title: '首页'
     },

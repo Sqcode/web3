@@ -29,7 +29,7 @@ export default {
     HeaderDropdownPwd
   },
   created () {
-    this.prefix = process.env.VUE_APP_IMAGE_URL_PREFIX
+    this.prefix = process.env.VUE_APP_DOMAIN_URL
   },
   mounted () {
     // console.log('mounted', this.$store.state.user);

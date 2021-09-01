@@ -51,7 +51,7 @@ export function absoluteUrl (url) {
     console.log(urls);
     return url;
   }
-  return url ? (url.indexOf('http') != -1 || url.indexOf('https') != -1) ? url : (process.env.VUE_APP_IMAGE_URL_PREFIX + url) : ''
+  return url ? (url.indexOf('http') != -1 || url.indexOf('https') != -1) ? url : (process.env.VUE_APP_DOMAIN_URL + url) : ''
 }
 
 export function clone (obj) {

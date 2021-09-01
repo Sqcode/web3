@@ -6,7 +6,7 @@
         <el-dropdown @command="handleCommand">
           <div style="height: 100%;">
             <img style="height: 100%;border-radius:50%;" alt="avatar_url"
-              :src=" user ? user.avatarUrl ? prefix + user.avatarUrl : require('../assets/logo.png') : require('../assets/logo.png')" />
+              :src=" user ? user.avatarUrl ? domain + user.avatarUrl : require('../assets/logo.png') : require('../assets/logo.png')" />
             <!-- <span>{{ user.userName }}</span> -->
           </div>
           <template #dropdown>
@@ -19,9 +19,22 @@
         </el-dropdown>
         <HeaderDropdownPwd ref="dropDownDialog" :show="dialog" />
       </div>
-      <div class="info" v-else>登录,开发中</div>
+      <div class="info" v-else @click="function(){$router.push({ name: 'login' })}">登 录</div>
     </el-header>
     <el-main>
+      <el-button @click="function(){$message({
+      type: 'success',
+      message: 'success'
+    })}">按钮</el-button>
+      <el-button type="primary" @click="function(e){
+        $message({
+          type: 'success',
+          message: e
+        })}">按钮</el-button>
+      <el-button type="success" @click='$alert(e)'>按钮</el-button>
+      <el-button type="info">按钮</el-button>
+      <el-button type="warning">按钮</el-button>
+      <el-button type="danger">按钮</el-button>
       <router-view />
     </el-main>
   </el-container>
@@ -38,7 +51,7 @@ export default {
     HeaderDropdownPwd
   },
   created () {
-    this.prefix = process.env.VUE_APP_IMAGE_URL_PREFIX
+    this.domain = process.env.VUE_APP_DOMAIN_URL
   },
   mounted () {
     // console.log('mounted', this.$store.state.user);
@@ -121,7 +134,7 @@ export default {
 </style>
 <style lang="scss" >
   #app {
-    background: url("../assets/images/2.jpg") no-repeat;
+    // background: url("../assets/images/2.jpg") no-repeat;
     background-position: center;
     height: 100%;
     width: 100%;
