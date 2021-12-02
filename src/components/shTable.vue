@@ -70,10 +70,12 @@ export default {
     }
 
     // 缓存赋值
-    let alive_search = this.$store.state.search[this.$parent.$options.name]
-    if (alive_search) {
-      search = Object.assign(search, alive_search)
-      this.$utils.beanCopy(alive_search, this.$parent.table.search)
+    if (this.$store.state.search) {
+      let alive_search = this.$store.state.search[this.$parent.$options.name]
+      if (alive_search) {
+        search = Object.assign(search, alive_search)
+        this.$utils.beanCopy(alive_search, this.$parent.table.search)
+      }
     }
 
     return {
