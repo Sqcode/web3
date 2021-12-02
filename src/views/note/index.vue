@@ -2,11 +2,12 @@
   <sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
     <!-- 搜索条件 -->
     <template #search>
-      <el-col :span="8">
-        <el-form-item label="标题">
-          <el-input v-model="table.search.title"></el-input>
-        </el-form-item>
-      </el-col>
+      <el-form-item label="标题">
+        <el-input v-model="table.search.title"></el-input>
+      </el-form-item>
+      <el-form-item label="所属菜单">
+        <MenuOption @selected="handleMenuSelected"></MenuOption>
+      </el-form-item>
     </template>
     <!-- 功能按钮 -->
     <template #button>
@@ -58,54 +59,43 @@ import request from '@/utils/request'
 import { clone } from '@/utils/util'
 // import formDialog from './dialog';
 import Note from 'models/note'
+import MenuOption from 'components/common/MenuOption'
 
 export default {
   name: 'Note',
   components: {
-    shTable
+    shTable, MenuOption
     // formDialog
   },
   data () {
     var table = {
       search: {
-        title: ''
+        title: '',
+        menuId: ''
       },
       remote: '/note/page',
       update: 0
     }
     return {
       table: table
-      // dialogFormVisible: false,
-      // dialogTitle: '',
-      // note: new Note()
     }
   },
   mounted () {
     // this.getList ()
   },
   methods: {
+    handleMenuSelected(selected){
+      this.table.search.menuId = selected ? selected[selected.length - 1] : ''
+    },
     getList () {
       this.table.update++
       // this.dialogFormVisible = false
     },
     handleInsertClick () {
       this.$router.push({ name: 'note_edit', params: { id: 0 } })
-      // this.dialogFormVisible = true
-      // this.dialogTitle = '新增'
-      // this.note = new Note()
-      // this.$nextTick(() => {
-      //   this.$refs.insertRef.handleOpen(this.note)
-      // })
     },
     handleEdit (index, row) {
       this.$router.push({ name: 'note_edit', params: { id: row.id } })
-      // this.$router.push({ path:'edit', query: { id: 2}})
-      // this.dialogFormVisible = true
-      // this.dialogTitle = '编辑'
-      // this.note = clone(row)
-      // this.$nextTick(() => {
-      //   this.$refs.insertRef.handleOpen(row)
-      // })
     },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除, 是否继续?', '提示', {
@@ -121,12 +111,6 @@ export default {
           this.getList()
         })
       })
-      // .catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '已取消删除'
-      //   });
-      // });
     }
   }
 }

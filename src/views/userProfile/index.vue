@@ -3,16 +3,12 @@
     <sh-table :remote="table.remote" :criteria="table.search" :update="table.update" @selection="handleSelectedChange">
       <!-- 搜索条件 -->
       <template #search>
-        <el-col :span="8">
-          <el-form-item label="用户名">
-            <el-input v-model="table.search.nickName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="手机号">
-            <el-input v-model="table.search.phone"></el-input>
-          </el-form-item>
-        </el-col>
+        <el-form-item label="用户名">
+          <el-input v-model="table.search.nickName"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="table.search.phone"></el-input>
+        </el-form-item>
       </template>
       <!-- 功能按钮 -->
       <template #button>
@@ -99,7 +95,7 @@
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
 export default {
-  name: 'User',
+  name: 'UserProfile',
   components: { shTable },
   data () {
     return {

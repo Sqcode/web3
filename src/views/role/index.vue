@@ -3,11 +3,9 @@
     <sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
       <!-- 搜索条件 -->
       <template #search>
-        <el-col :span="8">
-          <el-form-item label="名称">
-            <el-input v-model="table.search.name"></el-input>
-          </el-form-item>
-        </el-col>
+        <el-form-item label="名称">
+          <el-input v-model="table.search.name"></el-input>
+        </el-form-item>
       </template>
       <!-- 功能按钮 -->
       <template #button>

@@ -3,11 +3,9 @@
     <sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
       <!-- 搜索条件 -->
       <template #search>
-        <el-col :span="8">
-          <el-form-item label="名称">
-            <el-input v-model="table.search.name"></el-input>
-          </el-form-item>
-        </el-col>
+        <el-form-item label="名称">
+          <el-input v-model="table.search.name"></el-input>
+        </el-form-item>
       </template>
       <!-- 功能按钮 -->
       <template #button>
@@ -40,7 +38,7 @@
   <el-dialog :title="dialogTitle" v-model="dialogFormVisible" >
     <el-form :model="form" ref="form" :rules="rules" label-width="100px">
       <el-form-item label="所属部门" prop="deptId" >
-        <DeptSelected @selected="handleDeptSelected" :key="cascaderKey" :defaultSelected="cascaderSelected"></DeptSelected>
+        <DeptOption @selected="handleDeptSelected" :key="cascaderKey" :defaultSelected="cascaderSelected"></DeptOption>
       </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name"></el-input>
@@ -69,10 +67,10 @@ import { clone } from '@/utils/util'
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
 import Dept from 'models/dept'
-import DeptSelected from 'components/common/Dept'
+import DeptOption from 'components/common/DeptOption'
 export default {
   name: 'Dept',
-  components: { shTable, DeptSelected },
+  components: { shTable, DeptOption },
   data () {
     return {
       table: {

@@ -6,7 +6,7 @@
         <UploadTemplateManual v-else ref="upload" :prefix="'user/'" :url="form.avatarUrl" />
       </el-form-item>
       <el-form-item label="所属部门" prop="deptId" >
-        <Dept @selected="handleDeptSelected"></Dept>
+        <DeptOption @selected="handleDeptSelected"></DeptOption>
       </el-form-item>
       <el-form-item label="所属角色" prop="roleId">
           <el-select clearable filterable style="width: 100%" v-model="form.roleId" placeholder="请选择">
@@ -61,13 +61,13 @@ import User from 'models/user'
 import request from '@/utils/request'
 import UploadTemplateManual from 'components/UploadTemplateManual';
 import { clone } from '@/utils/util'
-import Dept from 'components/common/Dept'
+import DeptOption from 'components/common/DeptOption'
 
 export default {
   props: {
   },
   components: {
-    UploadTemplateManual, Dept
+    UploadTemplateManual, DeptOption
   },
   created () {
     var id = this.$route.params.id

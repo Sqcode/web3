@@ -3,16 +3,12 @@
     <sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
       <!-- 搜索条件 -->
       <template #search>
-        <el-col :span="8">
-          <el-form-item label="登录名">
-            <el-input v-model="table.search.loginName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="手机号">
-            <el-input v-model="table.search.phone"></el-input>
-          </el-form-item>
-        </el-col>
+        <el-form-item label="登录名">
+          <el-input v-model="table.search.loginName"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="table.search.phone"></el-input>
+        </el-form-item>
       </template>
       <!-- 功能按钮 -->
       <template #button>
@@ -76,20 +72,7 @@ export default {
       typeOptions: [
         { label: '管理员', value: 0 },
         { label: '超级管理员', value: 1 }
-      ],
-      // dialogFormVisible: false,
-      // dialogTitle: '',
-      // form: new SysUser(),
-      // rules: {
-      //   loginName: [
-      //     { required: true, message: '请填写登录名', trigger: 'blur' },
-      //     { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
-      //   ],
-      //   password: [
-      //     { required: true, message: '请填写密码', trigger: 'blur' },
-      //     { min: 2, max: 64, message: '密码长度在 2 到 64 个字符', trigger: 'blur' }
-      //   ]
-      // }
+      ]
     }
   },
   mounted () {
@@ -99,15 +82,9 @@ export default {
       this.table.update++
     },
     handleInsertClick () {
-      // this.dialogFormVisible = true
-      // this.dialogTitle = '新增'
-      // this.form = new SysUser()
       this.$router.push({ name: 'sys_user_edit', params: { id: 0 } })
     },
     handleEdit (index, row) {
-      // this.dialogFormVisible = true
-      // this.dialogTitle = '编辑'
-      // this.form = clone(row)
       this.$router.push({ name: 'sys_user_edit', params: { id: row.id } })
     },
     handleDelete (index, row) {

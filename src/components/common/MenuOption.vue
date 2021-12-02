@@ -37,17 +37,28 @@ export default {
         lazy: true,
         lazyLoad (node, resolve) {
           const { value, label, level } = node
+          // console.log('value', value, 'label', label, 'level', level);
           if (level === 0) {
-            request.get('/dept/option/list?parentId=0').then(res => {
+            request.get('/menu/option/list?parentId=0&level=0').then(res => {
+              res.unshift({
+                value: 0,
+                label: '首页菜单',
+                leaf: true,
+                hasChildren: false,
+                selected: false,
+                children: []
+              })
               resolve(res)
+              // this.optionsKey ++
             })
           } else {
-            request.get(`/dept/option/list?parentId=${value}`).then(res => {
+            request.get(`/menu/option/list?parentId=${value}`).then(res => {
+              // console.log('children', !res, res);
               resolve(res)
             })
           }
         }
-      }
+      },
     }
   },
   computed: {

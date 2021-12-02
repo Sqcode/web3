@@ -1,15 +1,19 @@
 <template>
   <div class="shTable" >
     <div class="shTable-div-form">
-      <el-form :model="search" label-width="80px">
+      <el-form :model="search" inline label-width="80px">
         <slot name="search">
           <!-- 搜索条件 -->
         </slot>
-        <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
-        <el-button type="danger" icon="el-icon-delete" @click="empty()">清空</el-button>
-        <slot name="button">
-          <!-- 功能按钮 -->
-        </slot>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
+          <el-button type="danger" icon="el-icon-delete" @click="empty()">清空</el-button>
+        </el-form-item>
+        <el-form-item>
+          <slot name="button">
+            <!-- 功能按钮 -->
+          </slot>
+        </el-form-item>
       </el-form>
       <slot name="tip">
         <!-- 温馨提示 -->
@@ -38,8 +42,6 @@ import { format, beanCopy, clone, emptyValue } from '@/utils/util'
 import request from '@/utils/request'
 
 export default {
-  // Vue.component('shTable', {
-  //     template: 'shTable',
   name: 'shTable',
   emits: ['selection'],
   props: {
@@ -66,8 +68,14 @@ export default {
         asc: false
       }]
     }
+
     // 缓存赋值
-    search = Object.assign(search, this.$store.state.search)
+    let alive_search = this.$store.state.search[this.$parent.$options.name]
+    if (alive_search) {
+      search = Object.assign(search, alive_search)
+      this.$utils.beanCopy(alive_search, this.$parent.table.search)
+    }
+
     return {
       search: search,
       loading: true,
@@ -89,14 +97,19 @@ export default {
   },
   mounted () {
     this.getList(this.search)
+    // 清空条件缓存
+    // this.$store.commit('REMOVE_SEARCH')
+    // console.log(this.$parent.$options.name);
   },
   methods: {
     getList (search) {
       if (!search) {
-        // console.log(this.search);
         search = Object.assign(this.search, this.criteria)
-        // console.log('RESERVE_SEARCH', this.criteria);
-        this.$store.commit('RESERVE_SEARCH', this.criteria)
+        if (this.criteria) {
+          var alive = {}
+          alive[this.$parent.$options.name] = this.criteria
+          this.$store.commit('RESERVE_SEARCH', alive)
+        }
       }
       request.post(this.remote, search).then(res => {
         this.tableData = res.records || []
@@ -105,7 +118,10 @@ export default {
       })
     },
     empty () {
+      // 清空组件中的条件
       emptyValue(this.$parent.table.search)
+      // 清空缓存
+      emptyValue(this.$store.state.search[this.$parent.$options.name])
       this.$parent.getList()
     },
     handleSizeChange (val) { // 修改显示条数
@@ -117,7 +133,6 @@ export default {
       this.getList()
     },
     handleSortChange (column, prop, order) { // 排序
-      console.log(column, prop, order)
       this.search.orderBy = column.prop + ' ' + column.order
       this.getList()
     },
@@ -142,6 +157,9 @@ export default {
     display: flex;
     flex-direction: column;
     margin-left: 10px;
+  }
+  .shTable-div-form {
+    text-align: left;
   }
   .div-table {
     flex:1;

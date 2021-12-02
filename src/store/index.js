@@ -7,25 +7,26 @@ export default createStore({
     search: JSON.parse(sessionStorage.getItem('search'))
   },
   mutations: {
-    // set
     RESERVE_SEARCH: (state, search) => {
-      // console.log('store', search);
-      state.search = search
-      sessionStorage.setItem('search', JSON.stringify(search))
+      var ss = state.search
+      for (let k in search) {
+        ss[k] = search[k]
+      }
+      sessionStorage.setItem('search', JSON.stringify(ss))
     },
-    // set
     SET_TOKEN: (state, token) => {
-      // console.log('store', state, token);
       state.token = token
       sessionStorage.setItem('token', token)
     },
     SET_USER: (state, user) => {
-      // console.log('store', state, user);
       state.user = user
       sessionStorage.setItem('user', JSON.stringify(user))
     },
+    REMOVE_SEARCH: (state) => {
+      state.search = {}
+      sessionStorage.setItem('search', JSON.stringify(''))
+    },
     REMOVE_INFO: (state) => {
-      state.token = ''
       state.user = {}
       sessionStorage.setItem('token', '')
       sessionStorage.setItem('user', JSON.stringify(''))

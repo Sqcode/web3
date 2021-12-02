@@ -3,21 +3,15 @@
     <sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
       <!-- 搜索条件 -->
       <template #search>
-        <el-col :span="8">
-          <el-form-item label="所属部门" prop="deptId" >
-            <Dept @selected="handleDeptSelected"></Dept>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="用户名">
-            <el-input v-model="table.search.userName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="手机号">
-            <el-input v-model="table.search.phone"></el-input>
-          </el-form-item>
-        </el-col>
+        <el-form-item label="所属部门" prop="deptId" >
+          <DeptOption @selected="handleDeptSelected"></DeptOption>
+        </el-form-item>
+        <el-form-item label="用户名">
+          <el-input v-model="table.search.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="table.search.phone"></el-input>
+        </el-form-item>
       </template>
       <!-- 功能按钮 -->
       <template #button>
@@ -78,11 +72,11 @@ import shTable from '@/components/shTable'
 import request from '@/utils/request'
 import ImportButton from 'components/importButton'
 import Request from 'utils/request'
-import Dept from 'components/common/Dept'
+import DeptOption from 'components/common/DeptOption'
 
 export default {
   name: 'User',
-  components: { shTable, ImportButton, Dept },
+  components: { shTable, ImportButton, DeptOption },
   data () {
     var table = {
       search: {
@@ -93,7 +87,6 @@ export default {
       remote: '/user/page',
       update: 0
     }
-    this.$utils.beanCopy(this.$store.state.search, table.search)
     return {
       table: table,
       cascaderSelected: [],

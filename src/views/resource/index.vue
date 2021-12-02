@@ -3,18 +3,16 @@
     <sh-table :remote="table.remote" :criteria="table.search" :update="table.update">
       <!-- 搜索条件 -->
       <template #search>
-        <el-col :span="12">
-          <el-form-item label="类型">
-            <el-select clearable style="width: 100%" v-model="table.search.type" placeholder="请选择">
-              <el-option
-                v-for="item in typeOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
+        <el-form-item label="类型">
+          <el-select clearable style="width: 100%" v-model="table.search.type" placeholder="请选择">
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </template>
       <!-- 功能按钮 -->
       <template #button>
