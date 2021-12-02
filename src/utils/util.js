@@ -159,7 +159,7 @@ export function beanCopy (source, target){
     //   beanCopy (source[prop], target[prop])
     // }
     if (source[prop] && target.hasOwnProperty(prop)) {
-        console.log(prop, source[prop]);
+        // console.log(prop, source[prop]);
         target[prop] = source[prop]
     }
   }

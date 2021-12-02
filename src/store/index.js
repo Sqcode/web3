@@ -9,6 +9,9 @@ export default createStore({
   mutations: {
     RESERVE_SEARCH: (state, search) => {
       var ss = state.search
+      if (!ss) {
+        ss = {}
+      }
       for (let k in search) {
         ss[k] = search[k]
       }

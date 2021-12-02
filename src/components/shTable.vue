@@ -123,7 +123,9 @@ export default {
       // 清空组件中的条件
       emptyValue(this.$parent.table.search)
       // 清空缓存
-      emptyValue(this.$store.state.search[this.$parent.$options.name])
+      if (this.$store.state.search) {
+        emptyValue(this.$store.state.search[this.$parent.$options.name])
+      }
       this.$parent.getList()
     },
     handleSizeChange (val) { // 修改显示条数
