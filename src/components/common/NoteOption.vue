@@ -1,11 +1,12 @@
 <template>
-  <el-cascader style="width: 100%"
-    clearable
-    filterable
-    :props="props"
-    v-model="cascaderSelected"
-    @change="handleCascaderChange">
-  </el-cascader>
+  <el-select @change="handleSelectChange" @clear="handleClear" clearable filterable style="width: 100%" v-model="selected" placeholder="请选择">
+    <el-option
+      v-for="item in notes"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
 </template>
 <script>
 import request from '@/utils/request'
@@ -13,14 +14,14 @@ import request from '@/utils/request'
 export default {
   props: {
     defaultSelected: {
-      type: Array,
+      type: Number,
       required: false
     }
   },
   setup(props) {
-    var cascaderSelected = props.defaultSelected
+    var selected = props.defaultSelected
     return {
-      cascaderSelected
+      selected
     };
   },
   emits: ['selected'],
@@ -31,45 +32,32 @@ export default {
   data () {
     return {
       selected: '',
-      props: {
-        expandTrigger: 'hover',
-        checkStrictly: true,
-        lazy: true,
-        lazyLoad (node, resolve) {
-          const { value, label, level } = node
-          // console.log('value', value, 'label', label, 'level', level);
-          if (level === 0) {
-            request.get('/menu/option/list?parentId=0&level=0').then(res => {
-              res.unshift({
-                value: 0,
-                label: '首页菜单',
-                leaf: true,
-                hasChildren: false,
-                selected: false,
-                children: []
-              })
-              resolve(res)
-              // this.optionsKey ++
-            })
-          } else {
-            request.get(`/menu/option/list?parentId=${value}`).then(res => {
-              // console.log('children', !res, res);
-              resolve(res)
-            })
-          }
-        }
-      },
+      notes: []
     }
   },
   computed: {
   },
   mounted () {
-    // console.log(this.cascaderSelected);
+    // 加载所有笔记
+    this.getNoteList('')
   },
   methods: {
-    handleCascaderChange (node) {
-      this.selected = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
-      this.$emit('selected', this.cascaderSelected)
+    getNoteList (menuId) {
+      request.get('/note/list?menuId=' + menuId).then(res => {
+        // 过滤有parentId，这里只能选择 主笔记
+        res = res.filter(v => !v.parentId)
+        const ns = res.map(v => ({
+          label: v.title,
+          value: v.id
+        }))
+        this.notes = ns
+      })
+    },
+    handleSelectChange (value) {
+      this.$emit('selected', value)
+    },
+    handleClear() {
+      this.$emit('clear')
     }
   }
 }

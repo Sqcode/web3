@@ -4,7 +4,7 @@
       <!-- 搜索条件 -->
       <template #search>
         <el-form-item label="所属部门" prop="deptId" >
-          <DeptOption @selected="handleDeptSelected"></DeptOption>
+          <DeptOption @selected="handleDeptSelected" @clear="getList"></DeptOption>
         </el-form-item>
         <el-form-item label="用户名">
           <el-input v-model="table.search.userName"></el-input>

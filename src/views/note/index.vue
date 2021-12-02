@@ -6,7 +6,10 @@
         <el-input v-model="table.search.title"></el-input>
       </el-form-item>
       <el-form-item label="所属菜单">
-        <MenuOption @selected="handleMenuSelected"></MenuOption>
+        <MenuOption @selected="handleMenuSelected" @clear="getList"></MenuOption>
+      </el-form-item>
+      <el-form-item label="所属笔记">
+        <NoteOption @selected="handleNoteSelected" @clear="getList"></NoteOption>
       </el-form-item>
     </template>
     <!-- 功能按钮 -->
@@ -57,21 +60,21 @@
 import shTable from '@/components/shTable'
 import request from '@/utils/request'
 import { clone } from '@/utils/util'
-// import formDialog from './dialog';
 import Note from 'models/note'
 import MenuOption from 'components/common/MenuOption'
+import NoteOption from 'components/common/NoteOption'
 
 export default {
   name: 'Note',
   components: {
-    shTable, MenuOption
-    // formDialog
+    shTable, MenuOption, NoteOption
   },
   data () {
     var table = {
       search: {
         title: '',
-        menuId: ''
+        menuId: '',
+        parentId: ''
       },
       remote: '/note/page',
       update: 0
@@ -87,9 +90,11 @@ export default {
     handleMenuSelected(selected){
       this.table.search.menuId = selected ? selected[selected.length - 1] : ''
     },
+    handleNoteSelected(selected){
+      this.table.search.parentId = selected
+    },
     getList () {
       this.table.update++
-      // this.dialogFormVisible = false
     },
     handleInsertClick () {
       this.$router.push({ name: 'note_edit', params: { id: 0 } })

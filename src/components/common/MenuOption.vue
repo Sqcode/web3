@@ -70,6 +70,9 @@ export default {
     handleCascaderChange (node) {
       this.selected = this.cascaderSelected ? this.cascaderSelected[this.cascaderSelected.length - 1] : ''
       this.$emit('selected', this.cascaderSelected)
+      if (!node) {
+        this.$emit('clear')
+      }
     }
   }
 }
