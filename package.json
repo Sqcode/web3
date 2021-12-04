@@ -1,14 +1,12 @@
 {
-  "name": "web3",
+  "name": "sqc",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
     "dev": "vue-cli-service serve --mode development",
-    "test": "vue-cli-service serve --mode production",
+    "prod": "vue-cli-service serve --mode production",
     "lint": "vue-cli-service lint",
-    "build": "vue-cli-service build",
-    "prod": "vue-cli-service build --mode production",
+    "build": "vue-cli-service build --mode production",
     "prev": "vue-cli-service build --mode prev"
   },
   "dependencies": {
