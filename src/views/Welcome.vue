@@ -19,11 +19,4 @@
     flex-direction: column;
     margin: 10px 30px;
   }
-  // .update {
-  //   font-size: 1em;
-  //   text-align: left;
-  //   height: 100%;
-  //   flex: 1;
-  //   overflow-y: scroll;
-  // }
 </style>
