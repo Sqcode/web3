@@ -17,6 +17,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-plus": "*",
+    "element-resize-detector": "^1.2.4",
     "tinymce": "^5.8.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",

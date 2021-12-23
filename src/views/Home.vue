@@ -7,7 +7,7 @@
       <el-header>
         <el-dropdown @command="handleCommand">
           <div style="height: 100%;">
-            <img style="height: 100%;" alt="avatar_url"
+            <img style="height: 50%; border-radius: 50%" alt="avatar_url"
               :src=" user ? user.avatarUrl ? prefix + user.avatarUrl : require('../assets/logo.png') : require('../assets/logo.png')" />
             <!-- <span>{{ user.userName }}</span> -->
           </div>
@@ -21,22 +21,15 @@
         </el-dropdown>
       </el-header>
       <HeaderDropdownPwd ref="dropDownDialog" :show="dialog" />
+      <Menu-tags></Menu-tags>
       <el-divider></el-divider>
-      <!-- <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
-        <el-tab-pane
-          v-for="(item, index) in editableTabs"
-          :key="item.name"
-          :label="item.title"
-          :name="item.name"
-        >
-        </el-tab-pane>
-      </el-tabs> -->
       <router-view />
     </el-container>
   </el-container>
 </template>
 <script>
 import Menu from '@/components/Menu.vue'
+import MenuTags from '@/components/MenuTags.vue'
 import HeaderDropdownPwd from '@/components/HeaderDropdownPwd.vue'
 import request from '@/utils/request'
 
@@ -44,6 +37,7 @@ export default {
   name: 'Home',
   components: {
     Menu,
+    MenuTags,
     HeaderDropdownPwd
   },
   created () {
@@ -55,18 +49,7 @@ export default {
   data () {
     return {
       user: this.$store.state.user,
-      dialog: false,
-    //   editableTabsValue: '2',
-    //   editableTabs: [{
-    //     title: 'Tab 1',
-    //     name: '1',
-    //     content: 'Tab 1 content'
-    //   }, {
-    //     title: 'Tab 2',
-    //     name: '2',
-    //     content: 'Tab 2 content'
-    //   }],
-    //   tabIndex: 2
+      dialog: false
     }
   },
   methods: {

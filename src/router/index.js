@@ -20,7 +20,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
-    redirect: { name: 'login' },
+    redirect: { name: 'welcome' },
     meta: {
       title: '主页'
     },
@@ -30,7 +30,7 @@ const routes = [
         name: 'welcome',
         component: () => import('views/Welcome.vue'),
         meta: {
-          title: 'Welcome'
+          title: '欢迎页'
         }
       },
       // {
@@ -46,7 +46,7 @@ const routes = [
         name: 'sys_user',
         component: () => import('views/sysUser'),
         meta: {
-          title: 'SysUser'
+          title: '管理员'
         }
       },
       {
@@ -54,7 +54,7 @@ const routes = [
         name: 'sys_user_edit',
         component: SYS_USER_EDIT,
         meta: {
-          title: 'SysUser'
+          title: '管理员'
         }
       },
       {
@@ -62,7 +62,7 @@ const routes = [
         name: 'dept',
         component: () => import('views/dept'),
         meta: {
-          title: 'Dept'
+          title: '部门'
         }
       },
       {
@@ -70,7 +70,7 @@ const routes = [
         name: 'role',
         component: () => import('views/role'),
         meta: {
-          title: 'Role'
+          title: '角色'
         }
       },
       {
@@ -78,7 +78,7 @@ const routes = [
         name: 'user',
         component: () => import('views/user'),
         meta: {
-          title: 'User'
+          title: '通讯录'
         }
       },
       {
@@ -86,7 +86,7 @@ const routes = [
         name: 'user_edit',
         component: USER_EDIT,
         meta: {
-          title: 'User'
+          title: '通讯录'
         }
       },
       {
@@ -94,7 +94,7 @@ const routes = [
         name: 'userProfile',
         component: () => import('views/userProfile'),
         meta: {
-          title: 'UserProfile'
+          title: '微信用户'
         }
       },
       {
@@ -102,7 +102,7 @@ const routes = [
         name: 'userProfile_edit',
         component: USER_PROFILE_EDIT,
         meta: {
-          title: 'UserProfile'
+          title: '微信用户'
         }
       },
       {
@@ -110,7 +110,7 @@ const routes = [
         name: 'menu',
         component: () => import('views/menu'),
         meta: {
-          title: 'Menu'
+          title: '菜单'
         }
       },
       {
@@ -118,7 +118,7 @@ const routes = [
         name: 'menu_edit',
         component: MENU_EDIT,
         meta: {
-          title: 'Menu'
+          title: '菜单'
         }
       },
       {
@@ -126,7 +126,7 @@ const routes = [
         name: 'note',
         component: () => import('views/note'),
         meta: {
-          title: 'Note'
+          title: '笔记'
         }
       },
       {
@@ -134,7 +134,7 @@ const routes = [
         name: 'note_edit',
         component: NOTE_EDIT,
         meta: {
-          title: 'Note edit'
+          title: '笔记'
         }
       },
       {
@@ -142,7 +142,7 @@ const routes = [
         name: 'resource',
         component: () => import('views/resource'),
         meta: {
-          title: 'Resource'
+          title: '资源'
         }
       },
       {
