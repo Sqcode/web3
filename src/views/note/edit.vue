@@ -128,6 +128,8 @@ export default {
         if (data) {
           data.parentId ? data.parentId + '' : ''
           this.form = data
+          this.form.encrypt = this.form.encrypt ?1:0
+          this.form.attach = this.form.attach ?1:0
           setTimeout(() => {
             tinyMCE.activeEditor.setContent(data.content)
           }, 500)
@@ -135,6 +137,8 @@ export default {
         if (data.parentPath) {
           this.cascaderSelected = data.parentPath.split(',').map(Number)
         }
+      }).catch(error => {
+        this.$router.push({ name: 'note', params: {} })
       })
 
     }
