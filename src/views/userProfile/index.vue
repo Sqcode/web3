@@ -30,20 +30,8 @@
       </el-table-column>
       <el-table-column prop="nickName" label="用户名"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
-      <!-- <el-table-column prop="" label="用户类型">
-        <template #default="scope">
-          <span v-for="item in typeOptions">
-            <span v-if="item.value === scope.row.type">{{item.label}}</span>
-          </span>
-        </template>
-      </el-table-column> -->
-      <el-table-column prop="" label="权限">
-        <template #default="scope">
-          <span v-for="item in permissionOptions">
-            <span v-if="scope.row.permission.split(',').map(Number).includes(item.value)">{{item.label}} | </span>
-          </span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="typeName" label="类型"></el-table-column>
+      <el-table-column prop="permissionName" label="权限"></el-table-column>
       <!-- <el-table-column prop="gender" label="性别">
         <template #default="scope">
             {{ scope.row.gender === 0 ? '未知' : scope.row.gender === 1 ? '男' : '女'}}
@@ -72,23 +60,23 @@
         </el-table-column>
     </sh-table>
     <el-dialog title="批量更新用户权限" v-model="dialogFormVisible">
-          <el-form :model="form" :rules="rules" ref="form" label-width="100px" >
-            <el-form-item label="权限" prop="permission">
-              <el-select v-model="permission" multiple clearable placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="item in permissionOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button @click="dialogFormVisible=false">取 消</el-button>
-              <el-button type="primary" @click="submitForm('form')">提交</el-button>
-            </el-form-item>
-          </el-form>
-      </el-dialog>
+      <el-form :model="form" :rules="rules" ref="form" label-width="100px" >
+        <el-form-item label="权限" prop="permission">
+          <el-select v-model="form.permission" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in permissionOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="dialogFormVisible=false">取 消</el-button>
+          <el-button type="primary" @click="submitForm('form')">提交</el-button>
+        </el-form-item>
+      </el-form>
+  </el-dialog>
 </template>
 
 <script>
@@ -109,23 +97,20 @@ export default {
       },
       typeOptions: [
         { label: '普通', value: 0 },
-        { label: 'SVIP', value: 1 },
-        { label: 'VIP', value: 2 }
+        { label: '体验', value: 1 },
+        { label: '管理员', value: 2 },
+        { label: '超级管理员', value: 99 }
       ],
       permissionOptions: [
         { label: '普通', value: 0 },
-        { label: '超级管理员', value: 1 },
-        { label: '管理员', value: 2 },
-        { label: '体验更多内容', value: 3 },
-        { label: '访问加密', value: 4 },
-        { label: '访问加密文件二级，未使用', value: 5 },
-        { label: '访问加密文件三级，未使用', value: 6 }
+        { label: '员工', value: 4 },
+        { label: '管理', value: 5 },
+        { label: '超级管理', value: 6 }
       ],
-      permission: [],
       checked: [],
       form: {
         ids: '',
-        permission: ''
+        permission: 0
       },
       rules: {
         permission: [
@@ -153,7 +138,6 @@ export default {
     },
     submitForm (formName) {
       this.form.ids = this.checked.join(',')
-      this.form.permission = this.permission.join(',')
       this.$refs[formName].validate((valid) => {
         if (valid) {
           var url = '/userProfile/update/permission'

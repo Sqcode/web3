@@ -8,6 +8,7 @@ export default class Note {
   content=''
   status= 1
   encrypt=0
+  encryptLevel=0
   parentId
   encrypt=0
   fileUrl=''
