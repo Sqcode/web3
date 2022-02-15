@@ -9,11 +9,34 @@
         <el-form-item label="手机号">
           <el-input v-model="table.search.phone"></el-input>
         </el-form-item>
+
+        <el-form-item label="操作权限">
+          <el-select clearable v-model="table.search.type" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="访问权限">
+          <el-select clearable v-model="table.search.permission" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in permissionOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
       </template>
       <!-- 功能按钮 -->
       <template #button>
         <!-- <el-button type="primary" icon="el-icon-plus" @click="handleInsertClick">添加</el-button> -->
-        <el-button type="primary" @click="handleBatchUpdatePermission">批量修改权限</el-button>
+        <el-button type="primary" @click="handleBatchUpdatePermission">批量修改访问权限</el-button>
       </template>
 
       <!-- 表格字段 -->
@@ -30,8 +53,8 @@
       </el-table-column>
       <el-table-column prop="nickName" label="用户名"></el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
-      <el-table-column prop="typeName" label="类型"></el-table-column>
-      <el-table-column prop="permissionName" label="权限"></el-table-column>
+      <el-table-column prop="typeName" label="操作权限"></el-table-column>
+      <el-table-column prop="permissionName" label="访问权限"></el-table-column>
       <!-- <el-table-column prop="gender" label="性别">
         <template #default="scope">
             {{ scope.row.gender === 0 ? '未知' : scope.row.gender === 1 ? '男' : '女'}}
@@ -59,9 +82,9 @@
           </template>
         </el-table-column>
     </sh-table>
-    <el-dialog title="批量更新用户权限" v-model="dialogFormVisible">
+    <el-dialog title="批量更新用户访问权限" v-model="dialogFormVisible">
       <el-form :model="form" :rules="rules" ref="form" label-width="100px" >
-        <el-form-item label="权限" prop="permission">
+        <el-form-item label="访问权限" prop="permission">
           <el-select v-model="form.permission" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in permissionOptions"
@@ -90,7 +113,9 @@ export default {
       table: {
         search: {
           nickName: '',
-          phone: ''
+          phone: '',
+          type: '',
+          permission: ''
         },
         remote: '/userProfile/page',
         update: 0
