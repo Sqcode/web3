@@ -165,7 +165,7 @@ export default {
       pageOptions: [
         { label: '笔记', value: 0 },
         { label: '笔记列表', value: 1 },
-        { label: '原版工具卡', value: 2 }
+        // { label: '原版工具卡', value: 2 }
       ],
       pages: [
         { label: 'page', value: '/note/index', noteId: '' },

@@ -81,14 +81,14 @@
             v-for="item in jumpTypeOptions"
             :key="item.value"
             :label="item.label"
-            :value="item.value" :disabled="item.value == 1 || item.value == 2">
+            :value="item.value" :disabled="item.value == 1">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="外链链接" v-if="form.jumpType == 3">
         <el-input placeholder="请输入完整的外链url" v-model="outUrl" clearable></el-input>
       </el-form-item>
-      <!-- <el-form-item label="跳转页面" prop="dataJson" v-if="form.jumpType == 2">
+      <el-form-item label="跳转页面" prop="dataJson" v-if="form.jumpType == 2">
         <el-select clearable style="width: 100%" v-model="pageSelected" placeholder="请选择" @change="handlePageSelected">
           <el-option
             v-for="item in pageOptions"
@@ -107,7 +107,7 @@
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="排序">
         <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
       </el-form-item>
@@ -116,6 +116,7 @@
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitForm('form')">确 定</el-button>
+        <el-button v-if="pageSelected == 0" @click="getNoteList('')">获取所有笔记</el-button>
       </span>
     </template>
   </el-dialog>
@@ -170,7 +171,7 @@ export default {
       pageOptions: [
         { label: '笔记', value: 0 },
         { label: '笔记列表', value: 1 },
-        { label: '原版工具卡', value: 2 }
+        // { label: '原版工具卡', value: 2 }
       ],
       pages: [
         { label: 'page', value: '/note/index', noteId: '' },
@@ -186,6 +187,24 @@ export default {
     this.getJumpTypeOptionList()
   },
   methods: {
+    handlePageSelected (e) {
+      if (e === 0) {
+        this.getNoteList(this.form.id)
+      }
+    },
+    getNoteList (menuId) {
+      request.get('/note/list?menuId=' + menuId).then(res => {
+        // 过滤有parentId，这里只能选择 主笔记
+        res = res.filter(v => !v.parentId)
+        const ns = res.map(v => ({
+          label: v.title,
+          value: v.id,
+          encrypt: v.encrypt
+        }))
+        this.notes = ns
+        this.noteSelectOptionUpdate++
+      })
+    },
     getJumpTypeOptionList () {
       request.get('/menu/jumpType/option/list').then(res => {
         if (res) {
@@ -260,6 +279,12 @@ export default {
       this.form = clone(row)
       if (row.jumpType === 3 && row.dataJson) {
         this.outUrl = row.dataJson.url
+      }
+      if (row.jumpType === 2 && row.dataJson) {
+        this.pageSelected = 0
+        // 笔记，获取笔记id，列表
+        this.getNoteList('')
+        this.noteSelected = row.dataJson.noteId
       }
     },
     handleDelete (index, row) {
