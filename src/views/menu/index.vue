@@ -29,6 +29,24 @@
             <el-option label="五级菜单" value="4"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="是否加密">
+          <el-select clearable style="width: 100%" v-model="table.search.encrypt" placeholder="请选择">
+            <el-option label="正常" value="0"></el-option>
+            <el-option label="加密" value="1"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="加密级别">
+          <el-select clearable v-model="table.search.encryptLevel" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in permissionOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
       </template>
       <!-- 功能按钮 -->
       <template #button>
@@ -64,12 +82,19 @@
           <span v-else>{{ scope.row.jumpTypeName}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="sort" label="排序"></el-table-column>
       <el-table-column prop="status" label="状态">
         <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{ scope.row.status === 1 ? '开启' : '禁用' }}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column prop="encrypt" label="是否加密">
+        <template #default="scope">
+            <el-tag :type="scope.row.encrypt === 0 ? 'success' : 'danger'">{{ scope.row.encrypt === 0 ? '正常' : '加密' }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="encryptLevelName" label="加密级别"></el-table-column>
+      <el-table-column prop="sort" label="排序"></el-table-column>
+
       <el-table-column prop="createdTime" label="创建时间" width="175">
         <template #default="scope">
           {{ this.$utils.format(scope.row.createdTime, 'yyyy-MM-dd HH:mm:ss') }}
@@ -101,12 +126,20 @@ export default {
           parentId: '',
           level: '',
           type: '',
-          jumpType: ''
+          jumpType: '',
+          encrypt: '',
+          encryptLevel: ''
         },
         remote: '/menu/page',
         update: 0
       },
       jumpTypeOptions: [],
+      permissionOptions: [
+        { label: '普通', value: 0 },
+        { label: '员工', value: 4 },
+        { label: '管理', value: 5 },
+        { label: '超级管理', value: 6 }
+      ],
     }
   },
   mounted () {

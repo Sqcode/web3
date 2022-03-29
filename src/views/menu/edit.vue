@@ -24,6 +24,16 @@
           <el-radio :label="0">正常</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="加密级别" v-if="form.encrypt=1">
+        <el-select v-model="form.encryptLevel" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in permissionOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="排序">
         <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="小程序菜单排序"></el-input-number>
       </el-form-item>
@@ -171,6 +181,12 @@ export default {
         { label: 'page', value: '/note/index', noteId: '' },
         { label: 'page', value: '/notes/index' },
         { label: 'page', value: '/menu_icon/index' }
+      ],
+      permissionOptions: [
+        { label: '普通', value: 0 },
+        { label: '员工', value: 4 },
+        { label: '管理', value: 5 },
+        { label: '超级管理', value: 6 }
       ],
       cascaderKey: 0,
       props: {

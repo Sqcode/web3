@@ -20,6 +20,16 @@
             <el-radio :label="0">正常</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="加密级别" v-if="form.encrypt">
+          <el-select v-model="form.encryptLevel" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in permissionOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="排序">
           <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="排序"></el-input-number>
         </el-form-item>
@@ -97,6 +107,12 @@ export default {
       },
       notes: [],
       cascaderSelected: [],
+      permissionOptions: [
+        { label: '普通', value: 0 },
+        { label: '员工', value: 4 },
+        { label: '管理', value: 5 },
+        { label: '超级管理', value: 6 }
+      ],
       props: {
         expandTrigger: 'hover',
         checkStrictly: true,
@@ -128,6 +144,8 @@ export default {
         if (data) {
           data.parentId ? data.parentId + '' : ''
           this.form = data
+          this.form.encrypt = this.form.encrypt ?1:0
+          this.form.attach = this.form.attach ?1:0
           setTimeout(() => {
             tinyMCE.activeEditor.setContent(data.content)
           }, 500)
@@ -135,6 +153,8 @@ export default {
         if (data.parentPath) {
           this.cascaderSelected = data.parentPath.split(',').map(Number)
         }
+      }).catch(error => {
+        this.$router.push({ name: 'note', params: {} })
       })
 
     }

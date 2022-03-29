@@ -11,7 +11,7 @@
       <el-form-item label="手机号" prop="phone">
         <el-input v-model="form.phone"></el-input>
       </el-form-item>
-      <el-form-item label="用户类型" prop="type">
+      <el-form-item label="操作权限" prop="type">
         <el-select clearable style="width: 100%" v-model="form.type" placeholder="请选择">
           <el-option
             v-for="item in typeOptions"
@@ -21,8 +21,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="权限" prop="permission">
-        <el-select v-model="permission" multiple clearable placeholder="请选择" style="width:100%">
+      <el-form-item label="访问权限" prop="permission">
+        <el-select v-model="form.permission" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in permissionOptions"
             :key="item.value"
@@ -68,11 +68,11 @@ export default {
     if (id != 0) {
       request.get('/userProfile/' + id).then(
         response => {
-          console.log(response);
+          // console.log(response);
           this.form = clone(response)
-          if (response.permission) {
-            this.permission = response.permission.split(',').map(Number)
-          }
+          // if (response.permission) {
+          //   this.permission = response.permission.split(',').map(Number)
+          // }
         },
         err => {
           reject(err)
@@ -95,19 +95,16 @@ export default {
       },
       typeOptions: [
         { label: '普通', value: 0 },
-        { label: 'SVIP', value: 1 },
-        { label: 'VIP', value: 2 }
+        { label: '体验', value: 1 },
+        { label: '管理员', value: 2 },
+        { label: '超级管理员', value: 99 }
       ],
-      permission: [],
       permissionOptions: [
         { label: '普通', value: 0 },
-        { label: '超级管理员', value: 1 },
-        { label: '管理员', value: 2 },
-        { label: '体验更多内容', value: 3 },
-        { label: '访问加密', value: 4 },
-        { label: '访问加密文件二级，未使用', value: 5 },
-        { label: '访问加密文件三级，未使用', value: 6 }
-      ]
+        { label: '员工', value: 4 },
+        { label: '管理', value: 5 },
+        { label: '超级管理', value: 6 }
+      ],
     }
   },
   computed: {
@@ -116,7 +113,6 @@ export default {
   },
   methods: {
     submitForm (formName) {
-      this.form.permission = this.permission.join(',')
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.$refs.upload.isChange) {
