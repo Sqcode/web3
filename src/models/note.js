@@ -11,7 +11,7 @@ export default class Note {
   encrypt=0
   fileUrl=''
   fileName=''
-  attach=0
+  attach=false
   constructor (bj) {
   }
 }

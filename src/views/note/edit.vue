@@ -140,12 +140,11 @@ export default {
 
     if (id != 0) {
       request.get('/note/' + id).then(data => {
-        // console.log('note', data);
         if (data) {
           data.parentId ? data.parentId + '' : ''
           this.form = data
           this.form.encrypt = this.form.encrypt ?1:0
-          this.form.attach = this.form.attach ? 0:1
+          this.form.attach = data.attach ? 1:0
           setTimeout(() => {
             tinyMCE.activeEditor.setContent(data.content)
           }, 500)
@@ -198,7 +197,7 @@ export default {
         // 属于某个笔记的话，清空菜单
         this.form.menuId = ''
       }
-      // console.log(this.form);
+      this.form.attach == 0 ? false : true
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // console.log(this.$refs.upload.isChange);
