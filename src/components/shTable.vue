@@ -2,13 +2,17 @@
   <div class="shTable" >
     <div class="shTable-div-form">
       <el-form :model="search" inline label-width="80px">
-        <slot name="search">
-          <!-- 搜索条件 -->
-        </slot>
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
-          <el-button type="danger" icon="el-icon-delete" @click="empty()">清空</el-button>
-        </el-form-item>
+        <el-checkbox v-model="showSearch" label=" " size="large" @change="handleShowSearchChange"/>
+        <template v-if="showSearch">
+          <slot name="search" >
+            <!-- 搜索条件 -->
+          </slot>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" @click="getList()">搜索</el-button>
+            <el-button type="danger" icon="el-icon-delete" @click="empty()">清空</el-button>
+          </el-form-item>
+        </template>
+
         <el-form-item>
           <slot name="button">
             <!-- 功能按钮 -->
@@ -40,6 +44,7 @@
 <script>
 import { format, beanCopy, clone, emptyValue } from '@/utils/util'
 import request from '@/utils/request'
+// import { getCurrentInstance } from 'vue';
 
 export default {
   name: 'shTable',
@@ -81,6 +86,7 @@ export default {
     return {
       search: search,
       loading: true,
+      showSearch: this.$store.state.showSearch,
       tableData: [],
       totalCount: 0
     }
@@ -104,6 +110,9 @@ export default {
     // console.log(this.$parent.$options.name);
   },
   methods: {
+    handleShowSearchChange(){
+      this.$store.commit('SHOW_SEARCH', this.$store.state.showSearch?false:true)
+    },
     getList (search) {
       if (!search) {
         search = Object.assign(this.search, this.criteria)

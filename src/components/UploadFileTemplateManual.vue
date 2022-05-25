@@ -145,7 +145,7 @@ export default {
     },
     submit(){
       if (this.isDel) {
-        thsi.del(this.oldFilePath)
+        this.del(this.oldFilePath)
       }
       if (this.isChange && !isEmpty(this.file)) {
         // console.log('上传oss');

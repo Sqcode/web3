@@ -105,6 +105,7 @@ export default {
   },
 
   mounted() {
+    // this.tagList = []
     this.listenFun(this.box, "box");
     var that = this;
     document.addEventListener("click", function(e) {

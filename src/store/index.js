@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     token: sessionStorage.getItem('token'),
+    showSearch: sessionStorage.getItem('showSearch')?false:true,
     user: JSON.parse(sessionStorage.getItem('user')),
     search: JSON.parse(sessionStorage.getItem('search'))
   },
@@ -16,6 +17,10 @@ export default createStore({
         ss[k] = search[k]
       }
       sessionStorage.setItem('search', JSON.stringify(ss))
+    },
+    SHOW_SEARCH: (state, bol) => {
+      state.showSearch = bol
+      sessionStorage.setItem('showSearch', bol)
     },
     SET_TOKEN: (state, token) => {
       state.token = token
@@ -32,6 +37,7 @@ export default createStore({
     REMOVE_INFO: (state) => {
       state.user = {}
       sessionStorage.setItem('token', '')
+      sessionStorage.setItem('showSearch', true)
       sessionStorage.setItem('user', JSON.stringify(''))
     }
   },

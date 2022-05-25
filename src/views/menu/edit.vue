@@ -24,7 +24,7 @@
           <el-radio :label="0">正常</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="加密级别" v-if="form.encrypt=1">
+      <el-form-item label="加密级别" v-if="form.encrypt==1">
         <el-select v-model="form.encryptLevel" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in permissionOptions"
@@ -116,11 +116,12 @@ export default {
     if (id != 0) {
       request.get('/menu/' + id).then(
         response => {
-          // console.log(response);
+          // console.log('response', response.encrypt);
           this.form = clone(response)
           if (response.parentPath) {
             this.cascaderMenuSelected = response.parentPath.split(',').map(Number)
           }
+          // console.log('form', this.form.encrypt);
           // console.log(row);
           this.pages.forEach((v, k) => {
             if (v.value === response.dataJson.value) {
@@ -141,7 +142,6 @@ export default {
         }
       )
     }
-
   },
   data () {
     return {

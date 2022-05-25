@@ -1,13 +1,11 @@
 export default class Note {
   id = ''
   menuId = ''
-  parentId
   sort = 1
   title=''
   subTitle=''
   content=''
   status= 1
-  encrypt=0
   encryptLevel=0
   parentId
   encrypt=0

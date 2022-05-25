@@ -145,7 +145,7 @@ export default {
           data.parentId ? data.parentId + '' : ''
           this.form = data
           this.form.encrypt = this.form.encrypt ?1:0
-          this.form.attach = this.form.attach ?1:0
+          this.form.attach = this.form.attach ? 0:1
           setTimeout(() => {
             tinyMCE.activeEditor.setContent(data.content)
           }, 500)

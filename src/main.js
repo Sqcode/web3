@@ -19,12 +19,13 @@ import 'element-plus/lib/theme-chalk/index.css'
 
 // 全局注册过滤器。VUE3 去掉了噶、
 // Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
-
 const app = createApp(App)
 app.config.globalProperties.$utils = utils
 app.config.globalProperties.$goBack = goBack
 app.use(store).use(router).use(ElementPlus, { locale }).mount('#app')
-
+// app.config.globalProperties.$showSearch = true
+// let global=internalInstance.appContext.config.globalProperties;
+// console.log(global.$key)
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   if (to.meta.title) {
