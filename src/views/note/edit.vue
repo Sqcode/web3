@@ -207,7 +207,7 @@ export default {
           if (this.$refs.upload.isChange) {
             const response = this.$refs.upload.submit()
             response.then((path) => {
-              console.log(path);
+              console.log('上传成功', path);
               if (path) {
                 this.form.fileUrl = path
                 this.form.fileName =this.$refs.upload.fileName

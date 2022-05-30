@@ -5,11 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "dev": "vue-cli-service serve --mode development",
+    "taihe": "vue-cli-service serve --mode taihe",
     "test": "vue-cli-service serve --mode production",
     "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
-    "prod": "vue-cli-service build --mode production",
-    "taihe": "vue-cli-service build --mode taihe",
+    "btuoqi": "vue-cli-service build --mode production",
+    "btaihe": "vue-cli-service build --mode taihe",
     "prev": "vue-cli-service build --mode prev"
   },
   "dependencies": {

@@ -122,12 +122,12 @@ export default {
           this.loading = true
           request.uploadFile(this.action, this.file, {'prefix': this.prefix, 'oldFilePath': this.oldFilePath}).then((res) => {
             if (res) {
-              // console.log('result: ', res);
               resolve(res);
               this.loading = false
             }
           }).catch(error => {
             this.$message.error('oss服务接口异常')
+            console.log(error);
             this.loading = false
           })
         // }, 2000);
@@ -140,6 +140,7 @@ export default {
           console.log(res);
         }
       }).catch(error => {
+        console.log(error);
         this.$message.error('oss服务接口异常')
       })
     },

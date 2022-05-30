@@ -46,8 +46,8 @@ module.exports = {
       // }
       // ,
       [process.env.VUE_APP_BASE_API]: {
+        // target: 'http://47.97.210.25:10086',
         target: 'http://localhost:10086',
-        // target: 'http://su1888.cn:10086',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
