@@ -34,6 +34,16 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="指定不展示">
+        <el-select v-model="form.unShown" placeholder="请选择" style="width:100%" multiple>
+          <el-option
+            v-for="item in userTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="排序">
         <el-input-number style="width: 100%" type="number" v-model.number="form.sort" :min="1" label="小程序菜单排序"></el-input-number>
       </el-form-item>
@@ -121,6 +131,7 @@ export default {
           if (response.parentPath) {
             this.cascaderMenuSelected = response.parentPath.split(',').map(Number)
           }
+          this.form.unShown = response.unShown.split(',').map(Number)
           // console.log('form', this.form.encrypt);
           // console.log(row);
           this.pages.forEach((v, k) => {
@@ -181,6 +192,12 @@ export default {
         { label: 'page', value: '/note/index', noteId: '' },
         { label: 'page', value: '/notes/index' },
         { label: 'page', value: '/menu_icon/index' }
+      ],
+      userTypeOptions: [
+        { label: '普通', value: 0 },
+        { label: '体验', value: 1 },
+        { label: '管理员', value: 2 },
+        { label: '超级管理员', value: 99 }
       ],
       permissionOptions: [
         { label: '普通', value: 0 },
@@ -269,6 +286,8 @@ export default {
         return
       }
       this.form.parentPath = this.cascaderMenuSelected ? this.cascaderMenuSelected.join(',') : ''
+      this.form.unShown = this.form.unShown ? this.form.unShown.join(',') : ''
+
       var dataJson = this.pages[this.pageSelected]
       // 如果是 笔记&选择笔记，dataJson中放入笔记id
       // console.log(dataJson, this.pageSelected, this.noteSelected);
